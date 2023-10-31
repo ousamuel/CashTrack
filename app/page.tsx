@@ -1,113 +1,182 @@
-import Image from 'next/image'
+"use client";
+import React, { useContext, useState, useEffect } from "react";
+import {
+  Image,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Button,
+  Divider,
+  Link,
+  Tabs,
+  Tab,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+  Input,
+} from "@nextui-org/react";
+import Header from "./header";
 
 export default function Home() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+    <div>
+      <Header />
+      <div className="main-body ">
+        <div className="left-container w-[200px] flex-col w-1/5 p-2">
+          <div className="text-[16px] mt-1 mb-4">
+            <Link className="flex open" href="/">
+              <Image
+                className="h-[17px] mx-1"
+                src="/images/splitwise.png"
+                alt="logo"
+              />
+              <div>Dashboard</div>
+            </Link>
+            <Link className="flex open" href="/">
+              <Image
+                className="h-[17px] mx-1"
+                src="/svgs/flag.svg"
+                alt="logo"
+              />
+              <div>Recent Activity</div>
+            </Link>
+          </div>
+          <div id="all-expenses" className="flex mb-1">
+            <Image src="/svgs/bulletList.svg" width="13px" />
+            <span>All expenses</span>
+          </div>
+
+          <div>
+            <div id="groups" className="left-header">
+              <span>groups</span>
+              <div>
+                <span className="font-extrabold text-[13px]">+</span> add
+              </div>
+            </div>
+            <Link className="left-tabs open">
+              <Image src="/svgs/tag.svg" width="10px" />
+              food
+            </Link>
+            <Link className="left-tabs ">
+              <Image src="/svgs/tag.svg" width="10px" />
+              food
+            </Link>
+
+            <div id="friends" className="left-header">
+              <span>friends</span>
+              <div>
+                <span className="font-extrabold text-[13px]">+</span> add
+              </div>
+            </div>
+            <div id="invite-box" className="">
+              <h3 className="invites color">Invite friends</h3>
+              <div className="input-box">
+                <input
+                  className=""
+                  type="email"
+                  placeholder="Enter an email address"
+                />
+                <Button className="btn-inv">Send invite</Button>
+              </div>
+            </div>
+            <div id="fb-twtt" className="text-[14px] flex pt-2 justify-center">
+              <Button className="btn-2 btn-fb w-2/5" radius="lg">
+                <Image width={15} src="/svgs/fb.svg" alt="fb" />
+                Share
+              </Button>
+              <Button className="btn-2 btn-tt w-2/5" radius="lg">
+                <Image width={15} src="/svgs/tt.svg" alt="tt" />
+                Tweet
+              </Button>
+            </div>
+          </div>
+        </div>
+        <div className="mid-container w-3/5">
+          <div className="p-3 bg-gray-200 flex border-b-2 justify-between">
+            <h1 className="topbar">Dashboard</h1>
+            <div className="text-[15px]">
+              <Button className="btn btn-orange" radius="lg">
+                Add an expense
+              </Button>
+              <Button className="btn btn-green" radius="lg">
+                Settle up
+              </Button>
+            </div>
+          </div>
+          <div className="py-2 bg-gray-200 flex justify-between border-y border-gray-300">
+            <div className="block ">
+              <p>total balance</p>
+              <p>price</p>
+            </div>
+            <div className="block border-l border-gray-300">
+              <p>you owe</p>
+              <p>price</p>
+            </div>
+            <div className="block border-l border-gray-300">
+              <p>you are owed</p>
+              <p>price</p>
+            </div>
+          </div>
+          <h2 className="relative uppercase p-2 px-3 text-[14px]">
+            <span>you owe</span>
+            <div className="absolute top-[10px] flex text-[12px] w-full justify-center items-center">
+              <Button className="list-btn" radius="lg" disableRipple>
+                <Image
+                  className="h-[12px]"
+                  width="15px"
+                  src="/svgs/list.svg"
+                  alt="list"
+                />
+                view as list{" "}
+              </Button>{" "}
+              <Button className="chart-btn" radius="lg" disableRipple>
+                <Image
+                  className="border-[1.5px] border-black mr-[10px]"
+                  width="14px"
+                  src="/svgs/chart.svg"
+                  alt="charts"
+                />
+                <span>view as chart</span>
+              </Button>{" "}
+            </div>
+            <span className="float-right">you are owed</span>
+          </h2>
+          <div className="p-3">list</div>
+        </div>
+        <div className="right-container max-w-[200px] w-1/5">
+          <h2 className="uppercase">splitwise on the go</h2>
+          <span>Get the free Splitwise app and add IOUs from anywhere:</span>
+          <Link
             target="_blank"
             rel="noopener noreferrer"
+            href="https://apps.apple.com/us/app/splitwise/id458023433"
           >
-            By{' '}
             <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+              className="mt-3"
+              src="/images/iphone.png"
+              alt="iphone app link"
+              width="160px"
             />
-          </a>
+          </Link>
+          <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://play.google.com/store/apps/details?id=com.Splitwise.SplitwiseMobile"
+          >
+            <Image
+              className="mt-3"
+              src="/images/android.png"
+              alt="android app link"
+              width="160px"
+            />
+          </Link>
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    </div>
+  );
 }
