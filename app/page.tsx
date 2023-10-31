@@ -29,29 +29,35 @@ export default function Home() {
       <div className="main-body ">
         <div className="left-container w-[200px] flex-col w-1/5 p-2">
           <div className="text-[16px] mt-1 mb-4">
-            <Link className="flex open" href="/">
+            <Link className="left-top open" href="/">
               <Image
-                className="h-[17px] mx-1"
+                className="h-[17px] ml-1"
                 src="/images/splitwise.png"
                 alt="logo"
               />
               <div>Dashboard</div>
             </Link>
-            <Link className="flex open" href="/">
+            <Link className="left-top" href="/">
               <Image
-                className="h-[17px] mx-1"
+                className="h-[17px] ml-1"
                 src="/svgs/flag.svg"
                 alt="logo"
               />
-              <div>Recent Activity</div>
+              Recent Activity
             </Link>
           </div>
-          <div id="all-expenses" className="flex mb-1">
-            <Image src="/svgs/bulletList.svg" width="13px" />
-            <span>All expenses</span>
+          <div className="text-[14px]">
+            <Link className="left-top" href="/">
+              <Image
+                className="h-[15px] ml-1"
+                src="/svgs/bulletList.svg"
+                alt="list"
+              />
+              All expenses
+            </Link>
           </div>
 
-          <div>
+          <div className="mt-1">
             <div id="groups" className="left-header">
               <span>groups</span>
               <div>
@@ -73,6 +79,15 @@ export default function Home() {
                 <span className="font-extrabold text-[13px]">+</span> add
               </div>
             </div>
+            <Link className="left-tabs open">
+              <Image src="/svgs/user.svg" width="10px" />
+              man
+            </Link>
+            <Link className="left-tabs ">
+              <Image src="/svgs/user.svg" width="10px" />
+              woman
+            </Link>
+
             <div id="invite-box" className="">
               <h3 className="invites color">Invite friends</h3>
               <div className="input-box">
@@ -81,15 +96,17 @@ export default function Home() {
                   type="email"
                   placeholder="Enter an email address"
                 />
-                <Button className="btn-inv">Send invite</Button>
+                <Button disableRipple className="btn-inv">
+                  Send invite
+                </Button>
               </div>
             </div>
             <div id="fb-twtt" className="text-[14px] flex pt-2 justify-center">
-              <Button className="btn-2 btn-fb w-2/5" radius="lg">
+              <Button disableRipple className="btn-2 btn-fb w-2/5" radius="lg">
                 <Image width={15} src="/svgs/fb.svg" alt="fb" />
                 Share
               </Button>
-              <Button className="btn-2 btn-tt w-2/5" radius="lg">
+              <Button disableRipple className="btn-2 btn-tt w-2/5" radius="lg">
                 <Image width={15} src="/svgs/tt.svg" alt="tt" />
                 Tweet
               </Button>
@@ -100,10 +117,10 @@ export default function Home() {
           <div className="p-3 bg-gray-200 flex border-b-2 justify-between">
             <h1 className="topbar">Dashboard</h1>
             <div className="text-[15px]">
-              <Button className="btn btn-orange" radius="lg">
+              <Button disableRipple className="btn btn-orange" radius="lg">
                 Add an expense
               </Button>
-              <Button className="btn btn-green" radius="lg">
+              <Button disableRipple className="btn btn-green" radius="lg">
                 Settle up
               </Button>
             </div>
@@ -125,7 +142,7 @@ export default function Home() {
           <h2 className="relative uppercase p-2 px-3 text-[14px]">
             <span>you owe</span>
             <div className="absolute top-[10px] flex text-[12px] w-full justify-center items-center">
-              <Button className="list-btn" radius="lg" disableRipple>
+              <Button disableRipple className="list-btn" radius="lg">
                 <Image
                   className="h-[12px]"
                   width="15px"
@@ -134,7 +151,7 @@ export default function Home() {
                 />
                 view as list{" "}
               </Button>{" "}
-              <Button className="chart-btn" radius="lg" disableRipple>
+              <Button disableRipple className="chart-btn" radius="lg">
                 <Image
                   className="border-[1.5px] border-black mr-[10px]"
                   width="14px"

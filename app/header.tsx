@@ -17,7 +17,7 @@ export default function Header() {
           <Image
             width="108px"
             height="22px"
-            className="m-auto pt-[5px]"
+            className="m-auto"
             src="https://assets.splitwise.com/assets/core/logo-wordmark-horizontal-white-short-c309b91b96261a8a993563bdadcf22a89f00ebb260f4f04fd814c2249a6e05d4.svg"
           />
         </Link>
