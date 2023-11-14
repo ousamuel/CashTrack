@@ -15,6 +15,9 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+:focus {
+  outline: none;
+}
 h1 {
   font-size: 24px;
 }
@@ -22,6 +25,15 @@ h2 {
   line-height: 24px;
   color: #999999;
   font-weight: bold;
+}
+h3 {
+  font-size: 16px;
+  color: #333333;
+}
+h4 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 3px;
 }
 body {
   font-size: 13px;
@@ -31,7 +43,13 @@ body {
 }
 
 .color {
-  background-color: #39a385;
+  background-color: #5bc5a7;
+}
+.green {
+  color: #5bc5a7;
+}
+.orange {
+  color: #ff652f;
 }
 
 .navbar {
@@ -60,7 +78,15 @@ body {
   /* padding-left: 3px;
   padding-right: 3px; */
 }
+
+.left-container {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
 .mid-container {
+  width: 60%;
   border-left: solid;
   border-right: solid;
   border-width: 1px;
@@ -68,8 +94,18 @@ body {
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
 }
 .right-container {
+  width: 20%;
+  max-width: 200px;
   margin-top: 12px;
   padding-left: 24px;
+}
+.delete {
+  display: flex;
+  padding-right: 5px;
+  font-size: 20px;
+  font-weight: bolder;
+  color: rgb(214, 4, 4);
+  text-decoration: underline;
 }
 .btn {
   border: solid;
@@ -92,6 +128,16 @@ body {
   display: flex;
   justify-content: space-evenly;
 }
+.btn-3 {
+  border: solid;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  padding: 5px;
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-left: 7px;
+  color: #fff;
+}
 .btn-inv {
   border: solid;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
@@ -103,6 +149,10 @@ body {
 .btn-orange {
   background: #ff652f;
   text-shadow: 0 -1px 0 #c83400;
+}
+.btn-blue {
+  background: #2d51e2;
+  text-shadow: 0 -1px 0 #1f068d;
 }
 .btn-green {
   background: #5bc5a7;
@@ -152,23 +202,26 @@ body {
 
 .list-btn,
 .chart-btn {
+  font-size: 12px;
   display: flex;
-  border-left: 1px #d1d5db;
+  /* border-left: 1px #d1d5db; */
+  align-items: center;
   justify-content: space-evenly;
   padding-right: 5px;
   padding-left: 5px;
   font-weight: normal;
+  border: 0.7px solid rgba(0, 0, 0, 0.1);
 }
 
 .list-btn {
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
   border-right-width: 0.5px;
 }
 .chart-btn {
   border-left-width: 0.5px;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .left-header {
@@ -205,11 +258,13 @@ body {
 .left-top {
   border-left: 6px solid rgba(255, 255, 255, 0.5);
   display: flex;
+  width: 100%;
+  text-align: start;
+  justify-content: left;
 }
 .left-tabs div,
 .left-top div {
-  filter: invert(50%);
-  opacity: 70%;
+  filter: grayscale(100%);
   margin-right: 4px;
 }
 .left-top:hover,
@@ -237,4 +292,92 @@ body {
 .open div {
   opacity: 100%;
   filter: invert(0%);
+}
+
+.expense-parent:hover {
+  background: rgb(248, 248, 248);
+  .expense-title {
+    text-decoration: underline;
+  }
+  /* padding: 10px; */
+  /* padding-left: 5px; */
+}
+.expense-parent div {
+  width: 100%;
+  line-height: 1;
+}
+
+.expense-trigger {
+  display: flex;
+  font-weight: normal;
+  padding: 10px 5px;
+}
+.open-down {
+  border-bottom: 1px solid #ccc;
+}
+.py-2 {
+  padding: 0px;
+}
+.expense-dropdown {
+  background: #f8f8f8;
+  padding: 15px;
+  box-shadow: inset 0 5px 7px -5px rgba(0, 0, 0, 0.25),
+    inset 0 -3px 7px -5px rgba(0, 0, 0, 0.25);
+}
+.expense-owe {
+  font-size: 12px;
+  color: #aaaaaa;
+}
+
+.expense-group {
+  background-color: #eeeeee;
+  color: #666666;
+  font-size: 10px;
+  padding: 3px 5px;
+  line-height: 1;
+  border: 1px solid #e6e6e6;
+  border-radius: 3px;
+  width: max-content;
+}
+
+.expense-img {
+  border: 1px solid #ddd;
+}
+
+.popover-trigger {
+  margin-right: 3px;
+  padding: 5px;
+  display: inline-block;
+  background: #eee;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-bottom-color: rgba(0, 0, 0, 0.25);
+  opacity: 30%;
+}
+.popover-trigger:hover {
+  opacity: 60%;
+  cursor: pointer;
+}
+.popover-open{
+  opacity:100%;
+}
+.popover-open:hover{
+  opacity:100%;
+}
+.triangle-up {
+  position: relative;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 10px solid #b7b7b7; /* You can change the color by replacing #ff0000 */
+  transform: translateX(105px) translateY(-5px);
+}
+
+.hover-gray:hover {
+  opacity: 60%;
+}
+.add:hover {
+  color: #5bc5a7;
 }

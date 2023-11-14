@@ -8,8 +8,11 @@ import {
   Button,
   Link,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
+  const router = useRouter();
+
   return (
     <div className="flex fixed w-full color h-[33px]">
       <div className="navbar">
@@ -23,10 +26,18 @@ export default function Header() {
         </Link>
         <Popover className="" placement="bottom" showArrow={true}>
           <PopoverTrigger>
-            <Button className="px-2">User</Button>
+            <Button className="px-2 flex">
+              <Image
+                className="w-[25px] rounded-full mr-2"
+                radius="sm"
+                src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+              />
+              <p>Sam</p>
+            </Button>
           </PopoverTrigger>
           <PopoverContent>
-            <div className="px-1 py-2">
+            <div className="triangle-up"></div>
+            <div className="bg-white rounded-sm p-3 border-gray-300 border-[1px] -translate-y-2 -translate-x-10">
               <div className="text-small font-bold">Popover Content</div>
               <div className="text-tiny">This is the popover content</div>
             </div>
