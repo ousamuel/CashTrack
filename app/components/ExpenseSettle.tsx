@@ -1,12 +1,56 @@
-import React from "react";
-import {Button } from "@nextui-org/react";
+import React, { useState } from "react";
+import { Button, Input } from "@nextui-org/react";
 export default function ExpenseSettle() {
+  const [modal, setModal] = useState<string>("close");
+
   return (
     <div className="text-[15px]">
-      <Button disableRipple className="btn btn-orange" radius="lg">
+      {modal == "open" ? (
+        <div className="modal flex ">
+          <div className="modal-div">
+            <div className="modal-top">
+              <p>Add an expense</p>
+              <p className="cursor" onClick={() => setModal("close")}>
+                X
+              </p>
+            </div>
+            <div className="modal-mid">
+              <p>With you and:</p>
+              <Input
+                className="w-fit"
+                placeholder="Enter names or emaasdasdasdasils"
+              />
+            </div>
+            <div className="modal-bot">
+              <Button
+                onClick={() => setModal("close")}
+                className="btn btn-gray"
+                disableRipple
+              >
+                Cancel
+              </Button>
+              <Button className="btn btn-green" disableRipple>
+                Save
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      <Button
+        onClick={() => setModal("open")}
+        disableRipple
+        className="btn btn-orange"
+        radius="lg"
+      >
         Add an expense
       </Button>
-      <Button disableRipple className="btn btn-green" radius="lg">
+      <Button
+        onClick={() => setModal("open")}
+        disableRipple
+        className="btn btn-green"
+        radius="lg"
+      >
         Settle up
       </Button>
     </div>

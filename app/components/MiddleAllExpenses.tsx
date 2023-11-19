@@ -65,7 +65,7 @@ export default function MiddleAllExpenses() {
   );
   return (
     <div className="mid-container">
-      <div className="p-3 bg-[#EEEEEE] flex border-b-2 justify-between">
+      <div className="p-3 bg-[#EEEEEE] flex border-b justify-between">
         <h1 className="topbar">All expenses</h1>
         <ExpenseSettle />
       </div>

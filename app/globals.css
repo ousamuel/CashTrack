@@ -41,7 +41,6 @@ body {
   background: #fff;
   font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
-
 .color {
   background-color: #5bc5a7;
 }
@@ -51,23 +50,75 @@ body {
 .orange {
   color: #ff652f;
 }
+.modal {
+  /* display: none; */
+  justify-content: center;
+  padding-top: 15vh;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(255, 255, 255, 0.697);
+}
+.modal-div {
+  z-index: 10000;
+  height: fit-content;
+  border-radius: 5px;
+  width: 350px;
+  border: 1px solid #999;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
+}
+.modal-top {
+  display: flex;
+  padding: 7px;
+  padding-left: 10px;
+  padding-right: 15px;
+  color: white;
+  text-shadow: 0 -1px 0 #318a71;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #5bc5a7;
+  border-bottom: 1px solid #36977b;
+  justify-content: space-between;
+}
+.modal-mid {
+  display: flex;
+  font-size: 14px;
+  padding: 7px;
+  padding-left: 10px;
+  background-color: white;
+}
+.modal-bot {
+  padding: 7px;
+  padding-left: 10px;
+  display: flex;
+  justify-content: end;
+  background-color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top: 1px solid rgb(230, 230, 230);
+}
 
 .navbar {
-  /* max-width: 960px; */
   display: flex;
   color: white;
   margin: auto;
   width: 100%;
   height: 33px;
   justify-content: space-between;
-  padding-right: max(50px, 5%);
-  padding-left: max(50px, 5%);
+  padding-right: min(50px, 5%);
+  padding-left: min(50px, 5%);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid #48be9d;
 }
 .main-body {
   justify-content: center;
   display: flex;
   height: 100vh;
-  min-width: 960px;
+  /* min-width: 960px; */
   padding-top: 33px;
   padding-right: max(50px, 5%);
   padding-left: max(50px, 5%);
@@ -84,13 +135,16 @@ body {
   display: flex;
   flex-direction: column;
   padding: 5px;
+  color: #999999;
+  margin-right: 10px;
 }
 .mid-container {
-  width: 60%;
+  flex-grow: 1;
   border-left: solid;
   border-right: solid;
   border-width: 1px;
   border-color: #ccc;
+  border-top: none;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
 }
 .right-container {
@@ -139,16 +193,22 @@ body {
   color: #fff;
 }
 .btn-inv {
-  border: solid;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  color: black;
+  border: solid 1px rgb(197, 197, 197);
   border-radius: 3px;
   font-size: 12px;
   background: #eee;
   padding: 2px 6px;
 }
+.btn-inv:hover {
+  background: #e4e4e4;
+}
 .btn-orange {
   background: #ff652f;
   text-shadow: 0 -1px 0 #c83400;
+}
+.btn-orange:hover {
+  background: #f9571d;
 }
 .btn-blue {
   background: #2d51e2;
@@ -159,6 +219,16 @@ body {
   color: #fff;
   text-shadow: 0 -1px 0 #318970;
 }
+.btn-green:hover {
+  background: #37c099;
+}
+.btn-gray {
+  background: #f6f6f6;
+  color: black;
+}
+.btn-gray:hover {
+  background: #e6e6e6;
+}
 .btn-fb {
   width: 76px;
   background: #3b5998;
@@ -166,6 +236,13 @@ body {
 .btn-tt {
   width: 78px;
   background: #4099ff;
+}
+.acc-btn {
+  padding: 5px 12px 5px 12px;
+}
+.acc-btn:hover {
+  color: white;
+  background: #39a385;
 }
 .invites {
   color: #fff;
@@ -223,7 +300,15 @@ body {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
-
+.list-btn:hover,
+.chart-btn:hover {
+  background-color: rgb(243, 243, 243);
+}
+.listchart-open,
+.listimg {
+  background-color: #eeeeee;
+  color: black;
+}
 .left-header {
   display: flex;
   justify-content: space-between;
@@ -238,10 +323,6 @@ body {
 }
 .left-header span {
   text-transform: uppercase;
-}
-.left-container {
-  color: #999999;
-  margin-right: 10px;
 }
 .left-tabs {
   display: flex;
@@ -359,11 +440,11 @@ body {
   opacity: 60%;
   cursor: pointer;
 }
-.popover-open{
-  opacity:100%;
+.popover-open {
+  opacity: 100%;
 }
-.popover-open:hover{
-  opacity:100%;
+.popover-open:hover {
+  opacity: 100%;
 }
 .triangle-up {
   position: relative;
@@ -372,7 +453,7 @@ body {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-bottom: 10px solid #b7b7b7; /* You can change the color by replacing #ff0000 */
-  transform: translateX(105px) translateY(-5px);
+  transform: translateX(80px) translateY(-5px);
 }
 
 .hover-gray:hover {
@@ -380,4 +461,24 @@ body {
 }
 .add:hover {
   color: #5bc5a7;
+}
+.cursor:hover {
+  cursor: pointer;
+  opacity: 70%;
+}
+.dropdown {
+  display: none;
+}
+@media (max-width: 830px) {
+  .left-container,
+  .right-container {
+    display: none;
+  }
+  .main-body {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .dropdown {
+    display: flex;
+  }
 }

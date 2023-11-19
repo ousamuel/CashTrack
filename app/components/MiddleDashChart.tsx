@@ -67,7 +67,6 @@ export default function MiddleDashChart() {
       setNum(num + 1);
     }
   }
-  console.log(num);
 
   return (
     <div className="p-4 ">

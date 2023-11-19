@@ -84,7 +84,7 @@ export default function RightAllExpenses() {
         return (
           <Tooltip
             content={
-              <div className="bg-black text-white rounded-lg p-2 -translate-y-2">
+              <div className="bg-black text-white rounded-lg p-2 -translate-y-1">
                 {obj.desc}
               </div>
             }

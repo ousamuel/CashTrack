@@ -5,7 +5,7 @@ import ExpenseAccordionItem from "./ExpenseAccordionItem";
 export default function MiddleRecentActivity() {
   return (
     <div className='mid-container'>
-      <div className="p-3 bg-[#EEEEEE] flex border-b-2 justify-between">
+      <div className="p-3 bg-[#EEEEEE] flex border-b justify-between">
         <h1 className="topbar">Recent Activity</h1>
       </div>
       <div className="p-3 flex">

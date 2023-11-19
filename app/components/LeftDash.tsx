@@ -51,7 +51,7 @@ const LeftDash: React.FC<LeftDashProps> = ({ path }) => {
       <div className="mt-1">
         <div id="groups" className="left-header">
           <span>groups</span>
-          <Link href='/new-group' className='add'>
+          <Link href="/new-group" className="add">
             <span className="font-extrabold text-[13px]">+</span> add
           </Link>
         </div>
@@ -66,7 +66,7 @@ const LeftDash: React.FC<LeftDashProps> = ({ path }) => {
 
         <div id="friends" className="left-header">
           <span>friends</span>
-          <Button className='add' disableRipple>
+          <Button className="add" disableRipple>
             <span className="font-extrabold text-[13px]">+</span> add
           </Button>
         </div>
@@ -99,11 +99,21 @@ const LeftDash: React.FC<LeftDashProps> = ({ path }) => {
           </div>
         </div>
         <div id="fb-twtt" className="text-[14px] flex pt-2 justify-center">
-          <Button disableRipple className="btn-2 btn-fb w-2/5" radius="lg">
+          <Button
+            onClick={() => alert("Fake button")}
+            disableRipple
+            className="btn-2 btn-fb w-2/5"
+            radius="lg"
+          >
             <Image width={15} src="/svgs/fb.svg" alt="fb" />
             Share
           </Button>
-          <Button disableRipple className="btn-2 btn-tt w-2/5" radius="lg">
+          <Button
+            onClick={() => alert("Fake button")}
+            disableRipple
+            className="btn-2 btn-tt w-2/5"
+            radius="lg"
+          >
             <Image width={15} src="/svgs/tt.svg" alt="tt" />
             Tweet
           </Button>
