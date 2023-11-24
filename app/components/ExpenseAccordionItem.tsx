@@ -14,34 +14,17 @@ import {
 export default function ExpenseAccordionItem() {
   return (
     <div className="expense-trigger open-down">
-      <div className="max-w-[35px] text-center flex flex-col justify-center inline-block">
+      <div className="max-w-[35px] mr-[5px] text-center flex flex-col justify-center inline-block">
         <p className="text-[10px] uppercase">oct</p>
-        <h4 className="text-[20px]">30</h4>
+        <p className="text-[20px] ">30</p>
       </div>
 
       <div className="max-w-[50px]">
-        <Popover className="" placement="bottom" showArrow={true}>
-          <PopoverTrigger>
-            <Image
-              className="hover-gray"
-              width={35}
-              src="/images/receipt.png"
-              alt="icon"
-            />
-          </PopoverTrigger>
-          <PopoverContent>
-            <div className="bg-white rounded-md p-3 border-gray-300 border-[1.5px] -translate-y-2 translate-x-[70px]">
-              <table>
-                <tbody>
-                  <tr>
-                    <td>Entertainment</td>
-                    <td>123</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </PopoverContent>
-        </Popover>
+        <Image
+          width={35}
+          src="/ss/receipt.png"
+          alt="icon"
+        />
       </div>
       <div className="max-w-[500px] text-left flex flex-col">
         <p className="text-[16px] text-black text-left my-auto font-bold expense-title">

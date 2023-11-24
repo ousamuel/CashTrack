@@ -15,17 +15,32 @@ export default function RightAllExpenses() {
     // { src: "/svgs/settings.svg", desc: "Settings" },
   ];
 
+  const [owed, setOwed] = useState<number>(40.5);
+  const [youOwe, setYouOwe] = useState<number>(155.5);
+  const netBalance: number = owed - youOwe;
   const BalancesComponent: React.FC = () => {
     return (
       <div>
         <h2 className="uppercase">your total balance</h2>
         <div className="orange ">
           <p className="text-[16px]">you owe</p>
-          <strong className="text-[28px] leading-none">{"$12.50"}</strong>
+          <strong className="text-[28px] leading-none">
+            ${youOwe.toFixed(2)}
+          </strong>{" "}
         </div>
         <div className="green">
           <p className="text-[16px]">you are owed</p>
-          <strong className="text-[28px]">{"$12.50"}</strong>
+          <strong className="text-[28px]">${owed.toFixed(2)}</strong>
+        </div>
+        <div className="flex flex-col">
+          <strong className="text-[16px]">Net Balance</strong>
+          <strong
+            className={
+              netBalance > 0 ? "green text-[28px]" : "orange text-[28px]"
+            }
+          >
+            ${netBalance.toFixed(2)}
+          </strong>
         </div>
       </div>
     );

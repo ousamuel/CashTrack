@@ -6,7 +6,7 @@ import RightGroups from "../components/RightGroups";
 export default function Dashboard() {
   return (
     <div>
-      <Header />
+      <Header path='dashboard' />
       <div className="main-body">
         <LeftDash path="dashboard" />
         <MiddleDash />

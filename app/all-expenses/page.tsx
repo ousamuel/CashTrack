@@ -6,7 +6,7 @@ import RightAllExpenses from "../components/RightAllExpenses";
 export default function AllExpenses() {
   return (
     <div>
-      <Header />
+      <Header path="all-expenses"/>
       <div className="main-body">
         <LeftDash path="all-expenses" />
         <MiddleAllExpenses />

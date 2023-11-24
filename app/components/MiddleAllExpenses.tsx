@@ -13,10 +13,53 @@ import {
 import ExpenseAccordionItem from "./ExpenseAccordionItem";
 import ExpenseSettle from "./ExpenseSettle";
 export default function MiddleAllExpenses() {
+  type Category = {
+    name: string;
+    iconSrc: string;
+  };
+
+  const categories: Category[] = [
+    { name: "General", iconSrc: "/ss/receipt.png" },
+    { name: "Food & Drink", iconSrc: "/ss/food-drink.png" },
+    { name: "Entertainment", iconSrc: "/ss/entertainment.png" },
+    { name: "Transportation", iconSrc: "/ss/car.png" },
+    { name: "Home", iconSrc: "/ss/home.png" },
+    { name: "Custom", iconSrc: "/ss/custom.png" },
+  ];
+
   const defaultContent: JSX.Element = (
     <div className="expense-dropdown">
       <div className="flex">
-        <Image className="expense-img" width={85} src="/images/receipt.png" />
+        <Popover className="" placement="bottom" showArrow={true}>
+          <PopoverTrigger>
+            <Image
+              className="expense-img hover-gray cursor"
+              width={85}
+              src="/ss/receipt.png"
+            />
+          </PopoverTrigger>
+          <PopoverContent>
+            <div className="bg-white rounded-md p-3 border-gray-300 border-[1.5px] -translate-y-2 translate-x-[30px]">
+              <table>
+                <tbody className="text-[14px]">
+                  {categories.map((category, index) => (
+                    <tr key={index}>
+                      <td>{category.name}:</td>
+                      <td>
+                        <Image
+                        // onClick={()=>{}}
+                          className="hover-gray"
+                          width={30}
+                          src={category.iconSrc}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </PopoverContent>
+        </Popover>
         <div className="ml-3">
           <h3 className="py-[3px]">Name of Expense</h3>
           <h4 className="mt-[3px] text-[20px] text-black font-bold">$50.00</h4>

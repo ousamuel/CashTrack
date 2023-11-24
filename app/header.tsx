@@ -9,10 +9,14 @@ import {
   Link,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-export default function Header() {
+
+interface HeaderProps {
+  path: string;
+}
+const Header: React.FC<HeaderProps> = ({ path }) => {
   const router = useRouter();
 
-  const [path, setPath] = useState<string>("");
+  // const [path, setPath] = useState<string>("");
 
   return (
     <div className="flex fixed w-full color h-[33px]">
@@ -30,13 +34,11 @@ export default function Header() {
             </PopoverTrigger>
             <PopoverContent className="bg-white p-2 border border-[#5bc5a7] rounded-md text-[#999999]">
               <div className="text-[16px] mt-1 mb-4">
-                <Button
+                <Link
                   className={path == "dashboard" ? "left-top open" : "left-top"}
                   onClick={() => {
-                    setPath("dashboard");
                     router.push("/dashboard");
                   }}
-                  disableRipple
                 >
                   <Image
                     className="h-[17px] ml-1"
@@ -44,17 +46,16 @@ export default function Header() {
                     alt="logo"
                   />
                   <div>Dashboard</div>
-                </Button>
+                </Link>
 
-                <Button
+                <Link
                   className={
                     path == "recent-activity" ? "left-top open" : "left-top"
                   }
-                  onClick={() => {
-                    setPath("recent-activity");
-                    router.push("/recent-activity");
-                  }}
-                  disableRipple
+                  href='recent-activity'
+                  // onClick={() => {
+                  //   router.push("/recent-activity");
+                  // }}
                 >
                   <Image
                     className="h-[17px] ml-1"
@@ -62,18 +63,17 @@ export default function Header() {
                     alt="logo"
                   />
                   Recent Activity
-                </Button>
+                </Link>
               </div>
               <div className="text-[14px]">
-                <Button
+                <Link
                   className={
                     path == "all-expenses" ? "left-top open" : "left-top"
                   }
                   onClick={() => {
-                    setPath("all-expenses");
                     router.push("/all-expenses");
                   }}
-                  disableRipple
+                  // disableRipple
                 >
                   <Image
                     className="h-[15px] items-center ml-1"
@@ -81,7 +81,7 @@ export default function Header() {
                     alt="list"
                   />
                   All expenses
-                </Button>
+                </Link>
               </div>
               <div className="mt-1">
                 <div id="groups" className="left-header">
@@ -165,13 +165,13 @@ export default function Header() {
             <div className="triangle-up"></div>
             <div className="bg-white rounded-md border-gray-400 border-[1px] -translate-y-2 ">
               <div className="flex flex-col">
-                <Link className="acc-btn" href='/dashboard'>
+                <Link className="acc-btn" href="/dashboard">
                   Your account
                 </Link>
                 <Link className="acc-btn" href="/new-group">
                   Create a group
                 </Link>
-                <Link className="acc-btn" href='/dashboard'>
+                <Link className="acc-btn" href="/dashboard">
                   Logout
                 </Link>
               </div>
@@ -181,4 +181,6 @@ export default function Header() {
       </div>
     </div>
   );
-}
+};
+
+export default Header;

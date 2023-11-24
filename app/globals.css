@@ -192,6 +192,15 @@ body {
   margin-left: 7px;
   color: #fff;
 }
+.btn-free {
+  border: solid;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  padding: 5px;
+  padding-left: 12px;
+  padding-right: 12px;
+  color: #fff;
+}
 .btn-inv {
   color: black;
   border: solid 1px rgb(197, 197, 197);
@@ -212,6 +221,10 @@ body {
 }
 .btn-blue {
   background: #2d51e2;
+  text-shadow: 0 -1px 0 #1f068d;
+}
+.btn-lblue {
+  background: #008cff;
   text-shadow: 0 -1px 0 #1f068d;
 }
 .btn-green {
@@ -264,7 +277,7 @@ body {
   border: 1px solid #cccccc;
   border-radius: 3px;
   padding: 3px 5px;
-  margin-bottom: 5px;
+  /* margin-bottom: 5px; */
 }
 .topbar {
   font-weight: bold;
@@ -458,6 +471,7 @@ body {
 
 .hover-gray:hover {
   opacity: 60%;
+  cursor: pointer;
 }
 .add:hover {
   color: #5bc5a7;
@@ -469,7 +483,7 @@ body {
 .dropdown {
   display: none;
 }
-@media (max-width: 830px) {
+@media (max-width: 850px) {
   .left-container,
   .right-container {
     display: none;

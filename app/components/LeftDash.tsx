@@ -2,12 +2,25 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Image, Button, Link } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 interface LeftDashProps {
   path: string;
 }
+interface InviteForm  {
+  inviteEmail: string;
+};
+
 const LeftDash: React.FC<LeftDashProps> = ({ path }) => {
   const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<InviteForm>();
+
+  const onSubmit: SubmitHandler<InviteForm> = (data) => console.log(data);
+
   return (
     <div className="left-container w-[200px] flex-col w-1/5 p-2">
       <div className="text-[16px] mt-1 mb-4">
@@ -47,7 +60,6 @@ const LeftDash: React.FC<LeftDashProps> = ({ path }) => {
           All expenses
         </Button>
       </div>
-
       <div className="mt-1">
         <div id="groups" className="left-header">
           <span>groups</span>
@@ -82,20 +94,22 @@ const LeftDash: React.FC<LeftDashProps> = ({ path }) => {
         <div id="invite-box" className="">
           <h3 className="invites color">Invite friends</h3>
           <div className="input-box">
-            <input
-              className=""
-              type="email"
-              placeholder="Enter an email address"
-            />
-            <Button
-              disableRipple
-              className="btn-inv"
-              onClick={() => {
-                alert("Please enter a valid email address.");
-              }}
-            >
-              Send invite
-            </Button>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <input
+                className="text-black"
+                // type="email"
+                placeholder="Enter an email address"
+                {...register("inviteEmail", {
+                  pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  required: true,
+                })}
+              />
+              {errors.inviteEmail && <span className='pl-1'>Incorrect email format</span>}
+
+              <Button disableRipple className="btn-inv mt-1" type="submit">
+                Send invite
+              </Button>
+            </form>
           </div>
         </div>
         <div id="fb-twtt" className="text-[14px] flex pt-2 justify-center">

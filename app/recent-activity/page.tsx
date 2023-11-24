@@ -6,7 +6,7 @@ import MiddleRecentActivity from "../components/MiddleRecentActivity";
 export default function RecentActivity() {
   return (
     <div>
-      <Header />
+      <Header path="recent-activity" />
       <div className="main-body">
         <LeftDash path="recent-activity" />
         <MiddleRecentActivity />
