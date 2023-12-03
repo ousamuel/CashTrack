@@ -96,7 +96,7 @@ export default function MiddleAllExpenses() {
               src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
             />
             <p className="flex-1 flex flex-wrap items-center text-[13px]">
-              <strong>Christie</strong>
+              <strong>Jenny</strong>
               &nbsp;owes&nbsp;
               <strong>$25.00</strong>
             </p>

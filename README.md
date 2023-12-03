@@ -9,3 +9,6 @@ npx tsc --init
 cd server
 npm i express morgan nodemon body-parser dotenv mongoose ax
 ios
+
+to run front:
+npm run dev in splitwise

@@ -37,7 +37,7 @@ export default function ExpenseAccordionItem() {
         <h4 className="mt-[3px] text-[16px] text-black font-bold">$50.00</h4>
       </div>
       <div className="px-1 max-w-[135px]">
-        <p className="expense-owe">you lent Christie</p>
+        <p className="expense-owe">you lent Jenny</p>
         <h4 className="mt-[3px] text-[16px] green font-bold">$25.00</h4>
       </div>
     </div>

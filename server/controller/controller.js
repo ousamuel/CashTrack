@@ -13,7 +13,7 @@ exports.create = (req, res) => {
   });
 
   user
-    .save(user)
+    .save()
     .then((data) => {
       res.send(data);
     })
@@ -27,3 +27,4 @@ exports.find = (req, res) => {};
 exports.update = (req, res) => {};
 
 exports.delete = (req, res) => {};
+
