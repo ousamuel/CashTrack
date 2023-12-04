@@ -15,8 +15,8 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", getUser, (req, res) => {
-  // res.send(req.params.id);
-  res.send(res.user.name);
+  res.send(req.params.id);
+  // res.send(res.user.name);
 });
 
 router.post("/", async (req, res) => {
