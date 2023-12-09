@@ -84,7 +84,7 @@ export default function RightAllExpenses() {
         return BalancesComponent;
     }
   };
-  const [selectedComponent, setSelectedComponent] = useState<React.FC | null>(
+  const [selectedComponent, setSelectedComponent] = useState<React.FC | any>(
     BalancesComponent
   );
   const [selectedDesc, setSelectedDesc] = useState<string>("Balances");

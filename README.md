@@ -1,14 +1,14 @@
 Current installations:
-npm i concurrently, rimraf, express
-npm install react-hook-form
-npm install @hookform/resolvers yup
+npm i concurrently, rimraf, express , react-hook-form , @hookform/resolvers yup, mongodb, cors , bcrypt
 npm i mongodb
 npm i -D nodemon, @types/express @types/node, typescript,
 npx tsc --init
 
 cd server
 npm i express morgan nodemon body-parser dotenv mongoose ax
-ios
+ios, bcrypt, jsonwebtoken
+ express-session cookie-parser
 
-to run front:
+development: 
 npm run dev in splitwise
+npm start in server

@@ -1,12 +1,51 @@
+GET http://localhost:8001/groups
+###
 GET http://localhost:8001/users
-### 
-GET http://localhost:8001/users/15
+###
+GET http://localhost:8001/expenses
 ###
 POST http://localhost:8001/users
 Content-Type: application/json
 
 {
-    "name" : "john" ,
-    "email": "abc@g",
-    "gender": "male"
+    "name": "user6",
+    "email": "user6@gmail.com",
+    "_password": "password"
 }
+###
+POST http://localhost:8001/groups
+Content-Type: application/json
+
+{
+    "groupName" : "groupALL" ,
+    "creator": "owner",
+    "userIds":[
+        "6574bf086539e039fd0c0f4d",
+        "6574bf424d702f24cb25bfd3",
+        "6574bf584d702f24cb25bfd5",
+        "6574bf894d702f24cb25bfd8",
+        "6574bf954d702f24cb25bfda",
+        "6574bf9b4d702f24cb25bfdc"
+    ]
+}
+###
+POST http://localhost:8001/expenses
+Content-Type: application/json
+
+{
+    "title" : "expenseALL" ,
+    "creator": "ab1231c@g",
+    "totalAmount": 500,
+    "group" : "6574d678150d41f468586157",
+    "userIds":[
+        "6574bf086539e039fd0c0f4d",
+        "6574bf424d702f24cb25bfd3",
+        "6574bf584d702f24cb25bfd5",
+        "6574bf894d702f24cb25bfd8",
+        "6574bf954d702f24cb25bfda",
+        "6574bf9b4d702f24cb25bfdc"
+    ]
+}
+
+
+

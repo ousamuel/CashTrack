@@ -9,14 +9,14 @@ import {
   Link,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { Context } from "./providers";
 
 interface HeaderProps {
   path: string;
 }
 const Header: React.FC<HeaderProps> = ({ path }) => {
+  const { user } = useContext(Context);
   const router = useRouter();
-
-  // const [path, setPath] = useState<string>("");
 
   return (
     <div className="flex fixed w-full color h-[33px]">
@@ -52,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
                   className={
                     path == "recent-activity" ? "left-top open" : "left-top"
                   }
-                  href='recent-activity'
+                  href="recent-activity"
                   // onClick={() => {
                   //   router.push("/recent-activity");
                   // }}
@@ -90,11 +90,11 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
                     <span className="font-extrabold text-[13px]">+</span> add
                   </Link>
                 </div>
-                <Link className="left-tabs" href="/">
+                <Link className="left-tabs" href="/dashboard">
                   <Image src="/svgs/tag.svg" width="10px" />
                   food
                 </Link>
-                <Link className="left-tabs" href="/">
+                <Link className="left-tabs" href="/dashboard">
                   <Image src="/svgs/tag.svg" width="10px" />
                   food
                 </Link>
@@ -136,7 +136,10 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
               </div>
             </PopoverContent>
           </Popover>
-          <Link href="/" className="w-[165px] flex content-center pl-1">
+          <Link
+            href="/dashboard"
+            className="w-[165px] flex content-center pl-1"
+          >
             <Image
               width="108px"
               height="22px"
@@ -146,21 +149,24 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
           </Link>
         </div>
         <Popover className="" placement="bottom" showArrow={true}>
-          <PopoverTrigger className="hover:bg-[#39a385]">
-            <Button className="px-2 flex" disableRipple>
-              <Image
-                className="w-[25px] rounded-full mr-2"
-                radius="sm"
-                src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
-              />
-              <p>Sam</p>
-              <Image
-                className="ml-1 mt-[2px]"
-                width={10}
-                src="/svgs/dropdown.svg"
-              />
-            </Button>
-          </PopoverTrigger>
+          {user ? (
+            <PopoverTrigger className="hover:bg-[#39a385]">
+              <Button className="px-2 flex" disableRipple>
+                <Image
+                  className="w-[25px] rounded-full mr-2"
+                  radius="sm"
+                  src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                />
+                <p>{user.name}</p>
+                <Image
+                  className="ml-1 mt-[2px]"
+                  width={10}
+                  src="/svgs/dropdown.svg"
+                />
+              </Button>
+            </PopoverTrigger>
+          ) : null}
+
           <PopoverContent>
             <div className="triangle-up"></div>
             <div className="bg-white rounded-md border-gray-400 border-[1px] -translate-y-2 ">

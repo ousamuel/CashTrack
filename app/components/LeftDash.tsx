@@ -7,9 +7,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 interface LeftDashProps {
   path: string;
 }
-interface InviteForm  {
+interface InviteForm {
   inviteEmail: string;
-};
+}
 
 const LeftDash: React.FC<LeftDashProps> = ({ path }) => {
   const router = useRouter();
@@ -18,11 +18,152 @@ const LeftDash: React.FC<LeftDashProps> = ({ path }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<InviteForm>();
+  const [friendsModal, setFriendsModal] = useState<string>("close");
 
   const onSubmit: SubmitHandler<InviteForm> = (data) => console.log(data);
 
+  const sampleGroup: Group[] = [
+    {
+      _id: "6570b7a93a3be786a711bcd4",
+      groupName: "group1",
+      createdDate: "2023-12-06T18:04:24.113Z",
+      creator: "owner",
+      members: [
+        {
+          name: "owner",
+          email: "test",
+          payments: [
+            {
+              recipient: "girl",
+              amountToPay: 50,
+            },
+          ],
+        },
+        {
+          name: "guy",
+          email: "test",
+          payments: [
+            {
+              recipient: "owner",
+              amountToPay: 150,
+            },
+          ],
+        },
+        {
+          name: "girl",
+          email: "test",
+          payments: [
+            {
+              recipient: "guy",
+              amountToPay: 520,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      _id: "6570b7a93a3be123786a711bcd4",
+      groupName: "group2",
+      createdDate: "2023-12-06T18:04:24.113Z",
+      creator: "owner",
+      members: [
+        {
+          name: "owner",
+          email: "test",
+          payments: [
+            {
+              recipient: "girl",
+              amountToPay: 50,
+            },
+          ],
+        },
+        {
+          name: "guy",
+          email: "test",
+          payments: [
+            {
+              recipient: "owner",
+              amountToPay: 150,
+            },
+          ],
+        },
+        {
+          name: "girl",
+          email: "test",
+          payments: [
+            {
+              recipient: "guy",
+              amountToPay: 520,
+            },
+          ],
+        },
+      ],
+    },
+  ];
+
+  type Payments = {
+    recipient: string;
+    amountToPay: number;
+  };
+
+  type Members = {
+    name: string;
+    email: string;
+    payments: Payments[];
+  };
+
+  type Group = {
+    _id: string;
+    groupName: string;
+    creator: string;
+    createdDate: string;
+    members: Members[];
+  };
+
   return (
     <div className="left-container w-[200px] flex-col w-1/5 p-2">
+      {friendsModal == "open" ? (
+        <div className="modal flex ">
+          <div className="modal-div">
+            <div className="modal-top">
+              <p>Invite Friends</p>
+              <p className="cursor" onClick={() => setFriendsModal("close")}>
+                X
+              </p>
+            </div>
+            <div className="modal-mid justify-center flex-col ">
+              <p className="text-center text-gray-500 text-[16px]">
+                Select a payment method
+              </p>
+              <Button
+                className="mx-auto mt-2 btn-free btn-green w-[290px] text-[16px]"
+                disableRipple
+              >
+                Cash payment
+              </Button>
+              <Button
+                className="font-bold mx-auto mt-3 btn-free btn-lblue w-[290px] text-[16px] italic"
+                disableRipple
+              >
+                Venmo
+              </Button>
+            </div>
+            <div className="modal-bot">
+              <Button
+                onClick={() => setFriendsModal("close")}
+                className="btn btn-gray"
+                disableRipple
+              >
+                Cancel
+              </Button>
+              <Button className="btn btn-green" disableRipple>
+                Save
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <div className="text-[16px] mt-1 mb-4">
         <Button
           className={path == "dashboard" ? "left-top open" : "left-top"}
@@ -67,10 +208,20 @@ const LeftDash: React.FC<LeftDashProps> = ({ path }) => {
             <span className="font-extrabold text-[13px]">+</span> add
           </Link>
         </div>
-        <Link className="left-tabs" href="/">
-          <Image src="/svgs/tag.svg" width="10px" />
-          food
-        </Link>
+        {sampleGroup.map((group) => {
+          return (
+            <Button
+              key={group._id}
+              className={path == "group-test" ? "left-tabs open" : "left-tabs"}
+              onClick={() => router.push("/group-test")}
+              disableRipple
+            >
+              <Image src="/svgs/tag.svg" width="10px" />
+              {group.groupName}
+            </Button>
+          );
+        })}
+
         <Link className="left-tabs" href="/">
           <Image src="/svgs/tag.svg" width="10px" />
           food
@@ -78,7 +229,11 @@ const LeftDash: React.FC<LeftDashProps> = ({ path }) => {
 
         <div id="friends" className="left-header">
           <span>friends</span>
-          <Button className="add" disableRipple>
+          <Button
+            onClick={() => setFriendsModal("open")}
+            className="add"
+            disableRipple
+          >
             <span className="font-extrabold text-[13px]">+</span> add
           </Button>
         </div>
@@ -104,7 +259,9 @@ const LeftDash: React.FC<LeftDashProps> = ({ path }) => {
                   required: true,
                 })}
               />
-              {errors.inviteEmail && <span className='pl-1'>Incorrect email format</span>}
+              {errors.inviteEmail && (
+                <span className="pl-1">Incorrect email format</span>
+              )}
 
               <Button disableRipple className="btn-inv mt-1" type="submit">
                 Send invite

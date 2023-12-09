@@ -10,9 +10,38 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@nextui-org/react";
+import { Context } from "../providers";
 import ExpenseAccordionItem from "./ExpenseAccordionItem";
 import ExpenseSettle from "./ExpenseSettle";
 export default function MiddleAllExpenses() {
+  const { api } = useContext(Context);
+  type Expense = {
+    title: string;
+    creator: string;
+    transactionDate: Date;
+    totalAmount: number;
+    groupName: string;
+    imageSrc: string;
+    // payments: [];
+  };
+  const allExpenses: Expense[] = [
+    {
+      title: "title",
+      creator: "creator",
+      transactionDate: new Date(),
+      totalAmount: 11.1,
+      groupName: "",
+      imageSrc: "food-drink",
+    },
+    {
+      title: "title2",
+      creator: "creator2",
+      transactionDate: new Date(),
+      totalAmount: 50.0,
+      groupName: "groupname2",
+      imageSrc: "entertainment",
+    },
+  ];
   type Category = {
     name: string;
     iconSrc: string;
@@ -24,9 +53,7 @@ export default function MiddleAllExpenses() {
     { name: "Entertainment", iconSrc: "/ss/entertainment.png" },
     { name: "Transportation", iconSrc: "/ss/car.png" },
     { name: "Home", iconSrc: "/ss/home.png" },
-    { name: "Custom", iconSrc: "/ss/custom.png" },
   ];
-
   const defaultContent: JSX.Element = (
     <div className="expense-dropdown">
       <div className="flex">
@@ -47,7 +74,7 @@ export default function MiddleAllExpenses() {
                       <td>{category.name}:</td>
                       <td>
                         <Image
-                        // onClick={()=>{}}
+                          // onClick={()=>{}}
                           className="hover-gray"
                           width={30}
                           src={category.iconSrc}
@@ -106,31 +133,116 @@ export default function MiddleAllExpenses() {
       </div>
     </div>
   );
+  const [month, setMonth] = useState<string>("Jan");
+
   return (
     <div className="mid-container">
       <div className="p-3 bg-[#EEEEEE] flex border-b justify-between">
         <h1 className="topbar">All expenses</h1>
         <ExpenseSettle />
       </div>
+
       <Accordion className="p-0 w-full">
-        <AccordionItem
-          key="1"
-          textValue="default"
-          className="expense-parent"
-          title={<ExpenseAccordionItem />}
-          hideIndicator
-        >
-          {defaultContent}
-        </AccordionItem>
-        <AccordionItem
-          key="2"
-          textValue="default"
-          className="expense-parent"
-          title={<ExpenseAccordionItem />}
-          hideIndicator
-        >
-          {defaultContent}
-        </AccordionItem>
+        {allExpenses.map((expense) => {
+          return (
+            <AccordionItem
+              key={expense.transactionDate + expense.creator}
+              textValue="default"
+              className="expense-parent"
+              title={
+                <ExpenseAccordionItem
+                  path={expense.groupName}
+                  props={{ expense }}
+                />
+              }
+              hideIndicator
+            >
+              <div className="expense-dropdown">
+                <div className="flex">
+                  <Popover className="" placement="bottom" showArrow={true}>
+                    <PopoverTrigger>
+                      <Image
+                        className="expense-img hover-gray cursor"
+                        width={85}
+                        src="/ss/receipt.png"
+                      />
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <div className="bg-white rounded-md p-3 border-gray-300 border-[1.5px] -translate-y-2 translate-x-[30px]">
+                        <table>
+                          <tbody className="text-[14px]">
+                            {categories.map((category, index) => (
+                              <tr key={index}>
+                                <td>{category.name}:</td>
+                                <td>
+                                  <Image
+                                    className="hover-gray"
+                                    width={30}
+                                    src={category.iconSrc}
+                                  />
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                  <div className="ml-3">
+                    <h3 className="py-[3px]">{expense.title}</h3>
+                    <h4 className="mt-[3px] text-[20px] text-black font-bold">
+                      ${expense.totalAmount.toFixed(2)}
+                    </h4>
+                    <p className="text-[12px] text-[#999] my-[3px]">
+                      Added by {expense.creator} on{" "}
+                      {expense.transactionDate.getMonth() + 1}/
+                      {expense.transactionDate.getDate()}/
+                      {expense.transactionDate.getFullYear()}
+                    </p>
+                    <Button
+                      disableRipple
+                      className="btn-2 btn-orange text-[11px]"
+                      radius="lg"
+                    >
+                      Edit expense
+                    </Button>
+                  </div>
+                </div>
+                <div className="border-t flex mt-3 pt-2">
+                  <div className="w-1/2 pr-3 pl-1">
+                    <div className="flex flex-1 mt-2">
+                      <Image
+                        className="w-[40px] border rounded-full mr-2"
+                        radius="md"
+                        src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                      />
+                      <p className="flex-1 flex flex-wrap items-center text-[13px]">
+                        <strong>{expense.creator}</strong>
+                        &nbsp;paid&nbsp;
+                        <strong>${expense.totalAmount.toFixed(2)}</strong>
+                        &nbsp;and owes&nbsp;
+                        <strong>$25.00</strong>
+                      </p>
+                    </div>
+                    <div className="flex flex-1 mt-2">
+                      <Image
+                        className="w-[40px] border rounded-full mr-2"
+                        radius="md"
+                        src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                      />
+                      <p className="flex-1 flex flex-wrap items-center text-[13px]">
+                        <strong>Jenny</strong>
+                        &nbsp;owes&nbsp;
+                        <strong>$25.00</strong>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="w-1/2 pr-3 pl-1"></div>
+                </div>
+              </div>
+            </AccordionItem>
+          );
+        })}
       </Accordion>
     </div>
   );

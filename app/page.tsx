@@ -1,50 +1,55 @@
 "use client";
 import React, { useContext, useState, useEffect } from "react";
-import { Image, Button, Link } from "@nextui-org/react";
+import { Image, Button, Link, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import Header from "./header";
-import RightOnTheGo from "./components/RightOnTheGo";
-import MiddleDash from "./components/MiddleDash";
-import LeftDash from "./components/LeftDash";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { Context } from "./providers";
 
-export default function Home() {
+type FormData = {
+  email: string;
+  password: string;
+};
+export default function Login() {
   const router = useRouter();
-  useEffect(() => {
-    router.push("/dashboard");
-  }, [router]);
+  const { user, loginUser, logOut } = useContext(Context);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
+  const onSubmit: SubmitHandler<FormData> = (data) => loginUser(data);
+  // useEffect(() => {
+  //   {
+  //     user ? router.push("/dashboard") : null;
+  //   }
+  // },[user]);
+  console.log(user);
   return (
     <div>
-      <Header path="dashboard" />
-      <div className="main-body ">
-        <LeftDash path="dashboard" />
-        <MiddleDash />
-        <RightOnTheGo />
+      <div className="input-box">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input
+            placeholder="email"
+            {...register("email", {
+              pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              required: true,
+            })}
+          />
+          {errors.email && <span className="pl-1">Incorrect email format</span>}
+          <input placeholder="password" {...register("password")} />
+          <Button className="text-5xl border-solid" disableRipple type="submit">
+            login
+          </Button>
+        </form>
+        <Button
+          className="text-5xl border-solid"
+          disableRipple
+          onClick={logOut}
+        >
+          log OUT
+        </Button>
       </div>
     </div>
   );
 }
-/*
-Models
-- individual user
-  - email
-  - name
-  - money owed to others
-  - money owed to self
-   
-
-- transactions
-  - type: 1-1 or group
-  - category
-  - involved users
-  - date
-  - total amount
-  - price division
-- 1-1
-  - user to user 
-
-- groups
-  - multiple users
-
-*/
-
