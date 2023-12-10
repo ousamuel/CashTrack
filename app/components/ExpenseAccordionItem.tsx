@@ -2,88 +2,86 @@ import React, { useContext, useState, useEffect } from "react";
 import { Image } from "@nextui-org/react";
 interface ExpenseAccordionItemProps {
   path: string;
-  props: any;
+  expense: any;
 }
 const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
   path,
-  props,
+  expense,
 }) => {
+  console.log(expense);
   const [month, setMonth] = useState<string>("Jan");
-  useEffect(() => {
-    switch (props.expense.transactionDate.getMonth()) {
-      case 0: {
-        setMonth("Jan");
-        break;
-      }
-      case 1: {
-        setMonth("Feb");
-        break;
-      }
-      case 2: {
-        setMonth("Mar");
-        break;
-      }
-      case 3: {
-        setMonth("Apr");
-        break;
-      }
-      case 4: {
-        setMonth("May");
-        break;
-      }
-      case 5: {
-        setMonth("Jun");
-        break;
-      }
-      case 6: {
-        setMonth("Jul");
-        break;
-      }
-      case 7: {
-        setMonth("Aug");
-        break;
-      }
-      case 8: {
-        setMonth("Sep");
-        break;
-      }
-      case 9: {
-        setMonth("Oct");
-        break;
-      }
-      case 10: {
-        setMonth("Nov");
-        break;
-      }
-      case 11: {
-        setMonth("Dec");
-        break;
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   switch (props.expense.transactionDate.getMonth()) {
+  //     case 0: {
+  //       setMonth("Jan");
+  //       break;
+  //     }
+  //     case 1: {
+  //       setMonth("Feb");
+  //       break;
+  //     }
+  //     case 2: {
+  //       setMonth("Mar");
+  //       break;
+  //     }
+  //     case 3: {
+  //       setMonth("Apr");
+  //       break;
+  //     }
+  //     case 4: {
+  //       setMonth("May");
+  //       break;
+  //     }
+  //     case 5: {
+  //       setMonth("Jun");
+  //       break;
+  //     }
+  //     case 6: {
+  //       setMonth("Jul");
+  //       break;
+  //     }
+  //     case 7: {
+  //       setMonth("Aug");
+  //       break;
+  //     }
+  //     case 8: {
+  //       setMonth("Sep");
+  //       break;
+  //     }
+  //     case 9: {
+  //       setMonth("Oct");
+  //       break;
+  //     }
+  //     case 10: {
+  //       setMonth("Nov");
+  //       break;
+  //     }
+  //     case 11: {
+  //       setMonth("Dec");
+  //       break;
+  //     }
+  //   }
+  // }, []);
   return (
     <div className="expense-trigger open-down">
       <div className="max-w-[35px] mr-[5px] text-center flex flex-col justify-center inline-block">
-        <p className="text-[10px] uppercase">{month} </p>
+        <p className="text-[10px] uppercase">{"month"} </p>
         <p className="text-[20px] ">
-          {props.expense.transactionDate.getDate()}
+          asd
+          {/* {props.expense.transactionDate.getDate()} */}
         </p>
       </div>
 
       <div className="max-w-[50px]">
-        <Image
-          width={35}
-          src={`/ss/${props.expense.imageSrc}.png`}
-          alt="icon"
-        />
+        <Image width={35} src={`/ss/receipt.png`} alt="icon" />
       </div>
       <div className="max-w-[500px] text-left flex flex-col">
         <p className="text-[16px] text-black text-left my-auto font-bold expense-title">
-          {props.expense.title}
+          {expense.title}
         </p>
-        {path == "group-test" || !props.expense.groupName ? null : (
-          <p className="mt-[3px] expense-group ">{props.expense.groupName}</p>
-        )}
+        {expense.groupName ? (
+          <p className="mt-[3px] expense-group ">{expense.groupName}</p>
+        ) : null}
       </div>
       <div className="max-w-[115px] px-2 text-right">
         <p className="expense-owe">you paid</p>

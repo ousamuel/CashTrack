@@ -165,9 +165,7 @@ const MiddleGroups: React.FC<MiddleGroupsProps> = ({ group, expenses }) => {
               key={expense._id}
               textValue="default"
               className="expense-parent"
-              title={
-                <ExpenseAccordionItem path="group-test" props={{ expense }} />
-              }
+              title={<ExpenseAccordionItem path="group-test" expense={expense} />}
               hideIndicator
             >
               {defaultContent}
