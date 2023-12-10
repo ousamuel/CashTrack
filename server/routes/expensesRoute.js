@@ -20,8 +20,23 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+router.get("/:groupId", async (req, res) => {
+  const populate = function (expense) {
+    return expense.populate("group",  "-users -expenses -__v");
+  };
 
-router.get("/:userid/expenses", getExpenseByUser, (req, res) => {
+  try {
+    const expenses = await Expense.find({group: req.params.groupId},{__v: 0});
+    // for (const expense of expenses) {
+    //   await populate(expense);
+    // }
+    res.json(expenses);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/:groupId", getExpenseByUser, (req, res) => {
   res.json(res.locals.expense);
 });
 

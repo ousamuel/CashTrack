@@ -41,9 +41,7 @@ export default function MiddleDash() {
             </div>
             <div className="block border-l border-gray-300">
               <p>you are owed</p>
-              <p className="green">
-                ${user.totalOwed.toFixed(2)}
-              </p>
+              <p className="green">${user.totalOwed.toFixed(2)}</p>
             </div>
           </div>
           <h2 className="flex uppercase p-2 px-3 text-[12px] sm:text-[14px]">

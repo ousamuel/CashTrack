@@ -2,7 +2,7 @@
 import React, { createContext, useState, ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@nextui-org/react";
-
+// CASHTRACK
 interface ContextProps {
   variable: string;
 }
@@ -16,18 +16,19 @@ export function Providers({ children }: ProvidersProps) {
   const router = useRouter();
   const API = process.env.REACT_APP_API;
   const [user, setUser] = useState<User>();
-  const [variable, setVariable] = useState<string>("hello");
-  const [loading, setLoaing] = useState<boolean>(true);
+  const [groupIds, setGroupIds] = useState<[]>([]);
+  const [selectedGroup, setSelectedGroup] = useState<[]>([]);
+  const [userGroups, setUserGroups] = useState<[]>([]);
+  const [userExpenses, setUserExpenses] = useState<[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [groups, setGroups] = useState<ReactNode>(null);
 
   useEffect(() => {
-
     loginUser({});
     if (!user) {
       router.push("/");
       // reroute to login page if session/user is null
     }
-
   }, []);
   type Expense = {
     _id: string;
@@ -72,8 +73,9 @@ export function Providers({ children }: ProvidersProps) {
 
       const data = await response.json();
       setUser(data.user);
+      setUserGroups(data.user.groups);
+      setUserExpenses(data.user.expenses);
       router.push("/dashboard");
-      // console.log("user set");
       console.log(data.user);
     } catch (error: any) {
       console.error("Error:", error.message);
@@ -124,7 +126,16 @@ export function Providers({ children }: ProvidersProps) {
 
   return (
     <Context.Provider
-      value={{ variable, groups, setGroups, user, setUser, loginUser, logOut }}
+      value={{
+        user,
+        setUser,
+        selectedGroup,
+        setSelectedGroup,
+        userGroups,
+        setUserGroups,
+        loginUser,
+        logOut,
+      }}
     >
       {children}
     </Context.Provider>

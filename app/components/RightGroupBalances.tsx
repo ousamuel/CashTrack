@@ -1,7 +1,10 @@
 "use client";
 import React, { useContext, useState, useEffect } from "react";
 import { Image, Link, Button, Tooltip } from "@nextui-org/react";
+
+
 export default function RightGroupBalances() {
+  const [members, setMembers] = useState<[]>([]);
   type ButtonType = {
     src: string;
     desc: string;

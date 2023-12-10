@@ -6,9 +6,10 @@ exports.login = (req, res, next) => {
   if (req.session.userId) {
     User.findOne({ _id: req.session.userId }, { _password: 0, __v: 0 }).then(
       (user) => {
-        user.populate("expenses groups", "-_password");
-        return res.status(200).json({
-          user,
+        user.populate("expenses groups").then((user) => {
+          return res.status(200).json({
+            user,
+          });
         });
       }
     );
@@ -48,35 +49,35 @@ exports.login = (req, res, next) => {
     }
   }
 };
-exports.verify = (req, res, next) => {
-  try {
-    User.findOne({ id: req.session.userId }).then((user) => {
-      if (!user) {
-        return res.status(401).json({
-          error: new Error("User not found!"),
-        });
-      }
-      user.populate("expenses groups");
-      try {
-        const userData = {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          expenses: user.expenses,
-          groups: user.groups,
-          payments: user.payments,
-          totalOwe: user.totalOwe,
-          totalOwed: user.totalOwed,
-          profilePicture: user.profilePicture,
-          friends: user.friends,
-        };
-        console.log(session);
-        res.status(200).json(userData);
-      } catch (error) {
-        console.error("password error" + error.message);
-      }
-    });
-  } catch (error) {
-    console.error("user finding error" + error.message);
-  }
-};
+// exports.verify = (req, res, next) => {
+//   try {
+//     User.findOne({ id: req.session.userId }).then((user) => {
+//       if (!user) {
+//         return res.status(401).json({
+//           error: new Error("User not found!"),
+//         });
+//       }
+//       user.populate("expenses groups");
+//       try {
+//         const userData = {
+//           _id: user._id,
+//           name: user.name,
+//           email: user.email,
+//           expenses: user.expenses,
+//           groups: user.groups,
+//           payments: user.payments,
+//           totalOwe: user.totalOwe,
+//           totalOwed: user.totalOwed,
+//           profilePicture: user.profilePicture,
+//           friends: user.friends,
+//         };
+//         console.log(session);
+//         res.status(200).json(userData);
+//       } catch (error) {
+//         console.error("password error" + error.message);
+//       }
+//     });
+//   } catch (error) {
+//     console.error("user finding error" + error.message);
+//   }
+// };

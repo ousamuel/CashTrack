@@ -8,6 +8,7 @@ import {
   Button,
   Link,
 } from "@nextui-org/react";
+import LeftDashComponent from "./components/LeftDashComponent";
 import { useRouter } from "next/navigation";
 import { Context } from "./providers";
 
@@ -17,9 +18,30 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ path }) => {
   const { user } = useContext(Context);
   const router = useRouter();
-
+  const logOut = async function () {
+    try {
+      await fetch(`http://localhost:8001/logout`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          Accept: "application/json",
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            router.push("/");
+          }
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
   return (
-    <div className="flex fixed w-full color h-[33px]">
+    <div className="flex fixed w-full color h-[40px]">
       <div className="navbar">
         <div className="flex">
           <Popover className="" placement="bottom" showArrow={true}>
@@ -33,29 +55,32 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="bg-white p-2 border border-[#5bc5a7] rounded-md text-[#999999]">
-              <div className="text-[16px] mt-1 mb-4">
-                <Link
+              <LeftDashComponent path={path} />
+              {/* <div className="text-[16px] mt-1 mb-4">
+                <Button
                   className={path == "dashboard" ? "left-top open" : "left-top"}
                   onClick={() => {
                     router.push("/dashboard");
                   }}
+                  disableRipple
+
                 >
                   <Image
                     className="h-[17px] ml-1"
-                    src="/images/splitwise.png"
+                    src="/svgs/logo.svg"
                     alt="logo"
                   />
                   <div>Dashboard</div>
-                </Link>
+                </Button>
 
-                <Link
+                <Button
                   className={
                     path == "recent-activity" ? "left-top open" : "left-top"
                   }
-                  href="recent-activity"
-                  // onClick={() => {
-                  //   router.push("/recent-activity");
-                  // }}
+                  onClick={() => {
+                    router.push("/recent-activity");
+                  }}
+                  disableRipple
                 >
                   <Image
                     className="h-[17px] ml-1"
@@ -63,17 +88,17 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
                     alt="logo"
                   />
                   Recent Activity
-                </Link>
+                </Button>
               </div>
               <div className="text-[14px]">
-                <Link
+                <Button
                   className={
                     path == "all-expenses" ? "left-top open" : "left-top"
                   }
                   onClick={() => {
                     router.push("/all-expenses");
                   }}
-                  // disableRipple
+                  disableRipple
                 >
                   <Image
                     className="h-[15px] items-center ml-1"
@@ -81,7 +106,7 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
                     alt="list"
                   />
                   All expenses
-                </Link>
+                </Button>
               </div>
               <div className="mt-1">
                 <div id="groups" className="left-header">
@@ -133,7 +158,7 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
                     </Button>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </PopoverContent>
           </Popover>
           <Link
@@ -141,11 +166,12 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
             className="w-[165px] flex content-center pl-1"
           >
             <Image
-              width="108px"
+              width="30px"
               height="22px"
               className="m-auto"
-              src="https://assets.splitwise.com/assets/core/logo-wordmark-horizontal-white-short-c309b91b96261a8a993563bdadcf22a89f00ebb260f4f04fd814c2249a6e05d4.svg"
+              src="/svgs/logo.svg"
             />
+            <strong className="ml-1 text-xl">CashTrack</strong>
           </Link>
         </div>
         <Popover className="" placement="bottom" showArrow={true}>
@@ -177,9 +203,9 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
                 <Link className="acc-btn" href="/new-group">
                   Create a group
                 </Link>
-                <Link className="acc-btn" href="/dashboard">
+                <Button className="acc-btn" onClick={logOut}>
                   Logout
-                </Link>
+                </Button>
               </div>
             </div>
           </PopoverContent>

@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
     return group.populate("expenses", "-users -groups -friends -__v");
   };
   try {
-    const groups = await Group.find({}, { __v: 0, });
+    const groups = await Group.find({}, { __v: 0 });
     for (const group of groups) {
       await populate(group);
     }
@@ -18,9 +18,17 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
-router.get("/:id", getGroup, (req, res) => {
-  res.json(res.locals.group);
+router.get("/:id", async (req, res) => {
+  const populate = function (group) {
+    return group.populate("expenses", "-users -groups -friends -__v");
+  };
+  try {
+    const group = await Group.findOne({ _id: req.params.id }, { __v: 0 });
+    await populate(group);
+    res.status(200).json(group);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 router.post("/", async (req, res) => {

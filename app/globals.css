@@ -42,13 +42,13 @@ body {
   font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 .color {
-  background-color: #5bc5a7;
+  background-color: #2C9984;
 }
 .green {
-  color: #5bc5a7;
+  color: #2C9984;
 }
 .orange {
-  color: #ff652f;
+  color: #e51212;
 }
 .modal {
   /* display: none; */
@@ -77,11 +77,11 @@ body {
   padding-left: 10px;
   padding-right: 15px;
   color: white;
-  text-shadow: 0 -1px 0 #318a71;
+  text-shadow: 0 -1px 0 #2C9984;
   font-size: 18px;
   font-weight: bold;
-  background-color: #5bc5a7;
-  border-bottom: 1px solid #36977b;
+  background-color: #2C9984;
+  border-bottom: 1px solid #2C9984;
   justify-content: space-between;
 }
 .modal-mid {
@@ -107,19 +107,19 @@ body {
   color: white;
   margin: auto;
   width: 100%;
-  height: 33px;
+  height: 40px;
   justify-content: space-between;
   padding-right: min(50px, 5%);
   padding-left: min(50px, 5%);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-  border-bottom: 1px solid #48be9d;
+  border-bottom: 1px solid #2C9984;
 }
 .main-body {
   justify-content: center;
   display: flex;
   height: 100vh;
   /* min-width: 960px; */
-  padding-top: 33px;
+  padding-top: 40px;
   padding-right: max(50px, 5%);
   padding-left: max(50px, 5%);
 }
@@ -213,11 +213,11 @@ body {
   background: #e4e4e4;
 }
 .btn-orange {
-  background: #ff652f;
+  background: #e51212;
   text-shadow: 0 -1px 0 #c83400;
 }
 .btn-orange:hover {
-  background: #f9571d;
+  background: #b10c0c;
 }
 .btn-blue {
   background: #2d51e2;
@@ -228,12 +228,12 @@ body {
   text-shadow: 0 -1px 0 #1f068d;
 }
 .btn-green {
-  background: #5bc5a7;
+  background: #2C9984;
   color: #fff;
   text-shadow: 0 -1px 0 #318970;
 }
 .btn-green:hover {
-  background: #37c099;
+  background: #258371;
 }
 .btn-gray {
   background: #f6f6f6;
@@ -376,12 +376,12 @@ body {
 } */
 
 .open {
-  border-left: 6px solid #5bc5a7;
-  color: #5bc5a7;
+  border-left: 6px solid #2C9984;
+  color: #2C9984;
   font-weight: bold;
 }
 .open:hover {
-  border-left: 6px solid #5bc5a7;
+  border-left: 6px solid #248271;
   color: #5bc5a7;
 }
 .open div {
@@ -475,7 +475,7 @@ body {
   cursor: pointer;
 }
 .add:hover {
-  color: #5bc5a7;
+  color: #2C9984;
 }
 .cursor:hover {
   cursor: pointer;

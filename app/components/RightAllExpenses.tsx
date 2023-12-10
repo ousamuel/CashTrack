@@ -1,7 +1,9 @@
 "use client";
 import React, { useContext, useState, useEffect } from "react";
 import { Image, Link, Button, Tooltip } from "@nextui-org/react";
+import { Context } from "../providers";
 export default function RightAllExpenses() {
+  const { user, userGroups } = useContext(Context);
   type ButtonType = {
     src: string;
     desc: string;
@@ -9,6 +11,7 @@ export default function RightAllExpenses() {
 
   const buttonArray: ButtonType[] = [
     { src: "/svgs/list.svg", desc: "Balances" },
+    { src: "/svgs/user.svg", desc: "Members" },
     { src: "/svgs/calendar.svg", desc: "Upcoming expenses" },
     { src: "/svgs/chart.svg", desc: "Trends" },
     // { src: "/svgs/chat.svg", desc: "Whiteboard" },
@@ -53,6 +56,14 @@ export default function RightAllExpenses() {
       </div>
     );
   };
+  const MembersComponent: React.FC = () => {
+    return (
+      <div>
+        <h2 className="uppercase">upcoming expenses</h2>
+        <span>You have not added any recurring expenses yet </span>
+      </div>
+    );
+  };
   const TrendsComponent: React.FC = () => {
     return (
       <div>
@@ -79,6 +90,8 @@ export default function RightAllExpenses() {
       case "Upcoming expenses":
         return ExpensesComponent;
       case "Trends":
+        return TrendsComponent;
+      case "Members":
         return TrendsComponent;
       default:
         return BalancesComponent;

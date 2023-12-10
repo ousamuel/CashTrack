@@ -5,20 +5,28 @@ const cookieParser = require("cookie-parser");
 const sessions = require("express-session");
 const io = require("socket.io")(process.env.SOCKET_PORT);
 const app = express();
+const crypto = require("crypto");
 const mongoose = require("mongoose");
 const router = express.Router();
 mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("connected to db"));
-const min = 1000 * 60
-const hour = min * 60
-const day = hour * 24
+
+function generateRandomKey(length) {
+  return crypto
+    .randomBytes(Math.ceil(length / 2))
+    .toString("hex")
+    .slice(0, length);
+}
+const min = 1000 * 60;
+const hour = min * 60;
+const day = hour * 24;
 // session parameters with time limit
 // temporary secret key
 app.use(
   sessions({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    secret: generateRandomKey(36),
     saveUninitialized: true,
     cookie: { maxAge: hour },
     resave: false,
@@ -36,6 +44,7 @@ app.use(cookieParser());
 // stand-alone route for destroying session
 app.get("/logout", (req, res) => {
   req.session.destroy();
+  res.status(200).json({ message: "user logged out" });
 });
 
 // ALL ROUTES - - - - - -

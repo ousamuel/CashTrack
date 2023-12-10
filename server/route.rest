@@ -1,15 +1,14 @@
-GET http://localhost:8001/groups
+GET http://localhost:8001/expenses/6574d678150d41f468586157
 ###
 GET http://localhost:8001/users
 ###
 GET http://localhost:8001/expenses
 ###
-POST http://localhost:8001/users
+POST http://localhost:8001/users/login
 Content-Type: application/json
 
 {
-    "name": "user6",
-    "email": "user6@gmail.com",
+    "email": "user3@gmail.com",
     "_password": "password"
 }
 ###

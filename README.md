@@ -10,5 +10,5 @@ ios, bcrypt, jsonwebtoken
  express-session cookie-parser
 
 development: 
-npm run dev in splitwise
+npm run dev in cashtrack
 npm start in server

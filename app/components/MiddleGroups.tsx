@@ -14,39 +14,49 @@ import { Context } from "../providers";
 import ExpenseAccordionItem from "./ExpenseAccordionItem";
 import ExpenseSettle from "./ExpenseSettle";
 
-interface MiddleGroupsProps {
-  path: string;
+interface GroupType {
+  _id: string;
+  groupName: string;
+  createdDate: string;
+  creator: string;
+  expenses: [];
+  users: [];
 }
-const MiddleGroups: React.FC<MiddleGroupsProps> = ({ path }) => {
+type MiddleGroupsProps = {
+  group: GroupType;
+  expenses: any;
+};
+const MiddleGroups: React.FC<MiddleGroupsProps> = ({ group, expenses }) => {
   const { api } = useContext(Context);
-  type Expense = {
-    title: string;
-    creator: string;
-    transactionDate: Date;
-    totalAmount: number;
-    groupName: string;
-    imageSrc: string;
-    // payments: [];
-  };
-  const allExpenses: Expense[] = [
-    {
-      title: "title",
-      creator: "creator",
-      transactionDate: new Date(),
-      totalAmount: 11.1,
-      groupName: "",
-      imageSrc: "food-drink",
-    },
-    {
-      title: "title2",
-      creator: "creator2",
-      transactionDate: new Date(),
-      totalAmount: 50.0,
-      groupName: "groupname2",
-      imageSrc: "entertainment",
-    },
-  ];
-  
+  console.log(expenses);
+  // type Expense = {
+  //   title: string;
+  //   creator: string;
+  //   transactionDate: Date;
+  //   totalAmount: number;
+  //   groupName: string;
+  //   imageSrc: string;
+  //   // payments: [];
+  // };
+  // const allExpenses: Expense[] = [
+  //   {
+  //     title: "title",
+  //     creator: "creator",
+  //     transactionDate: new Date(),
+  //     totalAmount: 11.1,
+  //     groupName: "",
+  //     imageSrc: "food-drink",
+  //   },
+  //   {
+  //     title: "title2",
+  //     creator: "creator2",
+  //     transactionDate: new Date(),
+  //     totalAmount: 50.0,
+  //     groupName: "groupname2",
+  //     imageSrc: "entertainment",
+  //   },
+  // ];
+
   type Category = {
     name: string;
     iconSrc: string;
@@ -140,18 +150,19 @@ const MiddleGroups: React.FC<MiddleGroupsProps> = ({ path }) => {
       </div>
     </div>
   );
+
+  // console.log(group.expenses)
   return (
     <div className="mid-container">
       <div className="p-3 bg-[#EEEEEE] flex border-b justify-between">
-        <h1 className="topbar">Group Name</h1>
+        <h1 className="topbar">{group.groupName}</h1>
         <ExpenseSettle />
       </div>
       <Accordion className="p-0 w-full">
-        {allExpenses.map((expense) => {
+        {expenses.map((expense: any) => {
           return (
             <AccordionItem
-              key={
-                expense.totalAmount}
+              key={expense._id}
               textValue="default"
               className="expense-parent"
               title={

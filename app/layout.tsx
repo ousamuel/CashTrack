@@ -4,7 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
-  title: "Splitwise Clone",
+  title: "CashTrack",
   description: "Developed by Samuel Ou",
 };
 
@@ -16,9 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Providers>
-        <body className={inter.className}>
-          {children}
-        </body>
+        <body className={inter.className}>{children}</body>
       </Providers>
     </html>
   );
