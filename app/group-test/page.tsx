@@ -6,8 +6,9 @@ import Header from "../header";
 import RightGroupBalances from "../components/RightGroupBalances";
 import MiddleGroups from "../components/MiddleGroups";
 import { Context } from "../providers";
+
 export default function GroupPage() {
-  const { selectedGroup } = useContext(Context);
+  const { selectedGroup, userGroups } = useContext(Context);
   const [groupExpenses, setGroupExpenses] = useState<any>([]);
 
   useEffect(() => {
@@ -30,9 +31,10 @@ export default function GroupPage() {
       )
       .then((data) => {
         setGroupExpenses(data);
-        // console.log(data)
+        console.log(data);
       });
   }
+  
 
   return (
     <div>

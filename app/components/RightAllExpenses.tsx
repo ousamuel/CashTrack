@@ -11,11 +11,8 @@ export default function RightAllExpenses() {
 
   const buttonArray: ButtonType[] = [
     { src: "/svgs/list.svg", desc: "Balances" },
-    { src: "/svgs/user.svg", desc: "Members" },
     { src: "/svgs/calendar.svg", desc: "Upcoming expenses" },
-    { src: "/svgs/chart.svg", desc: "Trends" },
-    // { src: "/svgs/chat.svg", desc: "Whiteboard" },
-    // { src: "/svgs/settings.svg", desc: "Settings" },
+    { src: "/svgs/settings.svg", desc: "Settings" },
   ];
 
   const [owed, setOwed] = useState<number>(40.5);
@@ -56,43 +53,13 @@ export default function RightAllExpenses() {
       </div>
     );
   };
-  const MembersComponent: React.FC = () => {
-    return (
-      <div>
-        <h2 className="uppercase">upcoming expenses</h2>
-        <span>You have not added any recurring expenses yet </span>
-      </div>
-    );
-  };
-  const TrendsComponent: React.FC = () => {
-    return (
-      <div>
-        <h2 className="uppercase">trends this month</h2>
-        <div>
-          <h4>Total you paid for</h4>
-          <p className="green">{"$12.50"}</p>
-          <h4>Your total share</h4>
-          <p className="orange">{"$12.50"}</p>
-          <h4>Payments made</h4>
-          <p className="orange">{"$12.50"}</p>
-          <h4>Payments received</h4>
-          <p className="green">{"$12.50"}</p>
-          <h4>Total change in balance</h4>
-          <strong className="green text-[18px]">{"$12.50"}</strong>
-        </div>
-      </div>
-    );
-  };
+  
   const renderComponent = (desc: string): React.FC => {
     switch (desc) {
       case "Balances":
         return BalancesComponent;
       case "Upcoming expenses":
         return ExpensesComponent;
-      case "Trends":
-        return TrendsComponent;
-      case "Members":
-        return TrendsComponent;
       default:
         return BalancesComponent;
     }

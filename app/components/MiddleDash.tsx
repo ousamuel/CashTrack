@@ -36,7 +36,7 @@ export default function MiddleDash() {
             <div className="block border-l border-gray-300">
               <p>you owe</p>
               <p className="orange">
-                {user.totalOwe > 0 ? "-" : ""} ${user.totalOwe.toFixed(2)}
+                ${user.totalOwe.toFixed(2)}
               </p>
             </div>
             <div className="block border-l border-gray-300">

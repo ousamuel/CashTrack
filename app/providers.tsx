@@ -16,19 +16,22 @@ export function Providers({ children }: ProvidersProps) {
   const router = useRouter();
   const API = process.env.REACT_APP_API;
   const [user, setUser] = useState<User>();
+  const [wrongLogin, setWrongLogin] = useState<boolean>(false);
   const [groupIds, setGroupIds] = useState<[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<[]>([]);
   const [userGroups, setUserGroups] = useState<[]>([]);
   const [userExpenses, setUserExpenses] = useState<[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [groups, setGroups] = useState<ReactNode>(null);
+  const [groupExpenses, setGroupExpenses] = useState<any>([]);
 
   useEffect(() => {
+    setWrongLogin(false);
     loginUser({});
-    if (!user) {
-      router.push("/");
-      // reroute to login page if session/user is null
-    }
+    // if (!user) {
+    //   router.push("/");
+    //   // reroute to login page if session/user is null
+    // }
   }, []);
   type Expense = {
     _id: string;
@@ -68,6 +71,10 @@ export function Providers({ children }: ProvidersProps) {
         }),
       });
       if (!response.ok) {
+        if (response.status == 401) {
+          console.log(401);
+          setWrongLogin(true);
+        }
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
@@ -75,9 +82,10 @@ export function Providers({ children }: ProvidersProps) {
       setUser(data.user);
       setUserGroups(data.user.groups);
       setUserExpenses(data.user.expenses);
-      router.push("/dashboard");
+
       console.log(data.user);
     } catch (error: any) {
+      router.push("/");
       console.error("Error:", error.message);
     }
   }
@@ -135,6 +143,11 @@ export function Providers({ children }: ProvidersProps) {
         setUserGroups,
         loginUser,
         logOut,
+        groupExpenses,
+        setGroupExpenses,
+        userExpenses,
+        setWrongLogin,
+        wrongLogin,
       }}
     >
       {children}

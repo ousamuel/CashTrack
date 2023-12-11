@@ -1,6 +1,6 @@
 GET http://localhost:8001/expenses/6574d678150d41f468586157
 ###
-GET http://localhost:8001/users
+GET http://localhost:8001/groups/6574d678150d41f468586157
 ###
 GET http://localhost:8001/expenses
 ###
@@ -16,15 +16,11 @@ POST http://localhost:8001/groups
 Content-Type: application/json
 
 {
-    "groupName" : "groupALL" ,
+    "groupName" : "grouponly1and2" ,
     "creator": "owner",
     "userIds":[
         "6574bf086539e039fd0c0f4d",
-        "6574bf424d702f24cb25bfd3",
-        "6574bf584d702f24cb25bfd5",
-        "6574bf894d702f24cb25bfd8",
-        "6574bf954d702f24cb25bfda",
-        "6574bf9b4d702f24cb25bfdc"
+        "6574bf424d702f24cb25bfd3"
     ]
 }
 ###
@@ -32,7 +28,7 @@ POST http://localhost:8001/expenses
 Content-Type: application/json
 
 {
-    "title" : "expenseALL" ,
+    "title" : "expense1and3" ,
     "creator": "ab1231c@g",
     "totalAmount": 500,
     "group" : "6574d678150d41f468586157",

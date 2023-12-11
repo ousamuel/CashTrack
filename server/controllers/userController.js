@@ -16,36 +16,42 @@ exports.login = (req, res, next) => {
   } else {
     // if no existing session, user has to log in with credentials
     // session is created with time limit, userdata is returned to client
-    try {
-      User.findOne({ email: req.body.email }).then((user) => {
-        if (!user) {
-          return res.status(401).json({
-            error: new Error("User not found!"),
-          });
-        }
-        user.populate("expenses groups");
-        try {
-          bcrypt.compare(req.body._password, user._password).then((match) => {
-            if (!match) {
-              return res
-                .status(401)
-                .json({ error: new Error("wrong password") });
-            }
-            // create new session and store id
-            var session = req.session;
-            session.userId = user.id;
-            // console.log(session);
-            user._password = "hidden";
-            res.status(200).json({
-              user,
+  
+    // this req.email check may be redundant
+    if (!req.body.email) {
+      return res.status(404).json({ error: "empty input" });
+    } else {
+      try {
+        User.findOne({ email: req.body.email }).then((user) => {
+          if (!user) {
+            return res.status(401).json({
+              error: new Error("INVALID CREDENTIALS"),
             });
-          });
-        } catch (error) {
-          console.error("password error" + error.message);
-        }
-      });
-    } catch (error) {
-      console.error("user finding error" + error.message);
+          }
+          user.populate("expenses groups");
+          try {
+            bcrypt.compare(req.body._password, user._password).then((match) => {
+              if (!match) {
+                return res
+                  .status(401)
+                  .json({ error: new Error("INVALID CREDENTIALS") });
+              }
+              // create new session and store id
+              var session = req.session;
+              session.userId = user.id;
+              // console.log(session);
+              user._password = "hidden";
+              res.status(200).json({
+                user,
+              });
+            });
+          } catch (error) {
+            console.error("password error" + error.message);
+          }
+        });
+      } catch (error) {
+        console.error("user finding error" + error.message);
+      }
     }
   }
 };

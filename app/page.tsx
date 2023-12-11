@@ -14,7 +14,8 @@ type FormData = {
 };
 export default function Login() {
   const router = useRouter();
-  const { user, loginUser, logOut } = useContext(Context);
+  const { user, loginUser, logOut, wrongLogin, setWrongLogin } =
+    useContext(Context);
   const [loggingIn, setLoggingIn] = useState<boolean>(true);
   const {
     register,
@@ -24,9 +25,11 @@ export default function Login() {
 
   const onLogInSubmit: SubmitHandler<FormData> = (data) => {
     loginUser(data);
+    router.push("/dashboard");
   };
   const onSignUpSubmit: SubmitHandler<FormData> = (data) => {
     loginUser(data);
+    router.push("/dashboard");
   };
   // useEffect(() => {
   //   {
@@ -41,7 +44,7 @@ export default function Login() {
   return (
     <div className="login-body flex flex-col sm:flex-row">
       <div className="flex flex-1 flex-col items-center align-center">
-      <p className="login-title text-[70px] sm:hidden">CashTrack</p>
+        <p className="login-title text-[70px] sm:hidden">CashTrack</p>
 
         <Image width={300} src="svgs/logo.svg" className="mb-4" />
         <h4 className="text-[20px] text-center w-4/5 sm:w-[65%]">
@@ -49,7 +52,9 @@ export default function Login() {
         </h4>
         {/* <hr className='my-2 w-3/4 dark:text-gray-200'/> */}
         <hr className="my-6 w-[65%] h-[1.5px] border-0 bg-[#90DFAA] hidden sm:flex" />
-        <strong className="text-black uppercase hidden text-[20px] sm:flex ">Testimonials</strong>
+        <strong className="text-black uppercase hidden text-[20px] sm:flex ">
+          Testimonials
+        </strong>
         {testimonials.map((testimonial) => {
           return (
             <h3
@@ -60,10 +65,9 @@ export default function Login() {
             </h3>
           );
         })}
-       
       </div>
       <div className="flex flex-1 flex-col items-center align-center">
-      <p className="login-title text-[80px] hidden sm:flex">CashTrack</p>
+        <p className="login-title text-[80px] hidden sm:flex">CashTrack</p>
 
         {loggingIn ? (
           // LOG IN FORM
@@ -75,13 +79,22 @@ export default function Login() {
                 className="w-full items-center flex flex-col"
                 onSubmit={handleSubmit(onLogInSubmit)}
               >
-                {errors.email ? (
+                {errors.email && !wrongLogin ? (
                   <p className="flex text-red-500 justify-start w-[90%]">
                     Please enter a valid email.
                   </p>
                 ) : null}
+                {wrongLogin ? (
+                  <p className="flex text-red-500 justify-start w-[90%]">
+                    Incorrect email/password
+                  </p>
+                ) : null}
                 <Input
-                  className={errors.email ? "input-form-wrong" : "input-form"}
+                  className={
+                    errors.email || wrongLogin
+                      ? "input-form-wrong"
+                      : "input-form"
+                  }
                   placeholder="Email"
                   {...register("email", {
                     pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -89,17 +102,19 @@ export default function Login() {
                   })}
                 />
                 {errors.password ? (
-                  <p className="text-red-500 justify-start">
-                    Incorrect password.
+                  <p className="flex text-red-500 justify-start w-[90%]">
+                    Password is required
                   </p>
                 ) : null}
                 <Input
                   type="password"
                   className={
-                    errors.password ? "input-form-wrong" : "input-form"
+                    wrongLogin || errors.password
+                      ? "input-form-wrong"
+                      : "input-form"
                   }
                   placeholder="Password"
-                  {...register("password")}
+                  {...register("password", { required: true })}
                 />
                 <Button
                   className="btn btn-green mt-2"
@@ -169,9 +184,7 @@ export default function Login() {
                 />
                 <Input
                   type="password"
-                  className={
-                    errors.confirm ? "input-form-wrong" : "input-form"
-                  }
+                  className={errors.confirm ? "input-form-wrong" : "input-form"}
                   placeholder="Confirm Password"
                   {...register("confirm")}
                 />
@@ -190,12 +203,14 @@ export default function Login() {
                 type="button"
                 onClick={() => setLoggingIn(true)}
               >
-                Not registered? Make an account here
+                Already registered? Log in now
               </Button>
             </div>
           </div>
         )}
-         <strong className="text-black text-[20px] uppercase sm:hidden">Testimonials</strong>
+        <strong className="text-black text-[20px] uppercase sm:hidden">
+          Testimonials
+        </strong>
         {testimonials.map((testimonial) => {
           return (
             <h3

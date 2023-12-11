@@ -20,7 +20,13 @@ router.get("/", async (req, res) => {
 });
 router.get("/:id", async (req, res) => {
   const populate = function (group) {
-    return group.populate("expenses", "-users -groups -friends -__v");
+    return group.populate([
+      { path: "expenses", select: "-__v" },
+      {
+        path: "users",
+        select: "name email _id profilePicture",
+      },
+    ]);
   };
   try {
     const group = await Group.findOne({ _id: req.params.id }, { __v: 0 });

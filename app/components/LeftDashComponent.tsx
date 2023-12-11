@@ -13,8 +13,13 @@ interface InviteForm {
 
 const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
   const router = useRouter();
-  const { selectedGroup, setSelectedGroup, user, userGroups } =
-    useContext(Context);
+
+  const {
+    selectedGroup,
+    setSelectedGroup,
+    user,
+    userGroups,
+  } = useContext(Context);
   const {
     register,
     handleSubmit,
@@ -42,7 +47,11 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
     createdDate: string;
     members: Members[];
   };
-
+  // onClick={() => {
+  //   setSelectedGroup(group);
+  //   router.push(`/groups/${group._id}`);
+  // }}
+  
   return (
     <div>
       {friendsModal == "open" ? (
@@ -130,13 +139,13 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
         {userGroups.map((group: any) => {
           return (
             <Button
-              key={group}
+              key={group._id}
               className={
-                selectedGroup == group ? "left-tabs open" : "left-tabs"
+                path == group._id ? "left-tabs open" : "left-tabs"
               }
               onClick={() => {
                 setSelectedGroup(group)
-                router.push("/group-test");
+                router.push(`/groups/${group._id}`);
               }}
               disableRipple
             >
@@ -145,11 +154,6 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
             </Button>
           );
         })}
-
-        <Link className="left-tabs" href="/">
-          <Image src="/svgs/group.svg" width="10px" />
-          food
-        </Link>
 
         <div id="friends" className="left-header">
           <span>friends</span>
@@ -161,14 +165,14 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
             <span className="font-extrabold text-[13px]">+</span> add
           </Button>
         </div>
-        <Link className="left-tabs" href="/">
+        {/* <Link className="left-tabs" href="/">
           <Image src="/svgs/user.svg" width="10px" />
           man
         </Link>
         <Link className="left-tabs" href="/">
           <Image src="/svgs/user.svg" width="10px" />
           woman
-        </Link>
+        </Link> */}
 
         <div id="invite-box" className="">
           <h3 className="invites color">Invite friends</h3>

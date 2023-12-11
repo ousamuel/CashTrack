@@ -2,8 +2,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Image, Link, Button, Tooltip } from "@nextui-org/react";
 
-
-export default function RightGroupBalances() {
+type RightGroupBalancesProps = {
+  group: any;
+  // expenses: any;
+};
+const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({ group }) => {
   const [members, setMembers] = useState<[]>([]);
   type ButtonType = {
     src: string;
@@ -12,10 +15,10 @@ export default function RightGroupBalances() {
 
   const buttonArray: ButtonType[] = [
     { src: "/svgs/list.svg", desc: "Group Balances" },
+    { src: "/svgs/user.svg", desc: "Members" },
     { src: "/svgs/calendar.svg", desc: "Upcoming expenses" },
-    { src: "/svgs/chart.svg", desc: "Trends" },
-    // { src: "/svgs/chat.svg", desc: "Whiteboard" },
-    // { src: "/svgs/settings.svg", desc: "Settings" },
+    { src: "/svgs/chat.svg", desc: "Whiteboard" },
+    { src: "/svgs/settings.svg", desc: "Settings" },
   ];
 
   const [owed, setOwed] = useState<number>(40.5);
@@ -26,6 +29,7 @@ export default function RightGroupBalances() {
       name: string;
       payments: [];
     };
+
     const membersArray: MemberExpenses[] = [
       { name: "john", payments: [] },
       { name: "kayne", payments: [] },
@@ -81,6 +85,20 @@ export default function RightGroupBalances() {
       </div>
     );
   };
+  const MembersComponent: React.FC = () => {
+    return (
+      <div>
+        {group.users.map((user: any) => {
+          return (
+            <div key={user._id}>
+              <h2>name: {user.name}</h2>
+              <h2> email: {user.email}</h2>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
   const renderComponent = (desc: string): React.FC => {
     switch (desc) {
       case "Balances":
@@ -89,6 +107,8 @@ export default function RightGroupBalances() {
         return ExpensesComponent;
       case "Trends":
         return TrendsComponent;
+      case "Members":
+        return MembersComponent;
       default:
         return BalancesComponent;
     }
@@ -133,4 +153,6 @@ export default function RightGroupBalances() {
       <div className="mt-2">{selectedComponent}</div>
     </div>
   );
-}
+};
+
+export default RightGroupBalances;
