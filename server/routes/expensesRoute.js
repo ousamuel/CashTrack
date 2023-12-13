@@ -42,6 +42,14 @@ router.get("/groupId/:groupId", async (req, res) => {
         select: "_id name email profilePicture",
       },
       {
+        path: "group",
+        select: "groupName",
+      },
+      {
+        path: "distributions",
+        populate: { path: "lendingUser", select: "name email" },
+      },
+      {
         path: "creator",
         select: "_id name email profilePicture",
       },
@@ -73,14 +81,22 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { title, creator, totalAmount, distributions, group, userIds } =
-    req.body;
+  const {
+    title,
+    creator,
+    totalAmount,
+    group,
+    imageSrc,
+    distributions,
+    userIds,
+  } = req.body;
 
   const expense = new Expense({
     title,
     creator,
     totalAmount,
     group,
+    imageSrc,
     distributions,
     users: [],
   });

@@ -51,9 +51,11 @@ body {
   color: #e51212;
 }
 .modal {
-  /* display: none; */
+  display: flex;
+
   justify-content: center;
-  padding-top: 15vh;
+  align-items: center;
+  padding-bottom: 20vh;
   position: fixed;
   z-index: 100;
   left: 0;
@@ -67,7 +69,6 @@ body {
   z-index: 10000;
   height: fit-content;
   border-radius: 5px;
-  width: 350px;
   border: 1px solid #999;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
 }
@@ -99,7 +100,8 @@ body {
   background-color: white;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  border-top: 1px solid rgb(230, 230, 230);
+  border-color: rgb(230, 230, 230);
+  /* border-top: 1px solid rgb(230, 230, 230); */
 }
 
 .navbar {

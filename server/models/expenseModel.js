@@ -31,10 +31,14 @@ const PaymentSchema = new mongoose.Schema({
   },
 });
 
-
 const ExpenseSchema = new mongoose.Schema({
   title: {
     type: String,
+    required: true,
+  },
+  imageSrc: {
+    type: String,
+    default: "/ss/receipt/png",
     required: true,
   },
   creator: {

@@ -1,6 +1,6 @@
-GET http://localhost:8001/groups/
+GET http://localhost:8001/groups/6578be5e7fcdb70a4ac2f6da
 ###
-GET http://localhost:8001/expenses
+GET http://localhost:8001/expenses/groupId/6578be5e7fcdb70a4ac2f6da
 ###
 
 GET http://localhost:8001/expenses/6578bf0ea5b6a70bb7206379
@@ -31,28 +31,30 @@ POST http://localhost:8001/expenses
 Content-Type: application/json
 
 {
-    "title" : "expenseAll5Nogroupownedby2" ,
+    "title" : "expenseAll5Yesgroupownedby2" ,
+    "imageSrc": "/ss/receipt.png",
     "creator": "6578bcbc5e31dd5accac3262",
-    "totalAmount": 6000,
+    "group":"6578be5e7fcdb70a4ac2f6da",
+    "totalAmount": 2000,
     "distributions":[
         {
             "lendingUser": "6578bb26702b1194da19864d",
-            "amount": 551,
+            "amount": 100,
             "title" : "expenseAll5Nogroupownedby2" 
         },
         {
             "lendingUser": "6578bcc55e31dd5accac326a",
-            "amount": 4512,
+            "amount": 400,
             "title" : "expenseAll5Nogroupownedby2" 
         },
         {
             "lendingUser": "6578bcca5e31dd5accac326e",
-            "amount": 2124,
+            "amount": 200,
             "title" : "expenseAll5Nogroupownedby2" 
         },
         {
             "lendingUser": "6578bd621454d2d3bba288e5",
-            "amount": 1136,
+            "amount": 300,
             "title" : "expenseAll5Nogroupownedby2" 
         }
     ],

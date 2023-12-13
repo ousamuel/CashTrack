@@ -21,7 +21,17 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const populate = function (group) {
     return group.populate([
-      { path: "expenses", select: "-__v" },
+      {
+        path: "expenses",
+        select: "-__v",
+        populate: [
+          {
+            path: "distributions",
+            populate: { path: "lendingUser", select: "name email" },
+          },
+          { path: "creator", select: "name email" },
+        ],
+      },
       {
         path: "users",
         select: "name email _id profilePicture",

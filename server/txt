@@ -1,0 +1,159 @@
+{
+  "user": {
+    "_id": "6578bb26702b1194da19864d",
+    "name": "user1",
+    "email": "user1@gmail.com",
+    "expenses": [
+      {
+        "_id": "6579d45ef1fafa4535e027e2",
+        "title": "expenseAll5Nogroupownedby2",
+        "imageSrc": "/ss/receipt.png",
+        "creator": {
+          "_id": "6578bcbc5e31dd5accac3262",
+          "name": "user2",
+          "email": "user2@gmail.com"
+        },
+        "transactionDate": "2023-12-13T15:53:37.459Z",
+        "totalAmount": 6000,
+        "users": [
+          "6578bb26702b1194da19864d",
+          "6578bcc55e31dd5accac326a",
+          "6578bcca5e31dd5accac326e",
+          "6578bd621454d2d3bba288e5"
+        ],
+        "distributions": [
+          {
+            "lendingUser": {
+              "_id": "6578bb26702b1194da19864d",
+              "name": "user1",
+              "email": "user1@gmail.com"
+            },
+            "title": "expenseAll5Nogroupownedby2",
+            "amount": 551,
+            "_id": "6579d45ef1fafa4535e027e3"
+          },
+          {
+            "lendingUser": {
+              "_id": "6578bcc55e31dd5accac326a",
+              "name": "user3",
+              "email": "user3@gmail.com"
+            },
+            "title": "expenseAll5Nogroupownedby2",
+            "amount": 4512,
+            "_id": "6579d45ef1fafa4535e027e4"
+          },
+          {
+            "lendingUser": {
+              "_id": "6578bcca5e31dd5accac326e",
+              "name": "user4",
+              "email": "user4@gmail.com"
+            },
+            "title": "expenseAll5Nogroupownedby2",
+            "amount": 2124,
+            "_id": "6579d45ef1fafa4535e027e5"
+          },
+          {
+            "lendingUser": {
+              "_id": "6578bd621454d2d3bba288e5",
+              "name": "user5",
+              "email": "user5@gmail.com"
+            },
+            "title": "expenseAll5Nogroupownedby2",
+            "amount": 1136,
+            "_id": "6579d45ef1fafa4535e027e6"
+          }
+        ],
+        "payments": []
+      },
+      {
+        "_id": "6579d487f1fafa4535e027ef",
+        "title": "expenseAll5Yesgroupownedby2",
+        "imageSrc": "/ss/receipt.png",
+        "creator": {
+          "_id": "6578bcbc5e31dd5accac3262",
+          "name": "user2",
+          "email": "user2@gmail.com"
+        },
+        "transactionDate": "2023-12-13T15:53:37.459Z",
+        "totalAmount": 2000,
+        "group": {
+          "_id": "6578be5e7fcdb70a4ac2f6da",
+          "groupName": "groupAll5"
+        },
+        "users": [
+          "6578bb26702b1194da19864d",
+          "6578bcc55e31dd5accac326a",
+          "6578bcca5e31dd5accac326e",
+          "6578bd621454d2d3bba288e5"
+        ],
+        "distributions": [
+          {
+            "lendingUser": {
+              "_id": "6578bb26702b1194da19864d",
+              "name": "user1",
+              "email": "user1@gmail.com"
+            },
+            "title": "expenseAll5Nogroupownedby2",
+            "amount": 100,
+            "_id": "6579d487f1fafa4535e027f0"
+          },
+          {
+            "lendingUser": {
+              "_id": "6578bcc55e31dd5accac326a",
+              "name": "user3",
+              "email": "user3@gmail.com"
+            },
+            "title": "expenseAll5Nogroupownedby2",
+            "amount": 400,
+            "_id": "6579d487f1fafa4535e027f1"
+          },
+          {
+            "lendingUser": {
+              "_id": "6578bcca5e31dd5accac326e",
+              "name": "user4",
+              "email": "user4@gmail.com"
+            },
+            "title": "expenseAll5Nogroupownedby2",
+            "amount": 200,
+            "_id": "6579d487f1fafa4535e027f2"
+          },
+          {
+            "lendingUser": {
+              "_id": "6578bd621454d2d3bba288e5",
+              "name": "user5",
+              "email": "user5@gmail.com"
+            },
+            "title": "expenseAll5Nogroupownedby2",
+            "amount": 300,
+            "_id": "6579d487f1fafa4535e027f3"
+          }
+        ],
+        "payments": []
+      }
+    ],
+    "groups": [
+      {
+        "_id": "6578be5e7fcdb70a4ac2f6da",
+        "groupName": "groupAll5",
+        "createdDate": "2023-12-12T20:08:48.398Z",
+        "creator": "6578bb26702b1194da19864d",
+        "expenses": [
+          "6578bebb7fcdb70a4ac2f6e1",
+          "6578bf0ea5b6a70bb7206379",
+          "6578bf334f89c95589cfd8b3",
+          "6579d487f1fafa4535e027ef"
+        ],
+        "users": [
+          "6578bb26702b1194da19864d",
+          "6578bcbc5e31dd5accac3262",
+          "6578bcc55e31dd5accac326a",
+          "6578bcca5e31dd5accac326e",
+          "6578bd621454d2d3bba288e5"
+        ]
+      }
+    ],
+    "profilePicture": "/src",
+    "friends": [],
+    "__v": 0
+  }
+}

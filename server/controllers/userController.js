@@ -6,11 +6,36 @@ exports.login = (req, res, next) => {
   if (req.session.userId) {
     User.findOne({ _id: req.session.userId }, { _password: 0, __v: 0 }).then(
       (user) => {
-        user.populate("expenses groups").then((user) => {
-          return res.status(200).json({
-            user,
+        user
+          .populate([
+            {
+              path: "expenses",
+              select: "-__v",
+              populate: [
+                {
+                  path: "group",
+                  select: "groupName",
+                },
+                {
+                  path: "creator",
+                  select: "name email",
+                },
+                {
+                  path: "distributions",
+                  populate: {
+                    path: "lendingUser",
+                    select: "name email",
+                  },
+                },
+              ],
+            },
+            { path: "groups", select: "-__v" },
+          ])
+          .then((user) => {
+            return res.status(200).json({
+              user,
+            });
           });
-        });
       }
     );
   } else {
@@ -29,7 +54,27 @@ exports.login = (req, res, next) => {
             });
           }
           user.populate([
-            { path: "expenses", select: "-__v" },
+            {
+              path: "expenses",
+              select: "-__v",
+              populate: [
+                {
+                  path: "group",
+                  select: "groupName",
+                },
+                {
+                  path: "creator",
+                  select: "name email",
+                },
+                {
+                  path: "distributions",
+                  populate: {
+                    path: "lendingUser",
+                    select: "name email",
+                  },
+                },
+              ],
+            },
             { path: "groups", select: "-__v" },
           ]);
           try {

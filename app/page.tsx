@@ -4,7 +4,6 @@ import { Image, Button, Link, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Context } from "./providers";
-import { set } from "mongoose";
 
 type FormData = {
   name: string;

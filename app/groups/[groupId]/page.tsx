@@ -15,7 +15,7 @@ export default function GroupPage({ params }) {
     selectedGroup,
   } = useContext(Context);
 
-  async function fetchGroupExpenses(groupId: string) {
+  async function fetchGroupData(groupId: string) {
     await fetch(`http://localhost:8001/groups/${groupId}`, {
       method: "GET",
       credentials: "include",
@@ -37,7 +37,7 @@ export default function GroupPage({ params }) {
   }
 
   useEffect(() => {
-    fetchGroupExpenses(params.groupId);
+    fetchGroupData(params.groupId);
   }, []);
 
   return (

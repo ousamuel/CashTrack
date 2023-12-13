@@ -89,7 +89,7 @@ export function Providers({ children }: ProvidersProps) {
       // setTotalOwe(0);
       // setTotalOwed(0);
       data.user.expenses.forEach((expense: any) => {
-        if (expense.creator == data.user._id) {
+        if (expense.creator._id == data.user._id) {
           expense.distributions.forEach((distribution: any) => {
             tempOwed += distribution.amount;
             // setTotalOwed(totalOwed + distribution.amount);
@@ -97,7 +97,7 @@ export function Providers({ children }: ProvidersProps) {
           setTotalOwed(tempOwed);
         } else {
           expense.distributions.forEach((distribution: any) => {
-            if (distribution.lendingUser == data.user._id) {
+            if (distribution.lendingUser._id == data.user._id) {
               tempOwe += distribution.amount;
               // setTotalOwe(totalOwe + distribution.amount);
             }
