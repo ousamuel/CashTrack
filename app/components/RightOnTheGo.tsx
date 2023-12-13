@@ -3,8 +3,8 @@ import React, { useContext, useState, useEffect } from "react";
 import { Image, Link } from "@nextui-org/react";
 export default function RightOnTheGo() {
   return (
-    <div className='right-container'>
-      <h2 className="uppercase">splitwise on the go</h2>
+    <div className="right-container">
+      <h2 className="uppercase">Inspired by Splitwise</h2>
       <span>Get the free Splitwise app and add IOUs from anywhere:</span>
       <Link
         target="_blank"

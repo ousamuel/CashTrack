@@ -17,12 +17,14 @@ export function Providers({ children }: ProvidersProps) {
   const API = process.env.REACT_APP_API;
   const [user, setUser] = useState<User>();
   const [wrongLogin, setWrongLogin] = useState<boolean>(false);
+  const [totalOwe, setTotalOwe] = useState<number>(0);
+  const [totalOwed, setTotalOwed] = useState<number>(0);
   const [groupIds, setGroupIds] = useState<[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<[]>([]);
   const [userGroups, setUserGroups] = useState<[]>([]);
   const [userExpenses, setUserExpenses] = useState<[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [groups, setGroups] = useState<ReactNode>(null);
+  // const [loading, setLoading] = useState<boolean>(true);
+  // const [groups, setGroups] = useState<ReactNode>(null);
   const [groupExpenses, setGroupExpenses] = useState<any>([]);
 
   useEffect(() => {
@@ -54,7 +56,6 @@ export function Providers({ children }: ProvidersProps) {
     profilePicture: string;
     friends: string[];
   };
-
   async function loginUser(input: { [key: string]: string }) {
     // function points to /server/controllers/userController.js
     try {
@@ -81,37 +82,60 @@ export function Providers({ children }: ProvidersProps) {
       const data = await response.json();
       setUser(data.user);
       setUserGroups(data.user.groups);
+      // settingBalances(data.user.expenses);
       setUserExpenses(data.user.expenses);
-
+      let tempOwe = 0;
+      let tempOwed = 0;
+      // setTotalOwe(0);
+      // setTotalOwed(0);
+      data.user.expenses.forEach((expense: any) => {
+        if (expense.creator == data.user._id) {
+          expense.distributions.forEach((distribution: any) => {
+            tempOwed += distribution.amount;
+            // setTotalOwed(totalOwed + distribution.amount);
+          });
+          setTotalOwed(tempOwed);
+        } else {
+          expense.distributions.forEach((distribution: any) => {
+            if (distribution.lendingUser == data.user._id) {
+              tempOwe += distribution.amount;
+              // setTotalOwe(totalOwe + distribution.amount);
+            }
+          });
+          setTotalOwe(tempOwe);
+        }
+        // console.log(totalOwed);
+        // console.log(expense._id);
+      });
       console.log(data.user);
     } catch (error: any) {
       router.push("/");
       console.error("Error:", error.message);
     }
   }
-  async function fetchGroups() {
-    try {
-      const response = await fetch(`http://localhost:8001/groups`, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Accept: "application/json",
-        },
-      });
+  // async function fetchGroups() {
+  //   try {
+  //     const response = await fetch(`http://localhost:8001/groups`, {
+  //       method: "GET",
+  //       credentials: "include",
+  //       headers: {
+  //         "Content-Type": "application/json; charset=UTF-8",
+  //         Accept: "application/json",
+  //       },
+  //     });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
 
-      const data = await response.json();
-      // console.log("Groups fetched");
-      // console.log(data);
-      setGroups(data);
-    } catch (error: any) {
-      console.error("Error:", error.message);
-    }
-  }
+  //     const data = await response.json();
+  //     // console.log("Groups fetched");
+  //     // console.log(data);
+  //     setGroups(data);
+  //   } catch (error: any) {
+  //     console.error("Error:", error.message);
+  //   }
+  // }
   async function logOut() {
     // function points to app.get('/logout') in /server/server.js
     try {
@@ -135,6 +159,10 @@ export function Providers({ children }: ProvidersProps) {
   return (
     <Context.Provider
       value={{
+        totalOwe,
+        setTotalOwe,
+        totalOwed,
+        setTotalOwed,
         user,
         setUser,
         selectedGroup,

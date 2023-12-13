@@ -63,6 +63,7 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
       }
     }
   }, []);
+  console.log(expense.group)
   return (
     <div className="expense-trigger open-down">
       <div className="max-w-[35px] mr-[5px] text-center flex flex-col justify-center inline-block">
@@ -77,8 +78,8 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
         <p className="text-[16px] text-black text-left my-auto font-bold expense-title">
           {expense.title}
         </p>
-        {expense.groupName ? (
-          <p className="mt-[3px] expense-group ">{expense.groupName}</p>
+        {expense.group ? (
+          <p className="mt-[3px] expense-group ">{expense.group}</p>
         ) : null}
       </div>
       <div className="max-w-[115px] px-2 text-right">
@@ -90,7 +91,7 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
       <div className="px-1 max-w-[135px]">
         <p className="expense-owe">you lent</p>
         <h4 className="mt-[3px] text-[16px] green font-bold">
-          ${expense.totalAmount.toFixed(2)} - calculate
+          ${(expense.totalAmount - (expense.totalAmount/expense.users.length)).toFixed(2)}
         </h4>
       </div>
     </div>

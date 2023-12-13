@@ -5,10 +5,12 @@ import MiddleDashList from "./MiddleDashList";
 import MiddleDashChart from "./MiddleDashChart";
 import { Context } from "../providers";
 export default function MiddleDash() {
-  const { user } = useContext(Context);
+  const { user, totalOwe, totalOwed } = useContext(Context);
   const [selected, setSelected] = useState<string>("list");
   // const owe = 140;
   // const owed = 40;
+  // console.log(totalOwe);
+  // console.log(totalOwed);
   return (
     <div className="mid-container">
       {user ? (
@@ -24,24 +26,20 @@ export default function MiddleDash() {
             */}
             <div className="block ">
               <p>total balance</p>
-              <p
-                className={user.totalOwe > user.totalOwed ? "orange" : "green"}
-              >
-                {user.totalOwe > user.totalOwed ? "-" : ""}$
-                {(user.totalOwe - user.totalOwed).toFixed(2)}
+              <p className={totalOwe > totalOwed ? "orange" : "green"}>
+                {totalOwe > totalOwed ? "-" : ""}$
+                {Math.abs(totalOwe - totalOwed).toFixed(2)}
               </p>
               {/* <p className={owe > owed ? "orange" : "green"}>
               {owe > owed ? "-" : ""}${(owe - owed).toFixed(2)}</p> */}
             </div>
             <div className="block border-l border-gray-300">
               <p>you owe</p>
-              <p className="orange">
-                ${user.totalOwe.toFixed(2)}
-              </p>
+              <p className="orange">${totalOwe.toFixed(2)}</p>
             </div>
             <div className="block border-l border-gray-300">
               <p>you are owed</p>
-              <p className="green">${user.totalOwed.toFixed(2)}</p>
+              <p className="green">${totalOwed.toFixed(2)}</p>
             </div>
           </div>
           <h2 className="flex uppercase p-2 px-3 text-[12px] sm:text-[14px]">

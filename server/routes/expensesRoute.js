@@ -7,11 +7,24 @@ router.use(express.json());
 
 router.get("/", async (req, res) => {
   const populate = function (expense) {
-    return expense.populate("group", "-users -expenses -__v");
+    return expense.populate([
+      {
+        path: "creator",
+        select: "-_password -expenses -groups -__v",
+      },
+      {
+        path: "group",
+        select: "-_id -expenses",
+      },
+      {
+        path: "users",
+        select: "",
+      },
+    ]);
   };
 
   try {
-    const expenses = await Expense.find({},{__v: 0});
+    const expenses = await Expense.find({}, { __v: 0 });
     for (const expense of expenses) {
       await populate(expense);
     }
@@ -20,35 +33,55 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-router.get("/:groupId", async (req, res) => {
+router.get("/groupId/:groupId", async (req, res) => {
   const populate = function (expense) {
-    return expense.populate("group",  "-users -expenses -__v");
+    // return expense.populate("group", "-users -expenses -__v");
+    return expense.populate([
+      {
+        path: "users",
+        select: "_id name email profilePicture",
+      },
+      {
+        path: "creator",
+        select: "_id name email profilePicture",
+      },
+    ]);
   };
 
   try {
-    const expenses = await Expense.find({group: req.params.groupId},{__v: 0});
-    // for (const expense of expenses) {
-    //   await populate(expense);
-    // }
+    const expenses = await Expense.find(
+      { group: req.params.groupId },
+      { __v: 0 }
+    );
+    for (const expense of expenses) {
+      await populate(expense);
+    }
     res.json(expenses);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.get("/:groupId", getExpenseByUser, (req, res) => {
-  res.json(res.locals.expense);
+router.get("/:id", async (req, res) => {
+  try {
+    const expense = await Expense.findOne({ _id: req.params.id });
+    res.status(200).json(expense);
+  } catch (err) {
+    console.error(err);
+  }
+  // res.json(res.locals.expense);
 });
 
 router.post("/", async (req, res) => {
-  const { title, creator, totalAmount, payments, group, userIds } = req.body;
+  const { title, creator, totalAmount, distributions, group, userIds } =
+    req.body;
 
   const expense = new Expense({
     title,
     creator,
     totalAmount,
-    payments,
     group,
+    distributions,
     users: [],
   });
 
@@ -77,40 +110,97 @@ router.post("/", async (req, res) => {
       throw error;
     }
   };
+  // const addToUserOwes = async function (distribution) {
+  //   try {
+  //     const updatedUser = await User.findByIdAndUpdate(
+  //       distribution.lendingUser,
+  //       { $push: { totalOwe: distribution.amount } },
+  //       { new: true, useFindAndModify: false }
+  //     );
+  //     return updatedUser;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // };
+  // const addToCreatorOwed = async function (distribution) {
+  //   try {
+  //     const updatedUser = await User.findByIdAndUpdate(
+  //       creator,
+  //       { $push: { totalOwed: distribution.amount } },
+  //       { new: true, useFindAndModify: false }
+  //     );
+  //     return updatedUser;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // };
   try {
+    await User.findByIdAndUpdate(
+      creator,
+      { $push: { expenses: expense._id } },
+      { new: true, useFindAndModify: false }
+    );
+
     for (const userId of userIds) {
       await addExpenseToUser(userId, expense);
     }
+    // for (const distribution of distributions) {
+    //   await addToUserOwes(distribution);
+    //   await addToCreatorOwed(distribution);
+    // }
     await addExpenseToGroup(group, expense);
     expense.save();
-
+    await expense.populate([
+      {
+        path: "users",
+        select: "_id name email profilePicture",
+      },
+    ]);
     res.status(201).json(expense);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-router.patch("/:id", (req, res) => {
-  // Implement patch logic
+router.patch("/:id", async (req, res) => {
+  const { sender, title, amount } = req.body;
+  try {
+    const expense = await Expense.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: {
+          payments: {
+            sender,
+            title,
+            amount,
+          },
+        },
+      },
+      { new: true, useFindAndModify: false }
+    );
+    res.status(201).json(expense);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 router.delete("/:id", (req, res) => {
   // Implement delete logic
 });
 
-async function getExpenseByUser(req, res, next) {
-  let expense;
-  try {
-    const expenses = await Expense.find({ userIds: req.body.userid });
-    if (expense === null) {
-      return res.status(400).json({ message: "No such expense" });
-    }
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-  res.expense = expense;
-  next();
-}
+// async function getExpenseByUser(req, res, next) {
+//   let expense;
+//   try {
+//     const expenses = await Expense.find({ userIds: req.body.userid });
+//     if (expense === null) {
+//       return res.status(400).json({ message: "No such expense" });
+//     }
+//   } catch (error) {
+//     return res.status(500).json({ message: error.message });
+//   }
+//   res.expense = expense;
+//   next();
+// }
 
 module.exports = router;
 

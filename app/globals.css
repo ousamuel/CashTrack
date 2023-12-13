@@ -139,6 +139,9 @@ body {
   margin-right: 10px;
 }
 .mid-container {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
   flex-grow: 1;
   border-left: solid;
   border-right: solid;

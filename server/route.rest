@@ -1,46 +1,91 @@
-GET http://localhost:8001/expenses/6574d678150d41f468586157
-###
-GET http://localhost:8001/groups/6574d678150d41f468586157
+GET http://localhost:8001/groups/
 ###
 GET http://localhost:8001/expenses
+###
+
+GET http://localhost:8001/expenses/6578bf0ea5b6a70bb7206379
+###
+
+PATCH http://localhost:8001/expenses/6578bebb7fcdb70a4ac2f6e1
+Content-Type: application/json
+
+{
+    "sender":"6578bcca5e31dd5accac326e",
+    "title": "expenseAll4",
+    "amount": 2000
+}
 ###
 POST http://localhost:8001/users/login
 Content-Type: application/json
 
 {
-    "email": "user3@gmail.com",
+    "name": "user1",
+    "email": "user1@gmail.com",
     "_password": "password"
 }
 ###
-POST http://localhost:8001/groups
-Content-Type: application/json
+GET http://localhost:8001/logout
 
-{
-    "groupName" : "grouponly1and2" ,
-    "creator": "owner",
-    "userIds":[
-        "6574bf086539e039fd0c0f4d",
-        "6574bf424d702f24cb25bfd3"
-    ]
-}
 ###
 POST http://localhost:8001/expenses
 Content-Type: application/json
 
 {
-    "title" : "expense1and3" ,
-    "creator": "ab1231c@g",
-    "totalAmount": 500,
-    "group" : "6574d678150d41f468586157",
+    "title" : "expenseAll5Nogroupownedby2" ,
+    "creator": "6578bcbc5e31dd5accac3262",
+    "totalAmount": 6000,
+    "distributions":[
+        {
+            "lendingUser": "6578bb26702b1194da19864d",
+            "amount": 551,
+            "title" : "expenseAll5Nogroupownedby2" 
+        },
+        {
+            "lendingUser": "6578bcc55e31dd5accac326a",
+            "amount": 4512,
+            "title" : "expenseAll5Nogroupownedby2" 
+        },
+        {
+            "lendingUser": "6578bcca5e31dd5accac326e",
+            "amount": 2124,
+            "title" : "expenseAll5Nogroupownedby2" 
+        },
+        {
+            "lendingUser": "6578bd621454d2d3bba288e5",
+            "amount": 1136,
+            "title" : "expenseAll5Nogroupownedby2" 
+        }
+    ],
     "userIds":[
-        "6574bf086539e039fd0c0f4d",
-        "6574bf424d702f24cb25bfd3",
-        "6574bf584d702f24cb25bfd5",
-        "6574bf894d702f24cb25bfd8",
-        "6574bf954d702f24cb25bfda",
-        "6574bf9b4d702f24cb25bfdc"
+        "6578bb26702b1194da19864d",
+        "6578bcc55e31dd5accac326a",
+        "6578bcca5e31dd5accac326e",
+        "6578bd621454d2d3bba288e5"
     ]
 }
 
 
+###
+###
+POST http://localhost:8001/groups
+Content-Type: application/json
 
+{
+    "groupName" : "groupAll5" ,
+    "creator": "6578bb26702b1194da19864d",
+    "userIds":[
+        "6578bb26702b1194da19864d",
+        "6578bcbc5e31dd5accac3262",
+        "6578bcc55e31dd5accac326a",
+        "6578bcca5e31dd5accac326e",
+        "6578bd621454d2d3bba288e5"
+    ]
+}
+###
+"userIds":[
+        "6578bb26702b1194da19864d",
+        "6578bcbc5e31dd5accac3262",
+        "6578bcc55e31dd5accac326a",
+        "6578bcca5e31dd5accac326e",
+        "6578bd621454d2d3bba288e5"
+    ]

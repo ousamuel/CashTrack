@@ -16,7 +16,7 @@ exports.login = (req, res, next) => {
   } else {
     // if no existing session, user has to log in with credentials
     // session is created with time limit, userdata is returned to client
-  
+
     // this req.email check may be redundant
     if (!req.body.email) {
       return res.status(404).json({ error: "empty input" });
@@ -28,7 +28,10 @@ exports.login = (req, res, next) => {
               error: new Error("INVALID CREDENTIALS"),
             });
           }
-          user.populate("expenses groups");
+          user.populate([
+            { path: "expenses", select: "-__v" },
+            { path: "groups", select: "-__v" },
+          ]);
           try {
             bcrypt.compare(req.body._password, user._password).then((match) => {
               if (!match) {

@@ -57,6 +57,8 @@ app.use("/expenses", expensesRouter);
 const groupsRouter = require("./routes/groupsRoute");
 app.use("/groups", groupsRouter);
 
+const paymentsRouter = require("./routes/paymentsRoute");
+app.use("/payments", paymentsRouter);
 // - - - - - - -
 app.use("/", router);
 

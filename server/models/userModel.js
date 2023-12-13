@@ -38,25 +38,15 @@ const UserSchema = new mongoose.Schema({
       ref: "Group",
     },
   ],
-  payments: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Payment",
-    },
-  ],
+
   gender: {
     type: String,
   },
-  totalOwe: {
-    type: Number,
-    default: 0,
-    required: true,
-  },
-  totalOwed: {
-    type: Number,
-    default: 0,
-    required: true,
-  },
+
+  // totalOwe: [{ type: Number }],
+
+  // totalOwed: [{ type: Number }],
+
   profilePicture: {
     type: String,
     default: "/src",

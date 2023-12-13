@@ -34,6 +34,10 @@ router.get("/:id", getUser, (req, res) => {
 });
 router.post("/login", userControl.login);
 router.post("/", async (req, res) => {
+  const existingUser = await User.findOne({ email: req.body.email });
+  if (existingUser) {
+    return res.status(400).json({ error: "invalid email" });
+  }
   bcrypt.hash(req.body._password, 10).then((hash) => {
     const user = new User({
       name: req.body.name,
@@ -42,6 +46,7 @@ router.post("/", async (req, res) => {
     });
     try {
       user.save();
+      user._password = "hidden";
       res.status(201).json(user);
     } catch (error) {
       res.status(400).json({ message: error.message });

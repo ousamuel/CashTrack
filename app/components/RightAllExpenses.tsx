@@ -3,48 +3,41 @@ import React, { useContext, useState, useEffect } from "react";
 import { Image, Link, Button, Tooltip } from "@nextui-org/react";
 import { Context } from "../providers";
 export default function RightAllExpenses() {
-  const { user, userGroups } = useContext(Context);
+  const { user, userGroups, totalOwed, totalOwe } = useContext(Context);
   type ButtonType = {
     src: string;
     desc: string;
   };
 
   const buttonArray: ButtonType[] = [
-    { src: "/svgs/list.svg", desc: "Balances" },
+    // { src: "/svgs/list.svg", desc: "Balances" },
     { src: "/svgs/calendar.svg", desc: "Upcoming expenses" },
     { src: "/svgs/settings.svg", desc: "Settings" },
   ];
-
-  const [owed, setOwed] = useState<number>(40.5);
-  const [youOwe, setYouOwe] = useState<number>(155.5);
-  const netBalance: number = owed - youOwe;
-  const BalancesComponent: React.FC = () => {
-    return (
-      <div>
-        <h2 className="uppercase">your total balance</h2>
-        <div className="orange ">
-          <p className="text-[16px]">you owe</p>
-          <strong className="text-[28px] leading-none">
-            ${youOwe.toFixed(2)}
-          </strong>{" "}
-        </div>
-        <div className="green">
-          <p className="text-[16px]">you are owed</p>
-          <strong className="text-[28px]">${owed.toFixed(2)}</strong>
-        </div>
-        <div className="flex flex-col">
-          <strong className="text-[16px]">Net Balance</strong>
-          <strong
-            className={
-              netBalance > 0 ? "green text-[28px]" : "orange text-[28px]"
-            }
-          >
-            ${netBalance.toFixed(2)}
-          </strong>
-        </div>
-      </div>
-    );
-  };
+  // const BalancesComponent: React.FC = () => {
+  //   return (
+  //     <div>
+  //       <h2 className="uppercase">your total balance</h2>
+  //       <div className="orange ">
+  //         <p className="text-[16px]">you owe</p>
+  //         <strong className="text-[28px] leading-none">
+  //           ${totalOwe.toFixed(2)}
+  //         </strong>{" "}
+  //       </div>
+  //       <div className="green">
+  //         <p className="text-[16px]">you are owed</p>
+  //         <strong className="text-[28px]">${totalOwed.toFixed(2)}</strong>
+  //       </div>
+  //       <div className="flex flex-col">
+  //         <strong className="text-[16px]">Net Balance</strong>
+  //         <strong className={totalOwe > totalOwed ? "orange" : "green"}>
+  // //               {totalOwe > totalOwed ? "-" : ""}$
+  //         {Math.abs(totalOwe - totalOwed).toFixed(2)}
+  //         </strong>
+  //       </div>
+  //     </div>
+  //   );
+  // };
   const ExpensesComponent: React.FC = () => {
     return (
       <div>
@@ -54,18 +47,27 @@ export default function RightAllExpenses() {
     );
   };
   
+  const RandomComp: React.FC = () => {
+    return (
+      <div>
+        <h2 className="uppercase">upcoming 12312312</h2>
+        <span>You have not added any 2312312321312 expenses yet </span>
+      </div>
+    );
+  };
+  
   const renderComponent = (desc: string): React.FC => {
     switch (desc) {
       case "Balances":
-        return BalancesComponent;
+        return ExpensesComponent;
       case "Upcoming expenses":
         return ExpensesComponent;
       default:
-        return BalancesComponent;
+        return RandomComp;
     }
   };
   const [selectedComponent, setSelectedComponent] = useState<React.FC | any>(
-    BalancesComponent
+    ExpensesComponent
   );
   const [selectedDesc, setSelectedDesc] = useState<string>("Balances");
   const handleButtonClick = (desc: string): void => {
@@ -75,6 +77,31 @@ export default function RightAllExpenses() {
   };
   return (
     <div className="right-container">
+      <div>
+        <h2 className="uppercase">your total balance</h2>
+        <div className="orange ">
+          <p className="text-[16px]">you owe</p>
+          <strong className="text-[28px] leading-none">
+            ${totalOwe.toFixed(2)}
+          </strong>{" "}
+        </div>
+        <div className="green my-2">
+          <p className="text-[16px]">you are owed</p>
+          <strong className="text-[28px]">${totalOwed.toFixed(2)}</strong>
+        </div>
+        <div className="flex flex-col">
+          <strong className="text-[16px]">Net Balance</strong>
+          <strong
+            className={
+              totalOwed >= totalOwe ? "green text-[28px]" : "orange text-[28px]"
+            }
+          >
+            {totalOwe > totalOwed ? "-" : ""}$
+            {Math.abs(totalOwe - totalOwed).toFixed(2)}
+          </strong>
+        </div>
+      </div>
+
       {buttonArray.map((obj) => {
         return (
           <Tooltip

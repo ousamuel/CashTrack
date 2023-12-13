@@ -1,7 +1,12 @@
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
-const PaymentSchema = new mongoose.Schema({
-  user: {
+const DistributionSchema = new mongoose.Schema({
+  lendingUser: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
+  },
+  title: {
     type: String,
     required: true,
   },
@@ -10,21 +15,31 @@ const PaymentSchema = new mongoose.Schema({
     required: true,
   },
 });
-const UserIdSchema = new mongoose.Schema({
-  userId: {
+const PaymentSchema = new mongoose.Schema({
+  sender: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
     required: true,
-    unique: true,
+    ref: "User",
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
   },
 });
+
+
 const ExpenseSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
   },
   creator: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
   transactionDate: {
@@ -39,7 +54,7 @@ const ExpenseSchema = new mongoose.Schema({
   group: {
     type: mongoose.Schema.Types.ObjectId,
     default: 0,
-    ref: "Group"
+    ref: "Group",
   },
   imageSrc: {
     type: String,
@@ -50,6 +65,7 @@ const ExpenseSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  distributions: [DistributionSchema],
   payments: [PaymentSchema],
 });
 

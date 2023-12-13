@@ -65,9 +65,10 @@ export default function MiddleAllExpenses() {
             </PopoverContent>
           </Popover>
           <div className="ml-3">
-            <h3 className="py-[3px]">Name of Expense {api}</h3>
+            <h3 className="py-[3px]">{expense.title}</h3>
+
             <h4 className="mt-[3px] text-[20px] text-black font-bold">
-              $50.00
+              ${expense.totalAmount}
             </h4>
             <p className="text-[12px] text-[#999] my-[3px]">
               Created on{" "}
@@ -97,23 +98,40 @@ export default function MiddleAllExpenses() {
               <p className="flex-1 flex flex-wrap items-center text-[13px]">
                 <strong>{expense.creator}</strong>
                 &nbsp;paid&nbsp;
-                <strong>{expense.totalAmount.toFixed(2)}</strong>
+                <strong>${expense.totalAmount.toFixed(2)}</strong>
                 &nbsp;and is owed&nbsp;
-                <strong>$25.00</strong>
+                <strong>
+                  {" "}
+                  $
+                  {(
+                    expense.totalAmount -
+                    expense.totalAmount / (expense.users.length + 1)
+                  ).toFixed(2)}
+                </strong>
               </p>
             </div>
-            <div className="flex flex-1 mt-2">
-              <Image
-                className="w-[40px] border rounded-full mr-2"
-                radius="md"
-                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-              />
-              <p className="flex-1 flex flex-wrap items-center text-[13px]">
-                <strong>Jenny</strong>
-                &nbsp;owes&nbsp;
-                <strong>$25.00</strong>
-              </p>
-            </div>
+            {expense.users.map((user: any) => {
+              return (
+                <div key={user._id} className="flex flex-1 mt-2">
+                  <Image
+                    className="w-[40px] border rounded-full mr-2"
+                    radius="md"
+                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                  />
+                  <p className="flex-1 flex flex-wrap items-center text-[13px]">
+                    <strong>{user}</strong>
+                    &nbsp;owes&nbsp;
+                    <strong>
+                      $
+                      {(
+                        expense.totalAmount /
+                        (expense.users.length + 1)
+                      ).toFixed(2)}
+                    </strong>
+                  </p>
+                </div>
+              );
+            })}
           </div>
           <div className="w-1/2 pr-3 pl-1"></div>
         </div>
@@ -127,7 +145,7 @@ export default function MiddleAllExpenses() {
         <ExpenseSettle />
       </div>
       {userExpenses ? (
-        <Accordion className="p-0 w-full">
+        <Accordion className="p-0 w-full overflow-y-scroll">
           {userExpenses.map((expense: any) => {
             return (
               <AccordionItem
@@ -137,7 +155,7 @@ export default function MiddleAllExpenses() {
                 title={
                   <ExpenseAccordionItem
                     path={expense.groupName}
-                    expense={ expense }
+                    expense={expense}
                   />
                 }
                 hideIndicator

@@ -2,7 +2,7 @@
 import MiddleDash from "../components/MiddleDash";
 import LeftDash from "../components/LeftDash";
 import Header from "../header";
-import RightGroups from "../components/RightGroups";
+import RightOnTheGo from "../components/RightOnTheGo";
 export default function Dashboard() {
   return (
     <div>
@@ -10,7 +10,7 @@ export default function Dashboard() {
       <div className="main-body">
         <LeftDash path="dashboard" />
         <MiddleDash />
-        <RightGroups />
+        <RightOnTheGo />
       </div>
     </div>
   );
