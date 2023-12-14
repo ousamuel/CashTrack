@@ -39,23 +39,23 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
     // CHECK CHECK CHECK
     // CHECK CHECK CHECK
     //
-  /// check userPercent, CAN NOT BE 0
-// check userIds can not be empty
-// title and total amount empty already prevents it from being posted
-// ^ probably throwing a form error, just handle it and throw red borders or smth
+    /// check userPercent, CAN NOT BE 0
+    // check userIds can not be empty
+    // title and total amount empty already prevents it from being posted
+    // ^ probably throwing a form error, just handle it and throw red borders or smth
 
     const percentsToIntArr = inputPercents.map((str: string) => parseInt(str));
-  
+
     const sum =
       percentsToIntArr.reduce((partialSum, a) => partialSum + a, 0) +
       parseInt(userPercent);
-    if (sum == 100) {
-      console.log("100%");
-      return "100%";
-    } else {
-      console.log("not 100%");
-      return 5;
-    }
+    // if (sum == 100) {
+    //   console.log("100%");
+    //   return "100%";
+    // } else {
+    //   console.log("not 100%");
+    //   return 5;
+    // }
 
     try {
       await fetch(`http://localhost:8001/expenses`, {
@@ -99,6 +99,7 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
   const [userIds, setUserIds] = useState<string[]>([]);
   const [inputPercents, setInputPercents] = useState<any[]>([]);
   const [userPercent, setUserPercent] = useState<any>();
+  const [tempGroupUsers, setTempGroupUsers] = useState<[]>([]);
 
   /*
 OPTIONS FOR SETTING IMAGE ON EXPENSE
@@ -137,12 +138,18 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
     setInputPercents(newInputValues);
   };
   // let percentInputs: number[] = userIds.map(() => 0);
-  let distributionsArr: DistributionType[] = userIds.map((id, index) => ({
-    lendingUser: id,
-    amount:
-      distributionType == "Evenly" ? expenseAmount / (userIds.length + 1) : 0,
-    title: expenseTitle,
-  }));
+  let distributionsArr: DistributionType[] = tempGroupUsers
+    .filter((checkUser: any) => userIds.includes(checkUser._id))
+    .map((user: any, index: number) => ({
+      lendingUser: user._id,
+      amount:
+        distributionType == "Evenly"
+          ? expenseAmount / (userIds.length + 1)
+          : distributionType == "By Percent"
+          ? ((parseInt(inputPercents[index]) * expenseAmount) / 100)
+          : 50,
+      title: expenseTitle,
+    }));
   console.log(distributionsArr);
 
   return (
@@ -350,6 +357,12 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
                                         handleChange(index, e.target.value);
                                       }}
                                     />
+                                    actual amount:
+                                    {(
+                                      (parseInt(inputPercents[index]) *
+                                        expenseAmount) /
+                                      100
+                                    ).toFixed(2)}
                                   </div>
                                 ) : null}
                               </strong>
@@ -369,14 +382,20 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
                         ).toFixed(2)
                       : null}
                     {distributionType == "By Percent" ? (
-                      <Input
-                        placeholder="user percent"
-                        type="number"
-                        value={userPercent}
-                        onChange={(e) => {
-                          setUserPercent(e.target.value);
-                        }}
-                      />
+                      <div>
+                        <Input
+                          placeholder="user percent"
+                          type="number"
+                          value={userPercent}
+                          onChange={(e) => {
+                            setUserPercent(e.target.value);
+                          }}
+                        />
+                        {(
+                          (parseInt(userPercent) * expenseAmount) /
+                          100
+                        ).toFixed(2)}
+                      </div>
                     ) : null}
                   </strong>
                 </div>
@@ -518,6 +537,7 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
       <Button
         onClick={() => {
           setExpenseModal("open");
+          setTempGroupUsers(group.users);
           setUserIds([]);
           console.log(userIds);
         }}
