@@ -30,6 +30,7 @@ export function Providers({ children }: ProvidersProps) {
   useEffect(() => {
     setWrongLogin(false);
     loginUser({});
+    
     // if (!user) {
     //   router.push("/");
     //   // reroute to login page if session/user is null
@@ -77,65 +78,38 @@ export function Providers({ children }: ProvidersProps) {
           setWrongLogin(true);
         }
         throw new Error(`HTTP error! Status: ${response.status}`);
+      } else {
       }
 
       const data = await response.json();
+
       setUser(data.user);
       setUserGroups(data.user.groups);
-      // settingBalances(data.user.expenses);
       setUserExpenses(data.user.expenses);
       let tempOwe = 0;
       let tempOwed = 0;
-      // setTotalOwe(0);
-      // setTotalOwed(0);
       data.user.expenses.forEach((expense: any) => {
         if (expense.creator._id == data.user._id) {
           expense.distributions.forEach((distribution: any) => {
             tempOwed += distribution.amount;
-            // setTotalOwed(totalOwed + distribution.amount);
           });
           setTotalOwed(tempOwed);
         } else {
           expense.distributions.forEach((distribution: any) => {
             if (distribution.lendingUser._id == data.user._id) {
               tempOwe += distribution.amount;
-              // setTotalOwe(totalOwe + distribution.amount);
             }
           });
           setTotalOwe(tempOwe);
         }
-        // console.log(totalOwed);
-        // console.log(expense._id);
       });
+
       console.log(data.user);
     } catch (error: any) {
       router.push("/");
       console.error("Error:", error.message);
     }
   }
-  // async function fetchGroups() {
-  //   try {
-  //     const response = await fetch(`http://localhost:8001/groups`, {
-  //       method: "GET",
-  //       credentials: "include",
-  //       headers: {
-  //         "Content-Type": "application/json; charset=UTF-8",
-  //         Accept: "application/json",
-  //       },
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-
-  //     const data = await response.json();
-  //     // console.log("Groups fetched");
-  //     // console.log(data);
-  //     setGroups(data);
-  //   } catch (error: any) {
-  //     console.error("Error:", error.message);
-  //   }
-  // }
   async function logOut() {
     // function points to app.get('/logout') in /server/server.js
     try {
@@ -178,7 +152,13 @@ export function Providers({ children }: ProvidersProps) {
         wrongLogin,
       }}
     >
-      {children}
+      {user === null ? (
+        // Render a loading spinner or loading indicator
+        <Spinner color="primary" />
+      ) : (
+        // Render the main content once the user is loaded
+        children
+      )}
     </Context.Provider>
   );
 }

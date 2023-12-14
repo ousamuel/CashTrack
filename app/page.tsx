@@ -24,11 +24,11 @@ export default function Login() {
 
   const onLogInSubmit: SubmitHandler<FormData> = (data) => {
     loginUser(data);
-    router.push("/dashboard");
+    window.location.href = "/dashboard";
   };
   const onSignUpSubmit: SubmitHandler<FormData> = (data) => {
     loginUser(data);
-    router.push("/dashboard");
+    window.location.href = "/dashboard";
   };
   // useEffect(() => {
   //   {

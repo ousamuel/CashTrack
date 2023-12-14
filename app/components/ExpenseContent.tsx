@@ -13,6 +13,7 @@ interface ExpenseContentProps {
 }
 const ExpenseContent: React.FC<ExpenseContentProps> = ({ expense }) => {
   const { user } = useContext(Context);
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   type Category = {
     name: string;
     iconSrc: string;
@@ -25,6 +26,26 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({ expense }) => {
     { name: "Transportation", iconSrc: "/ss/car.png" },
     { name: "Home", iconSrc: "/ss/home.png" },
   ];
+  async function deleteExpense() {
+    try {
+      const response: any = await fetch(
+        `http://localhost:8001/expenses/${expense._id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Accept: "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      } else console.log(response.status);
+    } catch (error: any) {
+      console.error("Error:", error.message);
+    }
+  }
   return (
     <div className="expense-dropdown">
       <div className="flex">
@@ -33,7 +54,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({ expense }) => {
             <Image
               className="expense-img hover-gray cursor"
               width={85}
-              src="/ss/receipt.png"
+              src={expense.imageSrc}
             />
           </PopoverTrigger>
           <PopoverContent>
@@ -59,10 +80,39 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({ expense }) => {
           </PopoverContent>
         </Popover>
         <div className="ml-3">
-          <h3 className="py-[3px]">{expense.title}</h3>
+          <h3 className="py-[3px] flex justify-between relative">
+            <p className="flex justify-start items-center flex-wrap max-w-[70%]">
+              {expense.title.length > 21 ? (
+                <div className="flex-wrap">
+                  <p className="md:hidden">{expense.title.slice(0, 21)}-</p>
+                  <p className="md:hidden">{expense.title.slice(21)}</p>
+                  <p className="hidden md:flex">{expense.title}</p>
+                </div>
+              ) : (
+                expense.title
+              )}
+            </p>
+            <div className="flex justify-end">
+              {confirmDelete ? (
+                <Button
+                  className="text-sm text-white bg-red-500 px-1 rounded-md -translate-x-[0px] items-center z-1000"
+                  disableRipple
+                  onClick={deleteExpense}
+                >
+                  Delete
+                </Button>
+              ) : null}
+              <Image
+                className="hover:cursor-pointer rounded-full"
+                width={20}
+                src="/svgs/delete.svg"
+                onClick={() => setConfirmDelete((prevState) => !prevState)}
+              />
+            </div>
+          </h3>
 
           <h4 className="mt-[3px] text-[20px] text-black font-bold">
-            ${expense.totalAmount}
+            ${expense.totalAmount.toFixed(2)}
           </h4>
           <p className="text-[12px] text-[#999] my-[3px]">
             Created on{" "}

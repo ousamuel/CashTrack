@@ -30,7 +30,8 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
       })
         .then((res) => {
           if (res.ok) {
-            router.push("/");
+            console.log("logged out");
+            // router.push("/");
           }
         })
         .catch((error) => {
@@ -42,140 +43,37 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
   };
   return (
     <div className="flex fixed w-full color h-[40px]">
-      <div className="navbar">
-        <div className="flex">
+      {user ? (
+        <div className="navbar">
+          <div className="flex">
+            <Popover className="" placement="bottom" showArrow={true}>
+              <PopoverTrigger>
+                <Button className="dropdown cursor" disableRipple>
+                  <Image
+                    className="mt-[5px]"
+                    width={20}
+                    src="/svgs/dropdown.svg"
+                  />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="bg-white p-2 border border-[#5bc5a7] rounded-md text-[#999999]">
+                <LeftDashComponent path={path} />
+              </PopoverContent>
+            </Popover>
+            <Link
+              href="/dashboard"
+              className="w-[165px] flex content-center pl-1"
+            >
+              <Image
+                width="30px"
+                height="22px"
+                className="m-auto"
+                src="/svgs/logo.svg"
+              />
+              <strong className="ml-1 text-xl">CashTrack</strong>
+            </Link>
+          </div>
           <Popover className="" placement="bottom" showArrow={true}>
-            <PopoverTrigger>
-              <Button className="dropdown cursor" disableRipple>
-                <Image
-                  className="mt-[5px]"
-                  width={20}
-                  src="/svgs/dropdown.svg"
-                />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="bg-white p-2 border border-[#5bc5a7] rounded-md text-[#999999]">
-              <LeftDashComponent path={path} />
-              {/* <div className="text-[16px] mt-1 mb-4">
-                <Button
-                  className={path == "dashboard" ? "left-top open" : "left-top"}
-                  onClick={() => {
-                    router.push("/dashboard");
-                  }}
-                  disableRipple
-
-                >
-                  <Image
-                    className="h-[17px] ml-1"
-                    src="/svgs/logo.svg"
-                    alt="logo"
-                  />
-                  <div>Dashboard</div>
-                </Button>
-
-                <Button
-                  className={
-                    path == "recent-activity" ? "left-top open" : "left-top"
-                  }
-                  onClick={() => {
-                    router.push("/recent-activity");
-                  }}
-                  disableRipple
-                >
-                  <Image
-                    className="h-[17px] ml-1"
-                    src="/svgs/flag.svg"
-                    alt="logo"
-                  />
-                  Recent Activity
-                </Button>
-              </div>
-              <div className="text-[14px]">
-                <Button
-                  className={
-                    path == "all-expenses" ? "left-top open" : "left-top"
-                  }
-                  onClick={() => {
-                    router.push("/all-expenses");
-                  }}
-                  disableRipple
-                >
-                  <Image
-                    className="h-[15px] items-center ml-1"
-                    src="/svgs/bulletList.svg"
-                    alt="list"
-                  />
-                  All expenses
-                </Button>
-              </div>
-              <div className="mt-1">
-                <div id="groups" className="left-header">
-                  <span>groups</span>
-                  <Link href="/new-group" className="add">
-                    <span className="font-extrabold text-[13px]">+</span> add
-                  </Link>
-                </div>
-                <Link className="left-tabs" href="/dashboard">
-                  <Image src="/svgs/tag.svg" width="10px" />
-                  food
-                </Link>
-                <Link className="left-tabs" href="/dashboard">
-                  <Image src="/svgs/tag.svg" width="10px" />
-                  food
-                </Link>
-
-                <div id="friends" className="left-header">
-                  <span>friends</span>
-                  <Button className="add" disableRipple>
-                    <span className="font-extrabold text-[13px]">+</span> add
-                  </Button>
-                </div>
-                <Link className="left-tabs" href="/">
-                  <Image src="/svgs/user.svg" width="10px" />
-                  man
-                </Link>
-                <Link className="left-tabs" href="/">
-                  <Image src="/svgs/user.svg" width="10px" />
-                  woman
-                </Link>
-
-                <div id="invite-box" className="">
-                  <h3 className="invites color">Invite friends</h3>
-                  <div className="input-box">
-                    <input
-                      className=""
-                      type="email"
-                      placeholder="Enter an email address"
-                    />
-                    <Button
-                      disableRipple
-                      className="btn-inv"
-                      onClick={() => {
-                        alert("Please enter a valid email address.");
-                      }}
-                    >
-                      Send invite
-                    </Button>
-                  </div>
-                </div>
-              </div> */}
-            </PopoverContent>
-          </Popover>
-          <Link
-            href="/dashboard"
-            className="w-[165px] flex content-center pl-1"
-          >
-            <Image
-              width="30px"
-              height="22px"
-              className="m-auto"
-              src="/svgs/logo.svg"
-            />
-            <strong className="ml-1 text-xl">CashTrack</strong>
-          </Link>
-        </div>
-        <Popover className="" placement="bottom" showArrow={true}>
-          {user ? (
             <PopoverTrigger className="hover:bg-[#39a385]">
               <Button className="px-2 flex" disableRipple>
                 <Image
@@ -191,26 +89,26 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
                 />
               </Button>
             </PopoverTrigger>
-          ) : null}
 
-          <PopoverContent>
-            <div className="triangle-up"></div>
-            <div className="bg-white rounded-md border-gray-400 border-[1px] -translate-y-2 ">
-              <div className="flex flex-col">
-                <Link className="acc-btn" href="/dashboard">
-                  Your account
-                </Link>
-                <Link className="acc-btn" href="/new-group">
-                  Create a group
-                </Link>
-                <Button className="acc-btn" onClick={logOut}>
-                  Logout
-                </Button>
+            <PopoverContent>
+              <div className="triangle-up"></div>
+              <div className="bg-white rounded-md border-gray-400 border-[1px] -translate-y-2 ">
+                <div className="flex flex-col">
+                  <Link className="acc-btn" href="/dashboard">
+                    Your account
+                  </Link>
+                  <Link className="acc-btn" href="/new-group">
+                    Create a group
+                  </Link>
+                  <Link href="/" className="acc-btn" onClick={logOut}>
+                    Logout
+                  </Link>
+                </div>
               </div>
-            </div>
-          </PopoverContent>
-        </Popover>
-      </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -3,7 +3,7 @@ GET http://localhost:8001/groups/6578be5e7fcdb70a4ac2f6da
 GET http://localhost:8001/expenses/groupId/6578be5e7fcdb70a4ac2f6da
 ###
 
-GET http://localhost:8001/expenses/6578bf0ea5b6a70bb7206379
+DELETE http://localhost:8001/expenses/657b617ce7c1de06003d01d5
 ###
 
 PATCH http://localhost:8001/expenses/6578bebb7fcdb70a4ac2f6e1

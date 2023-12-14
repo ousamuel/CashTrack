@@ -33,11 +33,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 //         setW
 type FormData = {
   title: string;
-  imageSrc: string;
   totalAmount: number;
-  group: string;
-  userIds: string[];
-  distributions: DistributionType[];
+  // userIds: string[];
+  // distributions: DistributionType[];
 };
 interface ExpenseSettleProps {
   group: any;
@@ -48,49 +46,12 @@ type DistributionType = {
   title: string;
 };
 const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
-  // console.log(group)
-
-  const [expenseModal, setExpenseModal] = useState<string>("close");
-  const [distributionType, setDistributionType] = useState<string>("Evenly");
-  const [imageSrc, setImageSrc] = useState<string>("/ss/receipt.png");
-  const [settleModal, setSettleModal] = useState<string>("close");
-  const { user } = useContext(Context);
-  const [userIds, setUserIds] = useState<string[]>([]);
-  type Category = {
-    name: string;
-    iconSrc: string;
-  };
-
-  const categories: Category[] = [
-    { name: "General", iconSrc: "/ss/receipt.png" },
-    { name: "Food & Drink", iconSrc: "/ss/food-drink.png" },
-    { name: "Entertainment", iconSrc: "/ss/entertainment.png" },
-    { name: "Transportation", iconSrc: "/ss/car.png" },
-    { name: "Home", iconSrc: "/ss/home.png" },
-  ];
-  type Option = {
-    desc: string;
-    iconSrc: string;
-  };
-  const distributionOptions: Option[] = [
-    { desc: "Evenly", iconSrc: "/svgs/equal.svg" },
-    { desc: "By Percent", iconSrc: "/svgs/percent.svg" },
-    { desc: "Custom", iconSrc: "/svgs/dollar-sign.svg" },
-  ];
-  // console.log(user);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-
-  const postNewExpense = async function (
-    title: string,
-    imageSrc: string,
-    totalAmount: number,
-    groupId: string,
-    distributions: DistributionType[]
-  ) {
+  const postNewExpense = async function (input: { [key: string]: any }) {
     try {
       await fetch(`http://localhost:8001/expenses`, {
         method: "POST",
@@ -100,26 +61,81 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
           Accept: "application/json",
         },
         body: JSON.stringify({
-          title: "",
-          imageSrc: "",
+          title: input.title,
+          imageSrc: imageSrc,
           creator: user._id,
-          totalAmount: 0,
-          distributions: distributions,
-          group: groupId,
+          group: group._id,
+          totalAmount: input.totalAmount,
+          distributions: distributionsArr,
+          userIds: userIds,
         }),
       });
+      // .then((response) => response.json())
+      // .then((data) => {
+      //   setGroupExpenses([...groupExpenses, data]);
+      //   console.log(data)
+      // });
     } catch (error) {
       console.log(error);
     }
   };
-  // console.log(group);
+  const handleExpense: SubmitHandler<FormData> = (data) => {
+    postNewExpense(data);
+  };
 
-  // console.log("groupdId" + groupId);
+  const [expenseAmount, setExpenseAmount] = useState<any>("");
+  const [expenseTitle, setExpenseTitle] = useState<string>("");
+  const [imageSrc, setImageSrc] = useState<string>("/ss/receipt.png");
+  const [creator, setCreator] = useState<string>("");
+  const [expenseModal, setExpenseModal] = useState<string>("close");
+  const [distributionType, setDistributionType] = useState<string>("Evenly");
+  const [settleModal, setSettleModal] = useState<string>("close");
+  const { user, groupExpenses, setGroupExpenses } = useContext(Context);
+  const [userIds, setUserIds] = useState<string[]>([]);
+
+  let distributionsArr: DistributionType[] = userIds.map((id) => ({
+    lendingUser: id,
+    amount: expenseAmount / (userIds.length + 1),
+    title: expenseTitle,
+  }));
+  console.log(distributionsArr);
+
+  /*
+OPTIONS FOR SETTING IMAGE ON EXPENSE
+*/
+  type Category = {
+    name: string;
+    iconSrc: string;
+  };
+  const categories: Category[] = [
+    { name: "General", iconSrc: "/ss/receipt.png" },
+    { name: "Food & Drink", iconSrc: "/ss/food-drink.png" },
+    { name: "Entertainment", iconSrc: "/ss/entertainment.png" },
+    { name: "Transportation", iconSrc: "/ss/car.png" },
+    { name: "Home", iconSrc: "/ss/home.png" },
+  ];
+
+  /*
+  OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
+*/
+  type Option = {
+    desc: string;
+    iconSrc: string;
+  };
+  const distributionOptions: Option[] = [
+    { desc: "Evenly", iconSrc: "/svgs/equal.svg" },
+    { desc: "By Percent", iconSrc: "/svgs/percent.svg" },
+    { desc: "Custom", iconSrc: "/svgs/dollar-sign.svg" },
+  ];
+
   return (
     <div className="text-[15px]">
       {expenseModal == "open" ? (
-        <div className="modal flex flex-col md:flex-row ">
-          <div className="modal-div w-[350px] md:translate-x-[70px] md:w-[420px]">
+        <div className="modal flex flex-col md:flex-row md:pb-10 ">
+          <form
+            onSubmit={handleSubmit(handleExpense)}
+            className="modal-div w-[350px] md:translate-x-[70px] md:w-[420px] max-h-[60vh] md:max-h-[70vh] overflow-y-scroll"
+          >
             <div className="modal-top">
               <p>
                 Add an expense {group ? "in: " : null}
@@ -132,18 +148,44 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
               </p>
             </div>
             <div className="modal-mid flex-col">
-              <div>
-                <p>With you and:</p>
-                <Input
+              <div className="flex">
+                <p className="flex flex-wrap items-center">
+                  With <strong className="px-1">you</strong> and:
+                </p>
+                <div className="flex flex-wrap">
+                  {group
+                    ? group.users
+                        .filter((checkUser: any) =>
+                          userIds.includes(checkUser._id)
+                        )
+                        .map((user: any) => {
+                          return (
+                            <strong
+                              className="flex items-center m-1 "
+                              key={user._id}
+                            >
+                              <Image
+                                className="rounded-full mr-2"
+                                width={30}
+                                src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                              />
+                              {user.name}
+                            </strong>
+                          );
+                        })
+                    : null}
+                </div>
+
+                {/* <Input
                   className="w-fit"
                   placeholder="Enter names or emaasdasdasdasils"
                   // {...register("email", {
                   //   pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                   //   required: true,
                   // })}
-                />
+                /> */}
               </div>
-              <div className="flex my-5 border-t">
+              <div className="flex my-2 border-t">
                 <div id="postExpenseLeft flex-none justify-center" className="">
                   <div className="flex flex-col">
                     <strong>
@@ -153,6 +195,11 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
                         {...register("title", {
                           required: true,
                         })}
+                        value={expenseTitle}
+                        onChange={(e) => {
+                          setExpenseTitle(e.target.value);
+                          console.log(expenseTitle);
+                        }}
                       />
                     </strong>
                     <div className="flex justify-center">
@@ -194,7 +241,7 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
                 <div id="postExpenseRight" className="flex-1 p-2 pb-0">
                   <div className="flex flex-col justify-center">
                     <strong className="text-center md:text-lg">
-                      Total amount paid
+                      Total amount paid by you
                     </strong>
                     <div className="flex text-xl pl-5 justify-center ">
                       $
@@ -205,6 +252,10 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
                         {...register("totalAmount", {
                           required: true,
                         })}
+                        value={expenseAmount}
+                        onChange={(e) => {
+                          setExpenseAmount(e.target.value);
+                        }}
                       />
                     </div>
                     <h4 className="text-center md:text-lg">
@@ -215,7 +266,7 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
                         return (
                           <Tooltip
                             content={
-                              <div className="bg-black text-white rounded-lg p-2 -translate-y-4">
+                              <div className="bg-black text-white rounded-lg p-2 -translate-y-1">
                                 {option.desc}
                               </div>
                             }
@@ -223,30 +274,64 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
                             placement="bottom"
                             closeDelay={0}
                           >
-                            <Button
+                            {/* <Button
                               // className={
                               //   selectedDesc == obj.desc
                               //     ? "popover-trigger popover-open"
                               //     : "popover-trigger"
                               // }
-                              onClick={() => setDistributionType(option.desc)}
                               disableRipple
-                            >
-                              <Image
-                                width={37}
-                                className={
-                                  distributionType == option.desc
-                                    ? "border-black border-2 bg-[#2c9984] rounded-full p-2 my-2"
-                                    : "border rounded-full p-2 my-2"
-                                }
-                                src={option.iconSrc}
-                              />
-                            </Button>
+                            > */}
+                            <Image
+                              width={37}
+                              className={
+                                distributionType == option.desc
+                                  ? "border-black border-2 bg-[#2c9984] rounded-full p-2 my-2  hover:cursor-pointer"
+                                  : "border rounded-full p-2 my-2 hover:bg-green-200 hover:cursor-pointer"
+                              }
+                              onClick={() => setDistributionType(option.desc)}
+                              src={option.iconSrc}
+                            />
+                            {/* </Button> */}
                           </Tooltip>
                         );
                       })}
                     </div>
                   </div>
+                </div>
+              </div>
+              <div className="flex  my-2 border-t">
+                <div className="flex flex-col flex-initial w-56">
+                  {group
+                    ? group.users
+                        .filter((checkUser: any) =>
+                          userIds.includes(checkUser._id)
+                        )
+                        .map((user: any) => {
+                          return (
+                            <div key={user._id}>
+                              {user.name} owes $
+                              <strong>
+                                {distributionType == "Evenly"
+                                  ? (expenseAmount / (userIds.length + 1)).toFixed(2)
+                                  : null}
+                              </strong>
+                            </div>
+                          );
+                        })
+                    : null}
+                </div>
+                <div className="grow text-center">
+                  {" "}
+                  You get back $
+                  <strong>
+                    {distributionType == "Evenly"
+                      ? (
+                          (expenseAmount * userIds.length) /
+                          (userIds.length + 1)
+                        ).toFixed(2)
+                      : null}
+                  </strong>
                 </div>
               </div>
             </div>
@@ -259,68 +344,70 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
               >
                 Cancel
               </Button>
-              <Button className="btn btn-green" disableRipple>
+              <Button className="btn btn-green" type="submit" disableRipple>
                 Save
               </Button>
             </div>
-          </div>
+          </form>
 
-          <div className="modal-div min-w-[200px] ml-4 md:translate-x-[70px]">
+          <div className="modal-div min-w-[260px] max-w-[80vw] ml-4 md:translate-x-[70px] max-h-[30vh] md:max-h-[80vh] overflow-y-scroll mt-3">
             <div className="modal-top">
               {" "}
               {group ? "Group Members " + `(${group.users.length})` : "Friends"}
             </div>
             <div className="modal-mid flex-col">
-              {group.users
-                .filter((checkUser: any) => checkUser._id != user._id)
-                .map((user: any) => {
-                  const findIdx: (id: string) => boolean = function (
-                    id: string
-                  ): boolean {
-                    return id == user._id;
-                  };
-                  return (
-                    <Button
-                      className={
-                        userIds.includes(user._id)
-                          ? "flex mt-1 py-[0.5px] justify-start bg-green-200 p-1 rounded-md "
-                          : "flex mt-1 py-[0.5px] justify-start p-1 rounded-md "
-                      }
-                      key={user._id}
-                      disableRipple
-                      onClick={() => {
-                        let tempUserIds: string[] = userIds;
-                        if (userIds.includes(user._id)) {
-                          const idx = tempUserIds.findIndex(findIdx);
-                          tempUserIds.splice(idx, 1);
-                        } else {
-                          tempUserIds.push(user._id);
-                        }
+              <strong className="pl-1">Click on member to add/remove</strong>{" "}
+              {group
+                ? group.users
+                    .filter((checkUser: any) => checkUser._id != user._id)
+                    .map((user: any) => {
+                      const findIdx: (id: string) => boolean = function (
+                        id: string
+                      ): boolean {
+                        return id == user._id;
+                      };
+                      return (
+                        <Button
+                          className={
+                            userIds.includes(user._id)
+                              ? "flex mt-1 py-[0.5px] justify-start bg-green-200 p-1 rounded-md "
+                              : "flex mt-1 py-[0.5px] justify-start p-1 rounded-md hover:bg-green-100 "
+                          }
+                          key={user._id}
+                          disableRipple
+                          onClick={() => {
+                            let tempUserIds: string[] = userIds;
+                            if (userIds.includes(user._id)) {
+                              const idx = tempUserIds.findIndex(findIdx);
+                              tempUserIds.splice(idx, 1);
+                            } else {
+                              tempUserIds.push(user._id);
+                            }
 
-                        setUserIds([...tempUserIds]);
-                        console.log(userIds);
-                      }}
-                    >
-                      <Image
-                        src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
-                        width={43}
-                        className="mr-1 rounded-full"
-                        alt="pfp"
-                      />
-                      <div className="flex flex-col pl-2">
-                        <strong className="text-left">{user.name}</strong>
-                        {user.email}
-                      </div>
-                    </Button>
-                  );
-                })}
+                            setUserIds([...tempUserIds]);
+                            console.log(userIds);
+                          }}
+                        >
+                          <Image
+                            src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                            width={43}
+                            className="mr-1 rounded-full"
+                            alt="pfp"
+                          />
+                          <div className="flex flex-col pl-2">
+                            <strong className="text-left">{user.name}</strong>
+                            {user.email}
+                          </div>
+                        </Button>
+                      );
+                    })
+                : null}
               <hr className="border border-gray-400 border-dashed mt-1"></hr>
-              <Button
-                className="flex mt-1 mx-1 py-[0.5px] justify-start p-1 rounded-md "
-                disableRipple
-                onClick={() => {
-                  console.log(userIds);
-                }}
+              <div
+                className="flex mt-2 mr-1 py-[0.5px] justify-start p-1 rounded-md "
+                // onClick={() => {
+                //   console.log(userIds);
+                // }}
               >
                 <Image
                   src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
@@ -332,7 +419,7 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
                   <strong className="text-left">You</strong>
                   {user.email}
                 </div>
-              </Button>
+              </div>
             </div>
             <div className="modal-bot">3</div>
           </div>

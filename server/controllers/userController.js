@@ -32,7 +32,7 @@ exports.login = (req, res, next) => {
             { path: "groups", select: "-__v" },
           ])
           .then((user) => {
-            return res.status(200).json({
+            return res.status(201).json({
               user,
             });
           });

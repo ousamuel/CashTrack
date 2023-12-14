@@ -200,7 +200,13 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res) => {
+  try {
+    await Expense.findByIdAndDelete(req.params.id);
+    res.status(204).json({message: "Expense deleted"})
+  } catch (err) {
+    console.log(err);
+  }
   // Implement delete logic
 });
 
