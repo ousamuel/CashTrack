@@ -49,13 +49,14 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({ expense }) => {
   return (
     <div className="expense-dropdown">
       <div className="flex">
-        <Popover className="" placement="bottom" showArrow={true}>
+        <Image
+          className="expense-img hover-gray cursor"
+          width={85}
+          src={expense.imageSrc}
+        />
+        {/* <Popover className="" placement="bottom" showArrow={true}>
           <PopoverTrigger>
-            <Image
-              className="expense-img hover-gray cursor"
-              width={85}
-              src={expense.imageSrc}
-            />
+           
           </PopoverTrigger>
           <PopoverContent>
             <div className="bg-white rounded-md p-3 border-gray-300 border-[1.5px] -translate-y-2 translate-x-[30px]">
@@ -78,7 +79,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({ expense }) => {
               </table>
             </div>
           </PopoverContent>
-        </Popover>
+        </Popover> */}
         <div className="ml-3">
           <h3 className="py-[3px] flex justify-between relative">
             <p className="flex justify-start items-center flex-wrap max-w-[70%]">

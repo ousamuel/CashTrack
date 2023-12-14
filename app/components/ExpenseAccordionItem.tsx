@@ -77,7 +77,7 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
         <Image width={35} src={expense.imageSrc} alt="icon" />
       </div>
       <div className="max-w-[500px] text-left flex flex-col">
-        <p className="text-[14px] md:text-[16px] text-black text-left my-auto font-bold expense-title">
+        <div className="text-[14px] md:text-[16px] text-black text-left my-auto font-bold expense-title">
           {expense.title.length > 16 ? (
             <div className="flex-wrap">
               <p className='md:hidden'>{expense.title.slice(0, 15)}...</p>
@@ -89,7 +89,7 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
           ) : (
             expense.title
           )}
-        </p>
+        </div>
         {path == "" && expense.group ? (
           <p className="mt-[3px] expense-group ">{expense.group.groupName}</p>
         ) : null}

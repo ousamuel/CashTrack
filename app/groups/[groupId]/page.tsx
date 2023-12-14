@@ -6,6 +6,8 @@ import LeftDash from "@/app/components/LeftDash";
 import MiddleGroups from "@/app/components/MiddleGroups";
 import RightGroupBalances from "@/app/components/RightGroupBalances";
 import { Context } from "@/app/providers";
+
+
 export default function GroupPage({ params }) {
   const {
     user,

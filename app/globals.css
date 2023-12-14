@@ -521,11 +521,18 @@ body {
   .right-container {
     display: none;
   }
+  
   .main-body {
     padding-left: 0px;
     padding-right: 0px;
   }
   .dropdown {
     display: flex;
+  }
+}
+
+@media(max-width:400px){
+  .mid-container {
+    min-width: 100vw;
   }
 }

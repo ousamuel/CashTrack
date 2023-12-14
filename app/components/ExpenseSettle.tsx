@@ -11,29 +11,10 @@ import {
 import { Context } from "../providers";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-// };
-// async function loginUser(input: { [key: string]: string }) {
-//   // function points to /server/controllers/userController.js
-//   try {
-//     const response: any = await fetch(`http://localhost:8001/users/login`, {
-//       method: "POST",
-//       credentials: "include",
-//       headers: {
-//         "Content-Type": "application/json; charset=UTF-8",
-//         Accept: "application/json",
-//       },
-//       body: JSON.stringify({
-//         email: input.email,
-//         _password: input.password,
-//       }),
-//     });
-//     if (!response.ok) {
-//       if (response.status == 401) {
-//         console.log(401);
-//         setW
 type FormData = {
   title: string;
   totalAmount: number;
+  // percents: number[];
   // userIds: string[];
   // distributions: DistributionType[];
 };
@@ -52,6 +33,30 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
     formState: { errors },
   } = useForm<FormData>();
   const postNewExpense = async function (input: { [key: string]: any }) {
+    // CHECK CHECK CHECK
+    // CHECK CHECK CHECK
+    // CHECK CHECK CHECK
+    // CHECK CHECK CHECK
+    // CHECK CHECK CHECK
+    //
+  /// check userPercent, CAN NOT BE 0
+// check userIds can not be empty
+// title and total amount empty already prevents it from being posted
+// ^ probably throwing a form error, just handle it and throw red borders or smth
+
+    const percentsToIntArr = inputPercents.map((str: string) => parseInt(str));
+  
+    const sum =
+      percentsToIntArr.reduce((partialSum, a) => partialSum + a, 0) +
+      parseInt(userPercent);
+    if (sum == 100) {
+      console.log("100%");
+      return "100%";
+    } else {
+      console.log("not 100%");
+      return 5;
+    }
+
     try {
       await fetch(`http://localhost:8001/expenses`, {
         method: "POST",
@@ -92,13 +97,8 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
   const [settleModal, setSettleModal] = useState<string>("close");
   const { user, groupExpenses, setGroupExpenses } = useContext(Context);
   const [userIds, setUserIds] = useState<string[]>([]);
-
-  let distributionsArr: DistributionType[] = userIds.map((id) => ({
-    lendingUser: id,
-    amount: expenseAmount / (userIds.length + 1),
-    title: expenseTitle,
-  }));
-  console.log(distributionsArr);
+  const [inputPercents, setInputPercents] = useState<any[]>([]);
+  const [userPercent, setUserPercent] = useState<any>();
 
   /*
 OPTIONS FOR SETTING IMAGE ON EXPENSE
@@ -127,6 +127,23 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
     { desc: "By Percent", iconSrc: "/svgs/percent.svg" },
     { desc: "Custom", iconSrc: "/svgs/dollar-sign.svg" },
   ];
+
+  const handleChange = (index: number, value: any) => {
+    // Create a copy of the inputPercents array
+    const newInputValues = [...inputPercents];
+    // Update the value at the specified index
+    newInputValues[index] = value;
+    // Set the updated array in state
+    setInputPercents(newInputValues);
+  };
+  // let percentInputs: number[] = userIds.map(() => 0);
+  let distributionsArr: DistributionType[] = userIds.map((id, index) => ({
+    lendingUser: id,
+    amount:
+      distributionType == "Evenly" ? expenseAmount / (userIds.length + 1) : 0,
+    title: expenseTitle,
+  }));
+  console.log(distributionsArr);
 
   return (
     <div className="text-[15px]">
@@ -289,7 +306,10 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
                                   ? "border-black border-2 bg-[#2c9984] rounded-full p-2 my-2  hover:cursor-pointer"
                                   : "border rounded-full p-2 my-2 hover:bg-green-200 hover:cursor-pointer"
                               }
-                              onClick={() => setDistributionType(option.desc)}
+                              onClick={() => {
+                                setInputPercents([]);
+                                setDistributionType(option.desc);
+                              }}
                               src={option.iconSrc}
                             />
                             {/* </Button> */}
@@ -307,14 +327,31 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
                         .filter((checkUser: any) =>
                           userIds.includes(checkUser._id)
                         )
-                        .map((user: any) => {
+                        .map((user: any, index: number) => {
                           return (
                             <div key={user._id}>
-                              {user.name} owes $
+                              {user.name} owes
                               <strong>
                                 {distributionType == "Evenly"
-                                  ? (expenseAmount / (userIds.length + 1)).toFixed(2)
+                                  ? " $" +
+                                    (
+                                      expenseAmount /
+                                      (userIds.length + 1)
+                                    ).toFixed(2)
                                   : null}
+                                {distributionType == "By Percent" ? (
+                                  <div className="flex">
+                                    <Input
+                                      placeholder="percent"
+                                      type="number"
+                                      value={inputPercents[index]}
+                                      onChange={(e) => {
+                                        console.log(inputPercents);
+                                        handleChange(index, e.target.value);
+                                      }}
+                                    />
+                                  </div>
+                                ) : null}
                               </strong>
                             </div>
                           );
@@ -331,6 +368,16 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
                           (userIds.length + 1)
                         ).toFixed(2)
                       : null}
+                    {distributionType == "By Percent" ? (
+                      <Input
+                        placeholder="user percent"
+                        type="number"
+                        value={userPercent}
+                        onChange={(e) => {
+                          setUserPercent(e.target.value);
+                        }}
+                      />
+                    ) : null}
                   </strong>
                 </div>
               </div>
