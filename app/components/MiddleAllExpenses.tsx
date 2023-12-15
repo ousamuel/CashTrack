@@ -6,7 +6,7 @@ import ExpenseContent from "./ExpenseContent";
 import ExpenseSettle from "./ExpenseSettle";
 
 export default function MiddleAllExpenses() {
-  const { user, userExpenses } = useContext(Context);
+  const { user, userExpenses, deleteExpense } = useContext(Context);
   const { api } = useContext(Context);
   return (
     <div className="mid-container">
@@ -16,16 +16,33 @@ export default function MiddleAllExpenses() {
       </div>
       {userExpenses ? (
         <Accordion className="p-0 w-full overflow-y-scroll">
-          {userExpenses.map((expense: any) => {
+          {userExpenses.map((expense: any, index:number) => {
+            const totalReturn = expense.distributions.reduce(
+              (total: number, { amount }: { amount: number }) => total + amount,
+              0
+            );
             return (
               <AccordionItem
                 key={expense._id}
                 textValue="default"
                 className="expense-parent"
-                title={<ExpenseAccordionItem path={""} expense={expense} />}
+                title={
+                  <ExpenseAccordionItem
+                    totalReturn={totalReturn}
+                    path={""}
+                    expense={expense}
+                  />
+                }
                 hideIndicator
               >
-                {user ? <ExpenseContent expense={expense} /> : null}
+                {user ? (
+                  <ExpenseContent
+                    deleteExpenseFunction={deleteExpense}
+                    totalReturn={totalReturn}
+                    expense={expense}
+                    index={index}
+                  />
+                ) : null}
               </AccordionItem>
             );
           })}

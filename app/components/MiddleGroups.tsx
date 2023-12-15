@@ -17,26 +17,41 @@ type MiddleGroupsProps = {
   expenses: any;
 };
 const MiddleGroups: React.FC<MiddleGroupsProps> = ({ group, expenses }) => {
-  const { api, user } = useContext(Context);
-
+  const { api, user, setGroupExpenses, deleteExpense } = useContext(Context);
+  
   return (
     <div className="mid-container">
       <div className="p-3 bg-[#EEEEEE] flex border-b justify-between">
         <h1 className="topbar">{group.groupName}</h1>
         <ExpenseSettle group={group} />
       </div>
-      {expenses ? (
+      {expenses && user ? (
         <Accordion className="p-0 w-full overflow-y-scroll">
-          {expenses.map((expense: any) => {
+          {expenses.map((expense: any, index: number) => {
+            const totalReturn = expense.distributions.reduce(
+              (total: number, { amount }: { amount: number }) => total + amount,
+              0
+            );
             return (
               <AccordionItem
                 key={expense._id}
                 textValue="default"
                 className="expense-parent"
-                title={<ExpenseAccordionItem path="groups" expense={expense} />}
+                title={
+                  <ExpenseAccordionItem
+                    path="groups"
+                    totalReturn={totalReturn}
+                    expense={expense}
+                  />
+                }
                 hideIndicator
               >
-                {user ? <ExpenseContent expense={expense} /> : null}
+                <ExpenseContent
+                  totalReturn={totalReturn}
+                  expense={expense}
+                  index={index}
+                  deleteExpenseFunction={deleteExpense}
+                />
               </AccordionItem>
             );
           })}

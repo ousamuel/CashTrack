@@ -7,7 +7,6 @@ import MiddleGroups from "@/app/components/MiddleGroups";
 import RightGroupBalances from "@/app/components/RightGroupBalances";
 import { Context } from "@/app/providers";
 
-
 export default function GroupPage({ params }) {
   const {
     user,
@@ -16,7 +15,6 @@ export default function GroupPage({ params }) {
     setSelectedGroup,
     selectedGroup,
   } = useContext(Context);
-
   async function fetchGroupData(groupId: string) {
     await fetch(`http://localhost:8001/groups/${groupId}`, {
       method: "GET",
@@ -32,7 +30,8 @@ export default function GroupPage({ params }) {
           : console.error("error in fetching expensebygroupid")
       )
       .then((data) => {
-        setGroupExpenses(data.expenses);
+        const reversedGroupExpenses = data.expenses.toReversed();
+        setGroupExpenses(reversedGroupExpenses);
         setSelectedGroup(data);
         console.log(data);
       });
@@ -48,7 +47,7 @@ export default function GroupPage({ params }) {
       <div className="main-body">
         <LeftDash path={params.groupId} />
         <MiddleGroups group={selectedGroup} expenses={groupExpenses} />
-        <RightGroupBalances group={selectedGroup}/>
+        <RightGroupBalances group={selectedGroup} />
       </div>
     </div>
   );

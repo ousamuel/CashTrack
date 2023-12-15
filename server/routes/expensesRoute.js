@@ -171,6 +171,18 @@ router.post("/", async (req, res) => {
         path: "users",
         select: "_id name email profilePicture",
       },
+      {
+        path: "group",
+        select: "groupName",
+      },
+      {
+        path: "distributions",
+        populate: { path: "lendingUser", select: "name email" },
+      },
+      {
+        path: "creator",
+        select: "_id name email profilePicture",
+      },
     ]);
     res.status(201).json(expense);
   } catch (error) {

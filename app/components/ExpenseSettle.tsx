@@ -32,23 +32,39 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
+  /*
+OPTIONS FOR SETTING IMAGE ON EXPENSE
+*/
+  type Category = {
+    name: string;
+    iconSrc: string;
+  };
+  const categories: Category[] = [
+    { name: "General", iconSrc: "/ss/receipt.png" },
+    { name: "Food & Drink", iconSrc: "/ss/food-drink.png" },
+    { name: "Entertainment", iconSrc: "/ss/entertainment.png" },
+    { name: "Transportation", iconSrc: "/ss/car.png" },
+    { name: "Home", iconSrc: "/ss/home.png" },
+  ];
+  /*
+OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
+*/
+  type Option = {
+    desc: string;
+    iconSrc: string;
+  };
+  const distributionOptions: Option[] = [
+    { desc: "Evenly", iconSrc: "/svgs/equal.svg" },
+    { desc: "By Percent", iconSrc: "/svgs/percent.svg" },
+    { desc: "Custom", iconSrc: "/svgs/dollar-sign.svg" },
+  ];
+
   const postNewExpense = async function (input: { [key: string]: any }) {
-    // CHECK CHECK CHECK
-    // CHECK CHECK CHECK
-    // CHECK CHECK CHECK
-    // CHECK CHECK CHECK
-    // CHECK CHECK CHECK
-    //
     /// check userPercent, CAN NOT BE 0
     // check userIds can not be empty
     // title and total amount empty already prevents it from being posted
     // ^ probably throwing a form error, just handle it and throw red borders or smth
 
-    const percentsToIntArr = inputPercents.map((str: string) => parseInt(str));
-
-    const sum =
-      percentsToIntArr.reduce((partialSum, a) => partialSum + a, 0) +
-      parseInt(userPercent);
     // if (sum == 100) {
     //   console.log("100%");
     //   return "100%";
@@ -56,7 +72,6 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
     //   console.log("not 100%");
     //   return 5;
     // }
-
     try {
       await fetch(`http://localhost:8001/expenses`, {
         method: "POST",
@@ -74,12 +89,12 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
           distributions: distributionsArr,
           userIds: userIds,
         }),
-      });
-      // .then((response) => response.json())
-      // .then((data) => {
-      //   setGroupExpenses([...groupExpenses, data]);
-      //   console.log(data)
-      // });
+      })
+        .then((res) => (res.ok ? res.json() : console.log(res.status)))
+        .then((data) => {
+          setGroupExpenses([data, ...groupExpenses]);
+          setUserExpenses([data, ...userExpenses]);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -87,7 +102,13 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
   const handleExpense: SubmitHandler<FormData> = (data) => {
     postNewExpense(data);
   };
-
+  const {
+    user,
+    groupExpenses,
+    setGroupExpenses,
+    userExpenses,
+    setUserExpenses,
+  } = useContext(Context);
   const [expenseAmount, setExpenseAmount] = useState<any>("");
   const [expenseTitle, setExpenseTitle] = useState<string>("");
   const [imageSrc, setImageSrc] = useState<string>("/ss/receipt.png");
@@ -95,39 +116,22 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
   const [expenseModal, setExpenseModal] = useState<string>("close");
   const [distributionType, setDistributionType] = useState<string>("Evenly");
   const [settleModal, setSettleModal] = useState<string>("close");
-  const { user, groupExpenses, setGroupExpenses } = useContext(Context);
   const [userIds, setUserIds] = useState<string[]>([]);
   const [inputPercents, setInputPercents] = useState<any[]>([]);
   const [userPercent, setUserPercent] = useState<any>();
-  const [tempGroupUsers, setTempGroupUsers] = useState<[]>([]);
+  const [tempSideUsers, setTempSideUsers] = useState<[]>([]);
 
-  /*
-OPTIONS FOR SETTING IMAGE ON EXPENSE
-*/
-  type Category = {
-    name: string;
-    iconSrc: string;
-  };
-  const categories: Category[] = [
-    { name: "General", iconSrc: "/ss/receipt.png" },
-    { name: "Food & Drink", iconSrc: "/ss/food-drink.png" },
-    { name: "Entertainment", iconSrc: "/ss/entertainment.png" },
-    { name: "Transportation", iconSrc: "/ss/car.png" },
-    { name: "Home", iconSrc: "/ss/home.png" },
-  ];
-
-  /*
-  OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
-*/
-  type Option = {
-    desc: string;
-    iconSrc: string;
-  };
-  const distributionOptions: Option[] = [
-    { desc: "Evenly", iconSrc: "/svgs/equal.svg" },
-    { desc: "By Percent", iconSrc: "/svgs/percent.svg" },
-    { desc: "Custom", iconSrc: "/svgs/dollar-sign.svg" },
-  ];
+  document.addEventListener("keydown", pressEsc);
+  function pressEsc(e: any) {
+    if (e.key === "Escape") {
+      setExpenseModal("close");
+      setSettleModal("close");
+    }
+  }
+  const percentsToIntArr = inputPercents.map((str: string) => parseInt(str));
+  const sum =
+    percentsToIntArr.reduce((partialSum, a) => partialSum + a, 0) +
+    parseInt(userPercent);
 
   const handleChange = (index: number, value: any) => {
     // Create a copy of the inputPercents array
@@ -137,8 +141,7 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
     // Set the updated array in state
     setInputPercents(newInputValues);
   };
-  // let percentInputs: number[] = userIds.map(() => 0);
-  let distributionsArr: DistributionType[] = tempGroupUsers
+  let distributionsArr: DistributionType[] = tempSideUsers
     .filter((checkUser: any) => userIds.includes(checkUser._id))
     .map((user: any, index: number) => ({
       lendingUser: user._id,
@@ -146,11 +149,14 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
         distributionType == "Evenly"
           ? expenseAmount / (userIds.length + 1)
           : distributionType == "By Percent"
-          ? ((parseInt(inputPercents[index]) * expenseAmount) / 100)
-          : 50,
+          ? (parseInt(inputPercents[index]) * expenseAmount) / 100
+          : distributionType == "Custom"
+          ? 50 //custom input case
+          : expenseAmount / (userIds.length + 1), //default to even distribution
+
       title: expenseTitle,
     }));
-  console.log(distributionsArr);
+  // console.log(distributionsArr);
 
   return (
     <div className="text-[15px]">
@@ -222,18 +228,21 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
                         value={expenseTitle}
                         onChange={(e) => {
                           setExpenseTitle(e.target.value);
-                          console.log(expenseTitle);
+                          // console.log(expenseTitle);
                         }}
                       />
                     </strong>
                     <div className="flex justify-center">
                       <Popover className="" placement="left" showArrow={true}>
                         <PopoverTrigger>
-                          <Image
-                            className="expense-img hover-gray cursor rounded-md mt-3"
-                            width={90}
-                            src={imageSrc}
-                          />
+                          <div className="text-center text-gray-400">
+                            <Image
+                              className="expense-img hover-gray cursor rounded-md mt-3"
+                              width={90}
+                              src={imageSrc}
+                            />
+                            Click to change
+                          </div>
                         </PopoverTrigger>
                         <PopoverContent>
                           <div className="bg-white rounded-md p-3 border-gray-300 border-[1.5px] translate-x-[10px]">
@@ -353,7 +362,7 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
                                       type="number"
                                       value={inputPercents[index]}
                                       onChange={(e) => {
-                                        console.log(inputPercents);
+                                        // console.log(inputPercents);
                                         handleChange(index, e.target.value);
                                       }}
                                     />
@@ -424,6 +433,15 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
             <div className="modal-mid flex-col">
               <strong className="pl-1">Click on member to add/remove</strong>{" "}
               {group
+                ? group.users.length
+                  ? null
+                  : "add group"
+                : user
+                ? user.friends.length
+                  ? null
+                  : "add friends"
+                : null}
+              {group
                 ? group.users
                     .filter((checkUser: any) => checkUser._id != user._id)
                     .map((user: any) => {
@@ -451,7 +469,7 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
                             }
 
                             setUserIds([...tempUserIds]);
-                            console.log(userIds);
+                            // console.log(userIds);
                           }}
                         >
                           <Image
@@ -537,7 +555,7 @@ OPTIONS FOR SETTING IMAGE ON EXPENSE
       <Button
         onClick={() => {
           setExpenseModal("open");
-          setTempGroupUsers(group.users);
+          setTempSideUsers(group ? group.users : user.friends);
           setUserIds([]);
           console.log(userIds);
         }}

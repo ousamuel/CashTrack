@@ -23,12 +23,16 @@ export default function Login() {
   } = useForm<FormData>();
 
   const onLogInSubmit: SubmitHandler<FormData> = (data) => {
-    loginUser(data);
-    window.location.href = "/dashboard";
+    const success = loginUser(data);
+    if (success) {
+      window.location.href = "/dashboard";
+    }
   };
   const onSignUpSubmit: SubmitHandler<FormData> = (data) => {
-    loginUser(data);
-    window.location.href = "/dashboard";
+    const success = loginUser(data);
+    if (success) {
+      window.location.href = "/dashboard";
+    }
   };
   // useEffect(() => {
   //   {

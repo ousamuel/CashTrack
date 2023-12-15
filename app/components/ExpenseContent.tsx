@@ -10,8 +10,16 @@ import { Context } from "../providers";
 
 interface ExpenseContentProps {
   expense: any;
+  index: number;
+  totalReturn: number
+  deleteExpenseFunction: (expenseId: string, index: number) => Promise<void>;
 }
-const ExpenseContent: React.FC<ExpenseContentProps> = ({ expense }) => {
+const ExpenseContent: React.FC<ExpenseContentProps> = ({
+  expense,
+  deleteExpenseFunction,
+  index,
+  totalReturn
+}) => {
   const { user } = useContext(Context);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   type Category = {
@@ -26,26 +34,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({ expense }) => {
     { name: "Transportation", iconSrc: "/ss/car.png" },
     { name: "Home", iconSrc: "/ss/home.png" },
   ];
-  async function deleteExpense() {
-    try {
-      const response: any = await fetch(
-        `http://localhost:8001/expenses/${expense._id}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Accept: "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      } else console.log(response.status);
-    } catch (error: any) {
-      console.error("Error:", error.message);
-    }
-  }
+
   return (
     <div className="expense-dropdown">
       <div className="flex">
@@ -98,7 +87,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({ expense }) => {
                 <Button
                   className="text-sm text-white bg-red-500 px-1 rounded-md -translate-x-[0px] items-center z-1000"
                   disableRipple
-                  onClick={deleteExpense}
+                  onClick={() => deleteExpenseFunction(expense._id, index)}
                 >
                   Delete
                 </Button>

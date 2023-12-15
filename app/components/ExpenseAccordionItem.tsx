@@ -4,10 +4,12 @@ import { Context } from "../providers";
 interface ExpenseAccordionItemProps {
   path: string;
   expense: any;
+  totalReturn: number
 }
 const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
   path,
   expense,
+  totalReturn
 }) => {
   // console.log(expense);
   const [month, setMonth] = useState<string>("Jan");
@@ -96,7 +98,7 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
       </div>
       <div className="max-w-[115px] px-2 text-right">
         <p className="expense-owe">
-          {expense.creator._id == user._id ? "You" : expense.creator.name} paid
+          {user && expense.creator._id == user._id ? "You" : expense.creator.name} paid
         </p>
         <h4 className="mt-[3px] text-[16px] text-black font-bold">
           ${expense.totalAmount.toFixed(2)}
@@ -107,22 +109,19 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
           <p className="expense-owe">You lent</p>
           <h4 className="mt-[3px] text-[16px] green font-bold">
             $
-            {(
-              expense.totalAmount -
-              expense.totalAmount / (expense.users.length + 1)
-            ).toFixed(2)}
+            {totalReturn.toFixed(2)}
           </h4>
         </div>
       ) : (
         <div className="px-1 max-w-[135px]">
           <p className="expense-owe">and lent you</p>
-          <h4 className="mt-[3px] text-[16px] green font-bold">
+          <h4 className="mt-[3px] text-[16px] orange font-bold">
             {expense.distributions
               .filter(
                 (distribution: any) => distribution.lendingUser._id == user._id
               )
               .map((dis: any) => (
-                <div>${dis.amount.toFixed(2)}</div>
+                <div key={dis._id}>${dis.amount.toFixed(2)}</div>
               ))}
           </h4>
         </div>

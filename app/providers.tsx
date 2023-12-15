@@ -22,15 +22,17 @@ export function Providers({ children }: ProvidersProps) {
   const [groupIds, setGroupIds] = useState<[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<[]>([]);
   const [userGroups, setUserGroups] = useState<[]>([]);
-  const [userExpenses, setUserExpenses] = useState<[]>([]);
+  const [userExpenses, setUserExpenses] = useState<any[]>([]);
   // const [loading, setLoading] = useState<boolean>(true);
   // const [groups, setGroups] = useState<ReactNode>(null);
   const [groupExpenses, setGroupExpenses] = useState<any>([]);
+  // document.addEventListener('keydown', sayHi);
 
+ 
   useEffect(() => {
     setWrongLogin(false);
     loginUser({});
-    
+
     // if (!user) {
     //   router.push("/");
     //   // reroute to login page if session/user is null
@@ -78,14 +80,14 @@ export function Providers({ children }: ProvidersProps) {
           setWrongLogin(true);
         }
         throw new Error(`HTTP error! Status: ${response.status}`);
-      } else {
       }
 
       const data = await response.json();
 
       setUser(data.user);
       setUserGroups(data.user.groups);
-      setUserExpenses(data.user.expenses);
+      const reversedExpenses = data.user.expenses.toReversed();
+      setUserExpenses(reversedExpenses);
       let tempOwe = 0;
       let tempOwed = 0;
       data.user.expenses.forEach((expense: any) => {
@@ -103,8 +105,8 @@ export function Providers({ children }: ProvidersProps) {
           setTotalOwe(tempOwe);
         }
       });
-
       console.log(data.user);
+      return true
     } catch (error: any) {
       router.push("/");
       console.error("Error:", error.message);
@@ -129,11 +131,33 @@ export function Providers({ children }: ProvidersProps) {
       console.error("Error:", error.message);
     }
   }
-
+  async function deleteExpense(expenseId: string, index: number) {
+    try {
+      // const response: any = await fetch(
+      //   `http://localhost:8001/expenses/${expenseId}`,
+      //   {
+      //     method: "DELETE",
+      //     credentials: "include",
+      //     headers: {
+      //       "Content-Type": "application/json; charset=UTF-8",
+      //       Accept: "application/json",
+      //     },
+      //   }
+      // );
+      // if (!response.ok) {
+      //   throw new Error(`HTTP error! Status: ${response.status}`);
+      // } else {
+      //   console.log(response.status);
+      // }
+    } catch (error: any) {
+      console.error("Error:", error.message);
+    }
+  }
   return (
     <Context.Provider
       value={{
         totalOwe,
+        deleteExpense,
         setTotalOwe,
         totalOwed,
         setTotalOwed,
