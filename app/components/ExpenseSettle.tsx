@@ -30,6 +30,7 @@ const ExpenseSettle: React.FC<ExpenseSettleProps> = ({ group }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormData>();
   /*
@@ -65,13 +66,13 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
     // title and total amount empty already prevents it from being posted
     // ^ probably throwing a form error, just handle it and throw red borders or smth
 
-    // if (sum == 100) {
-    //   console.log("100%");
-    //   return "100%";
-    // } else {
-    //   console.log("not 100%");
-    //   return 5;
-    // }
+    if (sum == 100) {
+      console.log("100%");
+      // return "100%";
+    } else {
+      console.log("not 100%");
+      return 5;
+    }
     try {
       await fetch(`http://localhost:8001/expenses`, {
         method: "POST",
@@ -121,17 +122,18 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
   const [userPercent, setUserPercent] = useState<any>();
   const [tempSideUsers, setTempSideUsers] = useState<[]>([]);
 
-  document.addEventListener("keydown", pressEsc);
-  function pressEsc(e: any) {
-    if (e.key === "Escape") {
-      setExpenseModal("close");
-      setSettleModal("close");
-    }
-  }
-  const percentsToIntArr = inputPercents.map((str: string) => parseInt(str));
+  // document.addEventListener("keydown", pressEsc);
+  // function pressEsc(e: any) {
+  //   if (e.key === "Escape") {
+  //     setExpenseModal("close");
+
+  //     setSettleModal("close");
+  //   }
+  // }
+  const percentsToIntArr = inputPercents.map((str: string) => parseFloat(str));
   const sum =
     percentsToIntArr.reduce((partialSum, a) => partialSum + a, 0) +
-    parseInt(userPercent);
+    parseFloat(userPercent);
 
   const handleChange = (index: number, value: any) => {
     // Create a copy of the inputPercents array
@@ -149,7 +151,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
         distributionType == "Evenly"
           ? expenseAmount / (userIds.length + 1)
           : distributionType == "By Percent"
-          ? (parseInt(inputPercents[index]) * expenseAmount) / 100
+          ? (parseFloat(inputPercents[index]) * expenseAmount) / 100
           : distributionType == "Custom"
           ? 50 //custom input case
           : expenseAmount / (userIds.length + 1), //default to even distribution
@@ -276,11 +278,11 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                     <strong className="text-center md:text-lg">
                       Total amount paid by you
                     </strong>
-                    <div className="flex text-xl pl-5 justify-center ">
+                    <div className="flex text-xl justify-center ">
                       $
                       <Input
                         placeholder="0.00"
-                        className="w-[120px] border-b border-dashed"
+                        className="w-[110px] border-b border-dashed"
                         type="number"
                         {...register("totalAmount", {
                           required: true,
@@ -345,9 +347,9 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                         )
                         .map((user: any, index: number) => {
                           return (
-                            <div key={user._id}>
-                              {user.name} owes
-                              <strong>
+                            <div key={user._id} className="px-1 mt-2 flex">
+                              {user.name} owes &nbsp;
+                              <strong className="orange">
                                 {distributionType == "Evenly"
                                   ? " $" +
                                     (
@@ -356,22 +358,27 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                                     ).toFixed(2)
                                   : null}
                                 {distributionType == "By Percent" ? (
-                                  <div className="flex">
+                                  <div className="flex justify-center font-bold">
                                     <Input
-                                      placeholder="percent"
+                                      className="percentInput w-[28px] border-b"
+                                      placeholder="0"
                                       type="number"
                                       value={inputPercents[index]}
                                       onChange={(e) => {
-                                        // console.log(inputPercents);
                                         handleChange(index, e.target.value);
                                       }}
                                     />
-                                    actual amount:
-                                    {(
-                                      (parseInt(inputPercents[index]) *
-                                        expenseAmount) /
-                                      100
-                                    ).toFixed(2)}
+                                    %&nbsp;= &nbsp;
+                                    <div className="green">
+                                      $
+                                      {inputPercents[index] && expenseAmount
+                                        ? (
+                                            (parseFloat(inputPercents[index]) *
+                                              expenseAmount) /
+                                            100
+                                          ).toFixed(2)
+                                        : "0.00"}
+                                    </div>
                                   </div>
                                 ) : null}
                               </strong>
@@ -380,30 +387,45 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                         })
                     : null}
                 </div>
-                <div className="grow text-center">
+                <div className="max-w-[180px] grow text-center">
                   {" "}
-                  You get back $
-                  <strong>
-                    {distributionType == "Evenly"
-                      ? (
-                          (expenseAmount * userIds.length) /
-                          (userIds.length + 1)
-                        ).toFixed(2)
-                      : null}
-                    {distributionType == "By Percent" ? (
-                      <div>
+                  {distributionType == "By Percent" ? (
+                    <div>
+                      <div className=" font-extrabold">You owe</div>
+                      <div className="flex justify-center text-xl orange font-bold">
                         <Input
-                          placeholder="user percent"
+                          className="percentInput w-[80px] pl-4"
+                          placeholder="e.g. 50"
                           type="number"
                           value={userPercent}
                           onChange={(e) => {
                             setUserPercent(e.target.value);
                           }}
                         />
-                        {(
-                          (parseInt(userPercent) * expenseAmount) /
-                          100
-                        ).toFixed(2)}
+                        %
+                      </div>
+                    </div>
+                  ) : null}
+                  <p className="font-extrabold border-t border-solid-1 mx-2">
+                    You get back
+                  </p>
+                  <strong className="text-3xl green">
+                    {distributionType == "Evenly"
+                      ? "$" +
+                        (
+                          (expenseAmount * userIds.length) /
+                          (userIds.length + 1)
+                        ).toFixed(2)
+                      : null}
+                    {distributionType == "By Percent" ? (
+                      <div>
+                        $
+                        {userPercent && expenseAmount
+                          ? (
+                              expenseAmount -
+                              (parseFloat(userPercent) * expenseAmount) / 100
+                            ).toFixed(2)
+                          : "0.00"}
                       </div>
                     ) : null}
                   </strong>
@@ -413,7 +435,9 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
 
             <div className="modal-bot border-t">
               <Button
-                onClick={() => setExpenseModal("close")}
+                onClick={(e) => {
+                  setExpenseModal("close");
+                }}
                 className="btn btn-gray"
                 disableRipple
               >
@@ -556,7 +580,13 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
         onClick={() => {
           setExpenseModal("open");
           setTempSideUsers(group ? group.users : user.friends);
+          setUserPercent(null);
           setUserIds([]);
+          setExpenseAmount(null);
+          setExpenseTitle("");
+          setInputPercents([]);
+          setImageSrc("/ss/receipt.png");
+          reset();
           console.log(userIds);
         }}
         disableRipple

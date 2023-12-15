@@ -1,7 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input { 
+  text-align: center; 
+}
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -296,6 +303,10 @@ body {
   border-radius: 3px;
   padding: 2px 5px;
   margin-bottom: 4px;
+}
+
+.percentInput div{
+  padding: 0px;
 }
 .topbar {
   font-weight: bold;

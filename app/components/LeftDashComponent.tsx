@@ -175,12 +175,12 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
         </Link> */}
 
         <div id="invite-box" className="">
-          <h3 className="invites color">Invite friends</h3>
+          <h3 className="invites color">Add friends</h3>
           <div className="input-box">
             <form onSubmit={handleSubmit(onSubmit)}>
               <input
                 className="text-black"
-                // type="email"
+                type="email"
                 placeholder="Enter an email address"
                 {...register("inviteEmail", {
                   pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,

@@ -22,24 +22,12 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
 }) => {
   const { user } = useContext(Context);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-  type Category = {
-    name: string;
-    iconSrc: string;
-  };
-
-  const categories: Category[] = [
-    { name: "General", iconSrc: "/ss/receipt.png" },
-    { name: "Food & Drink", iconSrc: "/ss/food-drink.png" },
-    { name: "Entertainment", iconSrc: "/ss/entertainment.png" },
-    { name: "Transportation", iconSrc: "/ss/car.png" },
-    { name: "Home", iconSrc: "/ss/home.png" },
-  ];
 
   return (
     <div className="expense-dropdown">
       <div className="flex">
         <Image
-          className="expense-img hover-gray cursor"
+          className="expense-img"
           width={85}
           src={expense.imageSrc}
         />
@@ -123,7 +111,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
       </div>
       <div className="border-t flex mt-3 pt-2">
         <div className="w-1/2 pr-3 pl-1">
-          distributions?
+          <p className='text-center font-extrabold text-lg'>Cost Distribution</p>
           <div className="flex flex-1 mt-2">
             <Image
               className="w-[40px] border rounded-full mr-2"
@@ -142,10 +130,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
               <strong>
                 {" "}
                 $
-                {(
-                  expense.totalAmount -
-                  expense.totalAmount / (expense.users.length + 1)
-                ).toFixed(2)}
+                {totalReturn.toFixed(2)}
               </strong>
             </p>
           </div>

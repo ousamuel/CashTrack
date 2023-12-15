@@ -133,22 +133,22 @@ export function Providers({ children }: ProvidersProps) {
   }
   async function deleteExpense(expenseId: string, index: number) {
     try {
-      // const response: any = await fetch(
-      //   `http://localhost:8001/expenses/${expenseId}`,
-      //   {
-      //     method: "DELETE",
-      //     credentials: "include",
-      //     headers: {
-      //       "Content-Type": "application/json; charset=UTF-8",
-      //       Accept: "application/json",
-      //     },
-      //   }
-      // );
-      // if (!response.ok) {
-      //   throw new Error(`HTTP error! Status: ${response.status}`);
-      // } else {
-      //   console.log(response.status);
-      // }
+      const response: any = await fetch(
+        `http://localhost:8001/expenses/${expenseId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Accept: "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      } else {
+        console.log(response.status);
+      }
     } catch (error: any) {
       console.error("Error:", error.message);
     }
