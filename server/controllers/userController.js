@@ -1,5 +1,25 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
+
+exports.addFriend = async (req, res, next) => {
+  try {
+    const friend = await User.findOneAndUpdate(
+      { email: req.body.email },
+      { $push: { friends: req.session.userId } },
+      { new: true }
+    );
+    await User.findByIdAndUpdate(
+      req.session.userId,
+      { $push: { friends: friend._id } },
+      { new: true }
+    );
+
+    await res.status(201).json(friend);
+  } catch (error) {
+    return res.status(401).json({ error: error.message });
+  }
+};
+
 exports.login = (req, res, next) => {
   // check if theres an existing session with stored user id
   // if there is, then query for user and return specified data
@@ -30,6 +50,7 @@ exports.login = (req, res, next) => {
               ],
             },
             { path: "groups", select: "-__v" },
+            { path: "friends", select: "_id name email profilePicture" },
           ])
           .then((user) => {
             return res.status(201).json({
@@ -76,6 +97,7 @@ exports.login = (req, res, next) => {
               ],
             },
             { path: "groups", select: "-__v" },
+            { path: "friends", select: "_id name email profilePicture" },
           ]);
           try {
             bcrypt.compare(req.body._password, user._password).then((match) => {

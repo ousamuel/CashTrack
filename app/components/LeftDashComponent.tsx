@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext, useState, useEffect } from "react";
-import { Image, Button, Link } from "@nextui-org/react";
+import { Image, Button, Link, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Context } from "../providers";
@@ -14,12 +14,8 @@ interface InviteForm {
 const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
   const router = useRouter();
 
-  const {
-    selectedGroup,
-    setSelectedGroup,
-    user,
-    userGroups,
-  } = useContext(Context);
+  const { selectedGroup, setSelectedGroup, user, userGroups, userFriends } =
+    useContext(Context);
   const {
     register,
     handleSubmit,
@@ -27,7 +23,32 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
   } = useForm<InviteForm>();
   const [friendsModal, setFriendsModal] = useState<string>("close");
 
-  const onSubmit: SubmitHandler<InviteForm> = (data) => console.log(data);
+  async function addFriend(email: string) {
+    try {
+      const res: any = await fetch(`http://localhost:8001/users/addFriend`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const data = await res.json();
+      console.log(data);
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+  const onSubmit: SubmitHandler<InviteForm> = (data) => {
+    console.log(data.inviteEmail);
+    addFriend(data.inviteEmail);
+  };
 
   type Payments = {
     recipient: string;
@@ -51,7 +72,7 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
   //   setSelectedGroup(group);
   //   router.push(`/groups/${group._id}`);
   // }}
-  
+
   return (
     <div>
       {friendsModal == "open" ? (
@@ -140,11 +161,9 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
           return (
             <Button
               key={group._id}
-              className={
-                path == group._id ? "left-tabs open" : "left-tabs"
-              }
+              className={path == group._id ? "left-tabs open" : "left-tabs"}
               onClick={() => {
-                setSelectedGroup(group)
+                setSelectedGroup(group);
                 router.push(`/groups/${group._id}`);
               }}
               disableRipple
@@ -165,6 +184,16 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
             <span className="font-extrabold text-[13px]">+</span> add
           </Button>
         </div>
+        {user
+          ? user.friends.map((friend: any) => {
+              return (
+                <Button className="left-tabs hover-gray" disableRipple>
+                  <Image src="/svgs/user.svg" width="10px" />
+                  {friend.name}&nbsp;{friend.email}
+                </Button>
+              );
+            })
+          : null}
         {/* <Link className="left-tabs" href="/">
           <Image src="/svgs/user.svg" width="10px" />
           man
@@ -178,7 +207,7 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
           <h3 className="invites color">Add friends</h3>
           <div className="input-box">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <input
+              <Input
                 className="text-black"
                 type="email"
                 placeholder="Enter an email address"

@@ -23,12 +23,12 @@ export function Providers({ children }: ProvidersProps) {
   const [selectedGroup, setSelectedGroup] = useState<[]>([]);
   const [userGroups, setUserGroups] = useState<[]>([]);
   const [userExpenses, setUserExpenses] = useState<any[]>([]);
+  const [userFriends, setUserFriends] = useState<any[]>([]);
   // const [loading, setLoading] = useState<boolean>(true);
   // const [groups, setGroups] = useState<ReactNode>(null);
   const [groupExpenses, setGroupExpenses] = useState<any>([]);
   // document.addEventListener('keydown', sayHi);
 
- 
   useEffect(() => {
     setWrongLogin(false);
     loginUser({});
@@ -85,6 +85,7 @@ export function Providers({ children }: ProvidersProps) {
       const data = await response.json();
 
       setUser(data.user);
+      setUserFriends(data.friends);
       setUserGroups(data.user.groups);
       const reversedExpenses = data.user.expenses.toReversed();
       setUserExpenses(reversedExpenses);
@@ -106,7 +107,7 @@ export function Providers({ children }: ProvidersProps) {
         }
       });
       console.log(data.user);
-      return true
+      return true;
     } catch (error: any) {
       router.push("/");
       console.error("Error:", error.message);
@@ -157,6 +158,8 @@ export function Providers({ children }: ProvidersProps) {
     <Context.Provider
       value={{
         totalOwe,
+        userFriends,
+        setUserFriends,
         deleteExpense,
         setTotalOwe,
         totalOwed,

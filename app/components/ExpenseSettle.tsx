@@ -206,6 +206,27 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                           );
                         })
                     : null}
+                  {!group && user
+                    ? user.friends
+                        .filter((checkUser: any) =>
+                          userIds.includes(checkUser._id)
+                        )
+                        .map((friend: any) => {
+                          return (
+                            <strong
+                              className="flex items-center m-1 "
+                              key={friend._id}
+                            >
+                              <Image
+                                className="rounded-full mr-2"
+                                width={30}
+                                src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                              />
+                              {friend.name}
+                            </strong>
+                          );
+                        })
+                    : null}
                 </div>
 
                 {/* <Input
@@ -464,6 +485,49 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                 ? user.friends.length
                   ? null
                   : "add friends"
+                : null}
+              {user
+                ? user.friends.map((friend: any) => {
+                    const findIdx: (id: string) => boolean = function (
+                      id: string
+                    ): boolean {
+                      return id == user._id;
+                    };
+                    return (
+                      <Button
+                        key={friend._id}
+                        className={
+                          userIds.includes(friend._id)
+                            ? "flex mt-1 py-[0.5px] justify-start bg-green-200 p-1 rounded-md "
+                            : "flex mt-1 py-[0.5px] justify-start p-1 rounded-md hover:bg-green-100 "
+                        }
+                        disableRipple
+                        onClick={() => {
+                          let tempUserIds: string[] = userIds;
+                          if (userIds.includes(friend._id)) {
+                            const idx = tempUserIds.findIndex(findIdx);
+                            tempUserIds.splice(idx, 1);
+                          } else {
+                            tempUserIds.push(friend._id);
+                          }
+
+                          setUserIds([...tempUserIds]);
+                          // console.log(userIds);
+                        }}
+                      >
+                        <Image
+                          src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                          width={43}
+                          className="mr-1 rounded-full"
+                          alt="pfp"
+                        />
+                        <div className="flex flex-col pl-2">
+                          <strong className="text-left">{friend.name}</strong>
+                          {friend.email}
+                        </div>
+                      </Button>
+                    );
+                  })
                 : null}
               {group
                 ? group.users

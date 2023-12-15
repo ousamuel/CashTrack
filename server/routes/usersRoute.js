@@ -33,6 +33,7 @@ router.get("/:id", getUser, (req, res) => {
   // res.send(res.user.name);
 });
 router.post("/login", userControl.login);
+router.patch("/addFriend", userControl.addFriend);
 router.post("/", async (req, res) => {
   const existingUser = await User.findOne({ email: req.body.email });
   if (existingUser) {

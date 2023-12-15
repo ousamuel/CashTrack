@@ -1,17 +1,5 @@
 const mongoose = require("mongoose");
 
-const FriendSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    default: "user",
-    required: true,
-  },
-  amount: {
-    type: Number,
-    required: true,
-  },
-});
-
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -43,16 +31,18 @@ const UserSchema = new mongoose.Schema({
     type: String,
   },
 
-  // totalOwe: [{ type: Number }],
-
-  // totalOwed: [{ type: Number }],
-
   profilePicture: {
     type: String,
     default: "/src",
   },
 
-  friends: [FriendSchema],
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      unique: true,
+    },
+  ],
 });
 
 module.exports = mongoose.model("User", UserSchema);
