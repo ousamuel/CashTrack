@@ -18,7 +18,7 @@ This is a TypeScript-React project with a backend powered by [Node/Express](http
 <!-- Deployed via Vercel & PythonAnywhere: [Click here to visit the site](https://fitness-app-ousamuel.vercel.app/)
 # SteelStance -->
 
-[![Home Page Screen Shot](images/cashtrack.png)](https://raw.githubusercontent.com/ousamuel/CashTrack/main/public/images/cashtrack.png)
+[![Home Page Screen Shot](public/images/cashtrack.png)](https://raw.githubusercontent.com/ousamuel/CashTrack/main/public/images/cashtrack.png)
 
 ## Introduction
 
