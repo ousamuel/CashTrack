@@ -13,7 +13,7 @@ development:
 npm run dev in cashtrack
 npm start in server
 
-This is a TypeScript-React project with a backend powered by [Node/Express](https://expressjs.com/) + [MongoDB](https://www.mongodb.com/)and Tailwind CSS for UX.
+This is a TypeScript-React project with a backend powered by [Node/Express](https://expressjs.com/) + [MongoDB](https://www.mongodb.com/) and Tailwind CSS for UX.
 
 <!-- Deployed via Vercel & PythonAnywhere: [Click here to visit the site](https://fitness-app-ousamuel.vercel.app/)
 # SteelStance -->
