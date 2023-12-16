@@ -15,6 +15,7 @@ export default function Login() {
   const router = useRouter();
   const { user, loginUser, logOut, wrongLogin, setWrongLogin } =
     useContext(Context);
+  
   const [loggingIn, setLoggingIn] = useState<boolean>(true);
   const {
     register,
@@ -34,20 +35,17 @@ export default function Login() {
       window.location.href = "/dashboard";
     }
   };
-  // useEffect(() => {
-  //   {
-  //     user ? router.push("/dashboard") : null;
-  //   }
-  // },[user]);
-  console.log(user);
+  // console.log(user);
   const testimonials: string[] = [
     '"This saved me and my friends a billion dollars" - Anonymous',
     '"My girlfriend used to always yell at me about paying for my friends before I found CashTrack!" - Josh',
   ];
+
   return (
     <div className="login-body flex flex-col sm:flex-row">
       <div className="flex flex-1 flex-col items-center align-center">
         <p className="login-title text-[70px] sm:hidden">CashTrack</p>
+        
 
         <Image width={300} src="svgs/logo.svg" className="mb-4" />
         <h4 className="text-[20px] text-center w-4/5 sm:w-[65%]">

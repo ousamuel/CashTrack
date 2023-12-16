@@ -132,12 +132,6 @@ body {
   padding-right: max(50px, 5%);
   padding-left: max(50px, 5%);
 }
-.left-container,
-.mid-container,
-.right-container {
-  /* padding-left: 3px;
-  padding-right: 3px; */
-}
 
 .left-container {
   width: 200px;
@@ -162,7 +156,7 @@ body {
   width: 20%;
   max-width: 200px;
   margin-top: 12px;
-  padding-left: 24px;
+  padding-left: 20px;
 }
 .delete {
   display: flex;

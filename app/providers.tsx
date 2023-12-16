@@ -2,6 +2,7 @@
 import React, { createContext, useState, ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@nextui-org/react";
+
 // CASHTRACK
 interface ContextProps {
   variable: string;
@@ -13,6 +14,17 @@ interface ProvidersProps {
 }
 
 export function Providers({ children }: ProvidersProps) {
+ 
+  useEffect(() => {
+    setWrongLogin(false);
+    loginUser({});
+   
+    // if (!user) {
+    //   router.push("/");
+    //   // reroute to login page if session/user is null
+    // }
+  }, []);
+
   const router = useRouter();
   const API = process.env.REACT_APP_API;
   const [user, setUser] = useState<User>();
@@ -29,15 +41,6 @@ export function Providers({ children }: ProvidersProps) {
   const [groupExpenses, setGroupExpenses] = useState<any>([]);
   // document.addEventListener('keydown', sayHi);
 
-  useEffect(() => {
-    setWrongLogin(false);
-    loginUser({});
-
-    // if (!user) {
-    //   router.push("/");
-    //   // reroute to login page if session/user is null
-    // }
-  }, []);
   type Expense = {
     _id: string;
     title: string;

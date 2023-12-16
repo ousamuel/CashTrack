@@ -14,7 +14,7 @@ interface InviteForm {
 const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
   const router = useRouter();
 
-  const { selectedGroup, setSelectedGroup, user, userGroups, userFriends } =
+  const { selectedGroup, setSelectedGroup, user, userGroups } =
     useContext(Context);
   const {
     register,
@@ -22,8 +22,11 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
     formState: { errors },
   } = useForm<InviteForm>();
   const [friendsModal, setFriendsModal] = useState<string>("close");
-
   async function addFriend(email: string) {
+    if (user.friends.find((friend: any) => friend.email == email)) {
+      alert("already added");
+      return 5;
+    }
     try {
       const res: any = await fetch(`http://localhost:8001/users/addFriend`, {
         method: "PATCH",
@@ -152,7 +155,7 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
       </div>
       <div className="mt-1">
         <div id="groups" className="left-header">
-          <span>groups</span>
+          <span className="flex items-center">groups</span>
           <Link href="/new-group" className="add">
             <span className="font-extrabold text-[13px]">+</span> add
           </Link>
@@ -176,19 +179,23 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
 
         <div id="friends" className="left-header">
           <span>friends</span>
-          <Button
+          {/* <Button
             onClick={() => setFriendsModal("open")}
             className="add"
             disableRipple
           >
             <span className="font-extrabold text-[13px]">+</span> add
-          </Button>
+          </Button> */}
         </div>
         {user
           ? user.friends.map((friend: any) => {
               return (
                 <Button className="left-tabs hover-gray" disableRipple>
-                  <Image src="/svgs/user.svg" width="10px" />
+                  <Image
+                    src="/svgs/user.svg"
+                    className="min-w-[10px]"
+                    width="10px"
+                  />
                   {friend.name}&nbsp;{friend.email}
                 </Button>
               );

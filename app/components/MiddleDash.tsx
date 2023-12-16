@@ -1,23 +1,21 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Image, Button, Link } from "@nextui-org/react";
+import { Image, Button, Link, Input } from "@nextui-org/react";
 import ExpenseSettle from "./ExpenseSettle";
 import MiddleDashList from "./MiddleDashList";
 import MiddleDashChart from "./MiddleDashChart";
 import { Context } from "../providers";
+
 export default function MiddleDash() {
   const { user, totalOwe, totalOwed } = useContext(Context);
   const [selected, setSelected] = useState<string>("list");
-  // const owe = 140;
-  // const owed = 40;
-  // console.log(totalOwe);
-  // console.log(totalOwed);
+ 
   return (
     <div className="mid-container">
       {user ? (
         <>
           <div className="p-3 bg-[#EEEEEE] flex justify-between">
             <h1 className="topbar">Dashboard{user.name} </h1>
-            <ExpenseSettle />
+            {/* <ExpenseSettle /> */}
           </div>
           <div className="py-[6px] bg-[#EEEEEE] flex justify-between border-y border-gray-300">
             {/* 

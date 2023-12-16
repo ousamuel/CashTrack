@@ -3,7 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const sessions = require("express-session");
-const io = require("socket.io")(process.env.SOCKET_PORT);
+const { Server } = require("socket.io");
+
 const app = express();
 const crypto = require("crypto");
 const mongoose = require("mongoose");
@@ -12,6 +13,28 @@ mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("connected to db"));
+
+const http = require("http");
+// const io = require("socket.io")(process.env.SOCKET_PORT);
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.FRONTEND_URL,
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  // console.log("user connected " + socket.id);
+
+  socket.on("send_message", (data) => {
+    socket.broadcast.emit("receive_message", data);
+  });
+
+  // socket.on("disconnect", () => {
+  //   console.log("user disconnected " + socket.id);
+  // });
+});
 
 function generateRandomKey(length) {
   return crypto
@@ -66,7 +89,7 @@ const port = process.env.PORT || 8000;
 app.get("/", (req, res) => {
   res.send("HELLO FROM new!! EXPRESS");
 });
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`listening on ${port}`);
 });
 /*

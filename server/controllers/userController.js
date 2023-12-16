@@ -7,7 +7,7 @@ exports.addFriend = async (req, res, next) => {
       { email: req.body.email },
       { $push: { friends: req.session.userId } },
       { new: true }
-    );
+    ).select("name email profilePicture");
     await User.findByIdAndUpdate(
       req.session.userId,
       { $push: { friends: friend._id } },

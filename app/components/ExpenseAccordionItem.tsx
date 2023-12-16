@@ -116,10 +116,14 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
             ${totalReturn.toFixed(2)}
           </h4>
         </div>
-      ) : expense.distributions.filter(
+      ) : expense.distributions.find(
           (distribution: any) => distribution.lendingUser._id == user._id
-        ).length ? (
-        <div className="px-1 max-w-[130px] justify-end inline-block ">
+        ) ? (
+        // (
+        //   expense.distributions.filter(
+        //     (distribution: any) => distribution.lendingUser._id == user._id
+        //   ).length ?
+        <div className="px-1 max-w-[115px] justify-end inline-block ">
           <p className="expense-owe w-max">and lent you</p>
           <h4 className="mt-[3px] text-[16px] orange font-bold w-max">
             {expense.distributions
@@ -132,7 +136,10 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
           </h4>
         </div>
       ) : (
-        <div className="px-1 max-w-[135px] text-[12px]">Not involved</div>
+        // ) : (
+        //   <div className="px-1 max-w-[135px] text-[12px]">Not involved</div>
+        // )
+        <div className="px-1 max-w-[115px] text-[12px]">Not involved</div>
       )}
     </div>
   );

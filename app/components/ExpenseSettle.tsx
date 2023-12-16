@@ -66,12 +66,12 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
     // title and total amount empty already prevents it from being posted
     // ^ probably throwing a form error, just handle it and throw red borders or smth
 
-    if (sum == 100) {
-      console.log("100%");
+    if (sum != 100 && distributionType == "By Percent") {
       // return "100%";
-    } else {
       console.log("not 100%");
-      return 5;
+      return "not 100";
+    } else {
+      console.log("100%");
     }
     try {
       await fetch(`http://localhost:8001/expenses`, {
@@ -95,6 +95,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
         .then((data) => {
           setGroupExpenses([data, ...groupExpenses]);
           setUserExpenses([data, ...userExpenses]);
+          setExpenseModal("close");
         });
     } catch (error) {
       console.log(error);
@@ -243,7 +244,11 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                   <div className="flex flex-col">
                     <strong>
                       <Input
-                        className="w-[140px] md:w-[170px] md:text-lg border-b border-dashed m-1 text-center"
+                        className={
+                          errors.title
+                            ? "w-[140px] md:w-[170px] md:text-lg border-b-2 border-red-400 border-dashed m-1 text-center"
+                            : "w-[140px] md:w-[170px] md:text-lg border-b border-dashed m-1 text-center"
+                        }
                         placeholder="Name of Expense"
                         {...register("title", {
                           required: true,
@@ -303,7 +308,11 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                       $
                       <Input
                         placeholder="0.00"
-                        className="w-[110px] border-b border-dashed"
+                        className={
+                          errors.totalAmount
+                            ? "w-[110px] border-b-2 border-red-400 border-dashed"
+                            : "w-[110px] border-b border-dashed"
+                        }
                         type="number"
                         {...register("totalAmount", {
                           required: true,
@@ -486,49 +495,6 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                   ? null
                   : "add friends"
                 : null}
-              {user
-                ? user.friends.map((friend: any) => {
-                    const findIdx: (id: string) => boolean = function (
-                      id: string
-                    ): boolean {
-                      return id == user._id;
-                    };
-                    return (
-                      <Button
-                        key={friend._id}
-                        className={
-                          userIds.includes(friend._id)
-                            ? "flex mt-1 py-[0.5px] justify-start bg-green-200 p-1 rounded-md "
-                            : "flex mt-1 py-[0.5px] justify-start p-1 rounded-md hover:bg-green-100 "
-                        }
-                        disableRipple
-                        onClick={() => {
-                          let tempUserIds: string[] = userIds;
-                          if (userIds.includes(friend._id)) {
-                            const idx = tempUserIds.findIndex(findIdx);
-                            tempUserIds.splice(idx, 1);
-                          } else {
-                            tempUserIds.push(friend._id);
-                          }
-
-                          setUserIds([...tempUserIds]);
-                          // console.log(userIds);
-                        }}
-                      >
-                        <Image
-                          src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
-                          width={43}
-                          className="mr-1 rounded-full"
-                          alt="pfp"
-                        />
-                        <div className="flex flex-col pl-2">
-                          <strong className="text-left">{friend.name}</strong>
-                          {friend.email}
-                        </div>
-                      </Button>
-                    );
-                  })
-                : null}
               {group
                 ? group.users
                     .filter((checkUser: any) => checkUser._id != user._id)
@@ -573,7 +539,49 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                         </Button>
                       );
                     })
-                : null}
+                : user
+                ? user.friends.map((friend: any) => {
+                    const findIdx: (id: string) => boolean = function (
+                      id: string
+                    ): boolean {
+                      return id == user._id;
+                    };
+                    return (
+                      <Button
+                        key={friend._id}
+                        className={
+                          userIds.includes(friend._id)
+                            ? "flex mt-1 py-[0.5px] justify-start bg-green-200 p-1 rounded-md "
+                            : "flex mt-1 py-[0.5px] justify-start p-1 rounded-md hover:bg-green-100 "
+                        }
+                        disableRipple
+                        onClick={() => {
+                          let tempUserIds: string[] = userIds;
+                          if (userIds.includes(friend._id)) {
+                            const idx = tempUserIds.findIndex(findIdx);
+                            tempUserIds.splice(idx, 1);
+                          } else {
+                            tempUserIds.push(friend._id);
+                          }
+
+                          setUserIds([...tempUserIds]);
+                          // console.log(userIds);
+                        }}
+                      >
+                        <Image
+                          src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                          width={43}
+                          className="mr-1 rounded-full"
+                          alt="pfp"
+                        />
+                        <div className="flex flex-col pl-2">
+                          <strong className="text-left">{friend.name}</strong>
+                          {friend.email}
+                        </div>
+                      </Button>
+                    );
+                  })
+                : "error loading users"}
               <hr className="border border-gray-400 border-dashed mt-1"></hr>
               <div
                 className="flex mt-2 mr-1 py-[0.5px] justify-start p-1 rounded-md "
@@ -632,7 +640,11 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
               >
                 Cancel
               </Button>
-              <Button className="btn btn-green" disableRipple>
+              <Button
+                className="btn btn-green"
+                disableRipple
+                onClick={() => setSettleModal("close")}
+              >
                 Save
               </Button>
             </div>

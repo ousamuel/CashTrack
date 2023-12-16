@@ -4,6 +4,7 @@ import { Context } from "../providers";
 import ExpenseAccordionItem from "./ExpenseAccordionItem";
 import ExpenseContent from "./ExpenseContent";
 import ExpenseSettle from "./ExpenseSettle";
+
 interface GroupType {
   _id: string;
   groupName: string;
