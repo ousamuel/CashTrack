@@ -19,14 +19,14 @@ type MiddleGroupsProps = {
 };
 const MiddleGroups: React.FC<MiddleGroupsProps> = ({ group, expenses }) => {
   const { api, user, setGroupExpenses, deleteExpense } = useContext(Context);
-  
+
   return (
     <div className="mid-container">
       <div className="p-3 bg-[#EEEEEE] flex border-b justify-between">
         <h1 className="topbar">{group.groupName}</h1>
         <ExpenseSettle group={group} />
       </div>
-      {expenses && user ? (
+      {expenses.length && user ? (
         <Accordion className="p-0 w-full overflow-y-scroll">
           {expenses.map((expense: any, index: number) => {
             const totalReturn = expense.distributions.reduce(
@@ -57,7 +57,11 @@ const MiddleGroups: React.FC<MiddleGroupsProps> = ({ group, expenses }) => {
             );
           })}
         </Accordion>
-      ) : null}
+      ) : (
+        <h2 className="uppercase text-center text-lg pt-4">
+          Add an expense to get started
+        </h2>
+      )}
     </div>
   );
 };

@@ -48,7 +48,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { groupName, creator, userIds } = req.body;
+  const { groupName, creator, userEmails } = req.body;
 
   const group = new Group({
     groupName,
@@ -56,23 +56,31 @@ router.post("/", async (req, res) => {
     users: [],
     expenses: [],
   });
-  const addGroupToUser = async function (userId) {
+  const addGroupToUser = async function (userEmail) {
     try {
-      var updatedUser = await User.findByIdAndUpdate(
-        userId,
+      const updatedUser = await User.findOneAndUpdate(
+        { email: userEmail },
         { $push: { groups: group._id } },
         { new: true, useFindAndModify: false }
-      );
+      ); // .select("name email profilePicture");
+
       group.users.push(updatedUser._id);
-      return updatedUser;
+      // return updatedUser;
     } catch (error) {
       console.error(error);
     }
   };
   try {
-    for (const userId of userIds) {
-      await addGroupToUser(userId);
+    await User.findByIdAndUpdate(
+      creator,
+      { $push: { groups: group._id } },
+      { new: true, useFindAndModify: false }
+    ).then(group.users.push(creator));
+
+    for (const userEmail of userEmails) {
+      await addGroupToUser(userEmail);
     }
+
     group.save();
     res.status(201).json(group);
   } catch (error) {

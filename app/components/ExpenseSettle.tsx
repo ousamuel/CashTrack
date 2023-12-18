@@ -544,7 +544,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                     const findIdx: (id: string) => boolean = function (
                       id: string
                     ): boolean {
-                      return id == user._id;
+                      return id == friend._id;
                     };
                     return (
                       <Button

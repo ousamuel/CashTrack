@@ -59,10 +59,10 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
         </Popover> */}
         <div className="ml-3">
           <h3 className="py-[3px] flex justify-between relative">
-            <p className="flex justify-start items-center flex-wrap max-w-[70%]">
+            <p className="whitespace-nowrap	 justify-start items-center max-w-[70%]">
               {expense.title.length > 21 ? (
-                <div className="flex-wrap">
-                  <p className="md:hidden">{expense.title.slice(0, 21)}-</p>
+                <div className="whitespace-normal">
+                  <p className="md:hidden">{expense.title.slice(0, 21)}</p>
                   <p className="md:hidden">{expense.title.slice(21)}</p>
                   <p className="hidden md:flex">{expense.title}</p>
                 </div>

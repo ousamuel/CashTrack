@@ -1,4 +1,4 @@
-GET http://localhost:8001/groups/6578be5e7fcdb70a4ac2f6da
+GET http://localhost:8001/groups/6580a248895da28b72c93e58
 ###
 GET http://localhost:8001/expenses/groupId/6578be5e7fcdb70a4ac2f6da
 ###
