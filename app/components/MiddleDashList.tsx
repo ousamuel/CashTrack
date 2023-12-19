@@ -26,8 +26,8 @@ export default function MiddleDashList() {
   //   }
   // });
   return (
-    <div className="p-3 flex">
-      <div className="w-1/2 pr-3 pl-1">
+    <div className="p-3 pt-1 flex">
+      <div className="w-1/2 pr-1 pl-2">
         {user
           ? Object.entries(
               user.expenses.reduce((creditors: any, expense: any) => {
@@ -60,14 +60,38 @@ export default function MiddleDashList() {
 
                 return creditors;
               }, {})
-            ).map(([creditorName, creditorData]) => (
-              <div key={creditorName}>
-                <h3>{creditorName}</h3>
-                <ul>
+            ).map(([creditorName, creditorData], index) => (
+              <div
+                key={creditorName}
+                className={index == 0 ? "" : "border-t pt-1"}
+              >
+                <h3 className="font-bold underline">{creditorName}</h3>
+                <p>
+                  Total:&nbsp;
+                  <strong className="orange text-lg">
+                    $
+                    {creditorData.distributions
+                      .reduce(
+                        (totalAmount: number, distribution: any) =>
+                          totalAmount + distribution.amount,
+                        0
+                      )
+                      .toFixed(2)}
+                  </strong>
+                </p>
+                <ul className="max-h-[25vh] overflow-y-scroll">
                   {creditorData.distributions.map((distribution: any) => (
-                    <li key={distribution.id}>
-                      I owe {distribution.amount.toFixed(2)} for{" "}
-                      {distribution.expenseTitle}
+                    <li
+                      key={distribution.id}
+                      className="flex whitespace-normal items-center my-1 text-[15px]"
+                    >
+                      <strong className="orange">
+                        ${distribution.amount.toFixed(2)}
+                      </strong>
+                      &nbsp;for&nbsp;
+                      <p className="expense-group">
+                        {distribution.expenseTitle}
+                      </p>
                     </li>
                   ))}
                 </ul>
@@ -75,57 +99,93 @@ export default function MiddleDashList() {
             ))
           : "null"}
       </div>
-      <div className="w-1/2 pr-3 pl-1">
+
+      <div className="w-1/2 pr-1 pl-2 border-l">
         {user
-          ? user.expenses
-              .filter(
-                (expense: any) =>
-                  expense.creator && expense.creator._id === user._id
-              )
-              .map((expense: any) => {
-                const distributions = expense.distributions.map(
-                  (distribution: any) => ({
+          ? Object.values(
+              user.expenses
+                .filter(
+                  (expense: any) =>
+                    expense.creator && expense.creator._id === user._id
+                )
+                .flatMap((expense: any) =>
+                  expense.distributions.map((distribution: any) => ({
                     id: distribution._id,
                     amount: distribution.amount,
+                    debtorId: distribution.lendingUser._id,
                     debtorName: distribution.lendingUser.name,
                     distributionTitle: distribution.title,
-                  })
-                );
-
-                const groupedByDebtor = distributions.reduce((acc, item) => {
-                  const key = item.debtorName;
-                  acc[key] = acc[key] || { totalAmount: 0, distributions: [] };
-                  acc[key].totalAmount += item.amount;
-                  acc[key].distributions.push(item);
+                  }))
+                )
+                .reduce((acc: any, item: any) => {
+                  const key = item.debtorId;
+                  const debtor = acc[key] || {
+                    debtorName: item.debtorName,
+                    totalAmount: 0,
+                    distributions: [],
+                  };
+                  debtor.totalAmount += item.amount;
+                  debtor.distributions.push(item);
+                  acc[key] = debtor;
                   return acc;
-                }, {});
-
-                const uniqueDebtors = new Set(Object.keys(groupedByDebtor));
-
-                return (
-                  <div key={expense._id}>
-                    {Array.from(uniqueDebtors).map((debtorName) => (
-                      <div key={debtorName}>
-                        <h3>{debtorName}</h3>
-                        <p>
-                          Total Amount Owed:{" "}
-                          {groupedByDebtor[debtorName].totalAmount.toFixed(2)}
-                        </p>
-                        <ul>
-                          {groupedByDebtor[debtorName].distributions.map(
-                            (item) => (
-                              <li key={item.id}>
-                                {item.amount.toFixed(2)} for{" "}
-                                {item.distributionTitle}
-                              </li>
-                            )
-                          )}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                );
-              })
+                }, {})
+            ).map((debtor: any, index: number) => (
+              <div
+                key={debtor.debtorId}
+                className={index == 0 ? "" : "border-t pt-1"}
+              >
+                <h3 className="font-bold underline">{debtor.debtorName}</h3>
+                <p>
+                  Total:&nbsp;
+                  <strong className="green text-lg">
+                    ${debtor.totalAmount.toFixed(2)}
+                  </strong>{" "}
+                </p>
+                <ul className="max-h-[25vh] overflow-y-scroll">
+                  {debtor.distributions.map((item: any) => (
+                    <li
+                      key={item.id}
+                      className="flex whitespace-normal items-center my-1 text-[15px]"
+                    >
+                      <strong className="green">
+                        ${item.amount.toFixed(2)}{" "}
+                      </strong>
+                      &nbsp;for&nbsp;
+                      <p className="expense-group">{item.distributionTitle} </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              // <div key={creditorName} className="border-b mb-1">
+              //   <h3 className="font-bold underline">{creditorName}</h3>
+              //   <p>
+              //     Total Amount Owed:{" "}
+              //     {creditorData.distributions
+              //       .reduce(
+              //         (totalAmount: number, distribution: any) =>
+              //           totalAmount + distribution.amount,
+              //         0
+              //       )
+              //       .toFixed(2)}
+              //   </p>
+              //   <ul className="max-h-[25vh] overflow-y-scroll">
+              //     {creditorData.distributions.map((distribution: any) => (
+              //       <li
+              //         key={distribution.id}
+              //         className="flex whitespace-normal items-center my-1 text-[15px]"
+              //       >
+              //         <strong className="orange">
+              //           ${distribution.amount.toFixed(2)}
+              //         </strong>
+              //         &nbsp;for&nbsp;
+              //         <p className="expense-group">
+              //           {distribution.expenseTitle}
+              //         </p>
+              //       </li>
+              //     ))}
+              //   </ul>
+              // </div>
+            ))
           : "null"}
       </div>
     </div>

@@ -148,7 +148,9 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
           (distribution: any) => distribution.lendingUser._id == user._id
         ) ? (
         <div className="px-1 max-w-[120px] justify-end inline-block ">
-          <p className="expense-owe w-max">and lent you</p>
+          <p className="expense-owe w-max">
+            {amountBorrowed <= 0 ? " - " : "and lent you"}
+          </p>
           {amountBorrowed <= 0 ? (
             <h4 className="mt-[3px] text-[16px] w-max">Settled</h4>
           ) : (

@@ -185,13 +185,18 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
                       </h2>
                     ) : null}
                     {totalPaid && totalBorrowed ? (
+                      <strong className="border-t border-gray-200 text-center">
+                        Net Balance
+                      </strong>
+                    ) : null}
+                    {totalPaid && totalBorrowed ? (
                       totalPaid >= totalBorrowed ? (
-                        <h2 className="text-[#2c9984] border-t border-gray-200">
-                          GETS BACK ${(totalPaid - totalBorrowed).toFixed(2)}{" "}
+                        <h2 className="text-[#2c9984] text-center leading-none">
+                          ${(totalPaid - totalBorrowed).toFixed(2)}{" "}
                         </h2>
                       ) : (
-                        <h2 className="text-[#e51212] border-t border-gray-200">
-                          OWES ${(totalBorrowed - totalPaid).toFixed(2)}{" "}
+                        <h2 className="text-[#e51212] text-center leading-none">
+                          ${(totalBorrowed - totalPaid).toFixed(2)}{" "}
                         </h2>
                       )
                     ) : null}

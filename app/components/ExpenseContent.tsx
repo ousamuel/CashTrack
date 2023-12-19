@@ -34,6 +34,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
   const [paymentAmount, setPaymentAmount] = useState<string>("");
   const [zeroPayment, setZeroPayment] = useState<boolean>(false);
   const [overPaid, setOverPaid] = useState<boolean>(false);
+  const [tempPayment, setTempPayment] = useState<number>(0);
   const myDebt = expense.distributions.find(
     (dis: any) => dis.lendingUser._id == user._id
   );
@@ -66,6 +67,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
       })
         .then((res) => (res.ok ? res.json() : console.log(res.status)))
         .then((data) => {
+          setTempPayment(postAmount);
           setPaymentModal("close");
         });
     } catch (error) {
@@ -226,7 +228,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
           {expense.creator._id == user._id ? (
             <Button
               disableRipple
-              className="btn-2 btn-orange text-[11px]"
+              className="btn-2 btn-orange text-[13px]"
               radius="lg"
             >
               Edit expense
@@ -234,20 +236,20 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
           ) : expense.users.includes(user._id) ? (
             <Button
               disableRipple
-              className="btn-2 btn-green text-[11px]"
+              className="btn-2 btn-green text-[13px]"
               radius="lg"
               onClick={() => {
                 setPaymentAmount("");
                 setPaymentModal("open");
               }}
             >
-              Make a payment
+              Settle your payment
             </Button>
           ) : null}
         </div>
       </div>
       <div className="border-t flex mt-3 pt-2">
-        <div className="w-1/2 pr-3 pl-1">
+        <div className="w-1/2 pl-1">
           <p className="text-center font-extrabold text-lg">
             Cost Distribution
           </p>
@@ -287,7 +289,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
                   </strong>
                   &nbsp;
                   {distribution.lendingUser._id == user._id ? "owe" : "owes"}
-                  &nbsp; $
+                  &nbsp;$
                   <strong className="underline">
                     {distribution.amount.toFixed(2)}
                     {/* {(
@@ -300,7 +302,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
             );
           })}
         </div>
-        <div className="w-1/2 pr-3 pl-1">
+        <div className="w-1/2 pl-10">
           <p className="text-center font-extrabold text-lg">Payments</p>
 
           {expense.payments.map((payment: any) => {
@@ -331,6 +333,21 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
               </div>
             );
           })}
+
+          {tempPayment ? (
+            <div className="flex flex-1 mt-2">
+              <Image
+                className="w-[40px] border rounded-full mr-2"
+                radius="md"
+                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              />
+              <p className="flex-1 flex flex-wrap items-center text-[13px]">
+                <strong>You</strong>
+                &nbsp;paid back&nbsp;$
+                <strong className="underline">{tempPayment.toFixed(2)}</strong>
+              </p>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

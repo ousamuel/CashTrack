@@ -41,9 +41,9 @@ export default function MiddleDash() {
             </div>
           </div>
           <h2 className="flex uppercase p-2 px-3 text-[12px] sm:text-[14px]">
-            <div className="flex w-1/2 justify-between">
+            <div className="flex w-1/2 justify-center">
               <span>you owe</span>
-              <Button
+              {/* <Button
                 disableRipple
                 className={
                   selected == "list" ? "list-btn listchart-open" : "list-btn"
@@ -62,10 +62,10 @@ export default function MiddleDash() {
                   alt="list"
                 />
                 <span className="pl-[2px]">view as list</span>
-              </Button>{" "}
+              </Button>{" "} */}
             </div>
-            <div className="flex w-1/2 justify-between">
-              <Button
+            <div className="flex w-1/2 justify-center">
+              {/* <Button
                 disableRipple
                 className={
                   selected == "chart" ? "chart-btn listchart-open" : "chart-btn"
@@ -84,12 +84,12 @@ export default function MiddleDash() {
                   alt="charts"
                 />
                 <span className="pl-1">view chart</span>
-              </Button>{" "}
+              </Button>{" "} */}
               <span>you are owed</span>
             </div>
           </h2>
-          {selected == "list" ? <MiddleDashList /> : <MiddleDashChart />}
-          {/* <MiddleDashList /> */}
+          {/* {selected == "list" ? <MiddleDashList /> : <MiddleDashChart />} */}
+          <MiddleDashList />
           {/* <MiddleDashChart /> */}
         </>
       ) : null}

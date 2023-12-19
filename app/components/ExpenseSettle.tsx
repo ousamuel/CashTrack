@@ -117,7 +117,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
   const [creator, setCreator] = useState<string>("");
   const [expenseModal, setExpenseModal] = useState<string>("close");
   const [distributionType, setDistributionType] = useState<string>("Evenly");
-  const [settleModal, setSettleModal] = useState<string>("close");
+  // const [settleModal, setSettleModal] = useState<string>("close");
   const [userIds, setUserIds] = useState<string[]>([]);
   const [inputPercents, setInputPercents] = useState<any[]>([]);
   const [userPercent, setUserPercent] = useState<any>();
@@ -597,7 +597,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
           </div>
         </div>
       ) : null}
-      {settleModal == "open" ? (
+      {/* {settleModal == "open" ? (
         <div className="modal flex ">
           <div className="modal-div">
             <div className="modal-top">
@@ -642,7 +642,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
             </div>
           </div>
         </div>
-      ) : null}
+      ) : null} */}
 
       <Button
         onClick={() => {
@@ -663,14 +663,14 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
       >
         Add an expense
       </Button>
-      <Button
+      {/* <Button
         onClick={() => setSettleModal("open")}
         disableRipple
         className="btn btn-green"
         radius="lg"
       >
         Settle up
-      </Button>
+      </Button> */}
     </div>
   );
 };
