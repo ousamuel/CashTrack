@@ -14,11 +14,10 @@ interface ProvidersProps {
 }
 
 export function Providers({ children }: ProvidersProps) {
- 
   useEffect(() => {
     setWrongLogin(false);
     loginUser({});
-   
+
     // if (!user) {
     //   router.push("/");
     //   // reroute to login page if session/user is null
@@ -92,7 +91,7 @@ export function Providers({ children }: ProvidersProps) {
       setUserGroups(data.user.groups);
       const reversedExpenses = data.user.expenses.toReversed();
       setUserExpenses(reversedExpenses);
-      let tempOwe = 0;
+      let tempBorrowed = 0;
       let tempOwed = 0;
       data.user.expenses.forEach((expense: any) => {
         if (expense.creator._id == data.user._id) {
@@ -101,12 +100,23 @@ export function Providers({ children }: ProvidersProps) {
           });
           setTotalOwed(tempOwed);
         } else {
-          expense.distributions.forEach((distribution: any) => {
-            if (distribution.lendingUser._id == data.user._id) {
-              tempOwe += distribution.amount;
+          // expense.distributions.forEach((distribution: any) => {
+          //   if (distribution.lendingUser._id == data.user._id) {
+          //     tempOwe += distribution.amount;
+          //   }
+          // });
+          for (let i = 0; i < expense.distributions.length; i++) {
+            if (expense.distributions[i].lendingUser._id == data.user._id) {
+              tempBorrowed += expense.distributions[i].amount;
+              break;
             }
-          });
-          setTotalOwe(tempOwe);
+          }
+          for (let i = 0; i < expense.payments.length; i++) {
+            if (expense.payments[i].sender._id == data.user._id) {
+              tempBorrowed -= expense.payments[i].amount;
+            }
+          }
+          setTotalOwe(tempBorrowed);
         }
       });
       console.log(data.user);

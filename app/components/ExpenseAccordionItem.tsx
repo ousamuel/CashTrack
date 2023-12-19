@@ -11,10 +11,9 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
   expense,
   totalReturn,
 }) => {
-  // console.log(expense);
   const [month, setMonth] = useState<string>("Jan");
+  const [amountBorrowed, setAmountBorrowed] = useState<number>(0);
   const { user } = useContext(Context);
-  // console.log(expense.transactionDate.slice(5, 7))
   useEffect(() => {
     switch (expense.transactionDate.slice(5, 7) - 1) {
       case 0: {
@@ -68,6 +67,35 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
     }
   }, []);
   // console.log(expense);
+  // <div className="px-1 max-w-[115px] justify-end inline-block ">
+  //   <p className="expense-owe w-max">and lent you</p>
+  //   <h4 className="mt-[3px] text-[16px] orange font-bold w-max">
+  //     {expense.distributions
+  //       .find((distribution: any) => distribution.lendingUser._id == user._id)
+  //       .map((dis: any) => (
+  //         <div key={dis._id}>${dis.amount.toFixed(2)}</div>
+  //       ))}
+  //   </h4>
+  // </div>;
+  useEffect(() => {
+    let tempBorrowed = 0;
+    const involvedDistribution = expense.distributions.find(
+      (distribution: any) => distribution.lendingUser._id == user._id
+    );
+    if (involvedDistribution) {
+      tempBorrowed += involvedDistribution.amount;
+      const myPayments = expense.payments.filter(
+        (payment: any) => payment.sender._id == user._id
+      );
+      if (myPayments.length) {
+        for (let i = 0; i < myPayments.length; i++) {
+          tempBorrowed -= myPayments[i].amount;
+        }
+      }
+    }
+    setAmountBorrowed(tempBorrowed);
+  }, []);
+
   return (
     <div className="expense-trigger open-down">
       <div className="max-w-[35px] mr-[5px] text-center flex flex-col justify-center inline-block">
@@ -110,8 +138,8 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
         </h4>
       </div>
       {expense.creator._id == user._id ? (
-        <div className="px-1 max-w-[135px] ">
-          <p className="expense-owe">You lent</p>
+        <div className="px-1 max-w-[120px] ">
+          <p className="expense-owe w-max">You lent</p>
           <h4 className="mt-[3px] text-[16px] green font-bold">
             ${totalReturn.toFixed(2)}
           </h4>
@@ -119,26 +147,17 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
       ) : expense.distributions.find(
           (distribution: any) => distribution.lendingUser._id == user._id
         ) ? (
-        // (
-        //   expense.distributions.filter(
-        //     (distribution: any) => distribution.lendingUser._id == user._id
-        //   ).length ?
-        <div className="px-1 max-w-[115px] justify-end inline-block ">
+        <div className="px-1 max-w-[120px] justify-end inline-block ">
           <p className="expense-owe w-max">and lent you</p>
-          <h4 className="mt-[3px] text-[16px] orange font-bold w-max">
-            {expense.distributions
-              .filter(
-                (distribution: any) => distribution.lendingUser._id == user._id
-              )
-              .map((dis: any) => (
-                <div key={dis._id}>${dis.amount.toFixed(2)}</div>
-              ))}
-          </h4>
+          {amountBorrowed <= 0 ? (
+            <h4 className="mt-[3px] text-[16px] w-max">Settled</h4>
+          ) : (
+            <h4 className="mt-[3px] text-[16px] orange font-bold w-max">
+              ${amountBorrowed.toFixed(2)}
+            </h4>
+          )}
         </div>
       ) : (
-        // ) : (
-        //   <div className="px-1 max-w-[135px] text-[12px]">Not involved</div>
-        // )
         <div className="px-1 max-w-[115px] text-[12px]">Not involved</div>
       )}
     </div>

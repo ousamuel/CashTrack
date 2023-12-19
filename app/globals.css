@@ -6,8 +6,8 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input { 
-  text-align: center; 
+input {
+  text-align: center;
 }
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -129,8 +129,8 @@ body {
   height: 100vh;
   /* min-width: 960px; */
   padding-top: 40px;
-  padding-right: max(50px, 5%);
-  padding-left: max(50px, 5%);
+  padding-right: min(50px, 3%);
+  padding-left: min(50px, 2%);
 }
 
 .left-container {
@@ -173,28 +173,26 @@ body {
   padding: 5px;
   padding-left: 12px;
   padding-right: 12px;
-  /* margin-left: 7px; */
+  margin-left: 7px;
   color: #fff;
 }
 .btn-2 {
   border: solid;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   border-radius: 3px;
-  padding: 0px 4px 2px 4px;
-  margin-left: 2px;
+  padding: 1px 4px 2px 4px;
   color: #fff;
   display: flex;
   justify-content: space-evenly;
 }
 .btn-3 {
   border: solid;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-color: rgba(0, 0, 0, 0.05);
   border-radius: 3px;
-  padding: 5px;
+  padding: 3px;
   padding-left: 12px;
   padding-right: 12px;
-  margin-left: 7px;
-  color: #fff;
+  margin-top: 5px;
 }
 .btn-free {
   border: solid;
@@ -298,7 +296,7 @@ body {
   margin-bottom: 4px;
 }
 
-.percentInput div{
+.percentInput div {
   padding: 0px;
 }
 .topbar {
@@ -435,6 +433,9 @@ body {
 .py-2 {
   padding: 0px;
 }
+.py-4 {
+  padding: 0px;
+}
 .expense-dropdown {
   background: #f8f8f8;
   padding: 15px;
@@ -525,7 +526,7 @@ body {
   .right-container {
     display: none;
   }
-  
+
   .main-body {
     padding-left: 0px;
     padding-right: 0px;
@@ -535,7 +536,7 @@ body {
   }
 }
 
-@media(max-width:400px){
+@media (max-width: 400px) {
   .mid-container {
     min-width: 100vw;
   }

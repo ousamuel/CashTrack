@@ -1,6 +1,15 @@
 "use client";
 import React, { useContext, useState, useEffect } from "react";
-import { Image, Link, Button, Tooltip, Input } from "@nextui-org/react";
+import {
+  Image,
+  Link,
+  Button,
+  Tooltip,
+  Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@nextui-org/react";
 import io from "socket.io-client";
 import { Context } from "../providers";
 const socket = io("http://localhost:8001");
@@ -23,7 +32,7 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
   const buttonArray: ButtonType[] = [
     { src: "/svgs/list.svg", desc: "Balances" },
     { src: "/svgs/user.svg", desc: "Members" },
-    { src: "/svgs/chat.svg", desc: "Whiteboard" },
+    // { src: "/svgs/chat.svg", desc: "Whiteboard" },
     { src: "/svgs/settings.svg", desc: "Settings" },
   ];
 
@@ -42,7 +51,7 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
                 <h3 className="leading-none font-bold flex">
                   {user.name}{" "}
                   {group.creator == user._id ? (
-                    <Image width={17} className='ml-2' src="/svgs/crown.svg" />
+                    <Image width={17} className="ml-2" src="/svgs/crown.svg" />
                   ) : null}
                 </h3>
                 <h2 className="leading-snug">{user.email}</h2>
@@ -53,12 +62,33 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
       </div>
     );
   };
+  const SettingsComponent: React.FC = () => {
+    return (
+      <div className="flex flex-col ">
+        <h4>Settings</h4>
+        <Button
+          className="btn-3 text-left bg-[#f1f1f1] hover:bg-[#eaeaea]"
+          disableRipple
+        >
+          Edit Group
+        </Button>
+        <Button
+          className="btn-3 text-left text-white bg-[#e51212] hover:bg-[#c83400]"
+          disableRipple
+        >
+          Delete Group
+        </Button>
+      </div>
+    );
+  };
   const renderComponent = (desc: string): any => {
     switch (desc) {
       case "Balances":
         return null;
       case "Members":
         return MembersComponent;
+      case "Settings":
+        return SettingsComponent;
       default:
         return MembersComponent;
     }
@@ -105,7 +135,7 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
 
       {group && group.users
         ? group.users.map((userObj: any) => {
-            console.log(userObj);
+            // console.log(userObj);
             const ownedExpenses = expenses.filter(
               (expense: any) =>
                 expense.creator && expense.creator._id === userObj._id
@@ -121,6 +151,11 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
             );
             let totalBorrowed = 0;
             involvedExpenses.map((expense: any) => {
+              for (let i = 0; i < expense.payments.length; i++) {
+                if (expense.payments[i].sender._id == userObj._id) {
+                  totalBorrowed -= expense.payments[i].amount;
+                }
+              }
               for (let i = 0; i < expense.distributions.length; i++) {
                 if (expense.distributions[i].lendingUser._id == userObj._id) {
                   totalBorrowed += expense.distributions[i].amount;

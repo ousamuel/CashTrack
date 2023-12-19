@@ -1,62 +1,185 @@
 import React, { useContext, useState, useEffect } from "react";
-import {
-  Image,
-  Button,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@nextui-org/react";
+import { Image, Button, Input } from "@nextui-org/react";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Context } from "../providers";
+type FormData = {
+  title: string;
+  totalAmount: number;
+  // percents: number[];
+  // userIds: string[];
+  // distributions: DistributionType[];
+};
 
 interface ExpenseContentProps {
   expense: any;
   index: number;
-  totalReturn: number
+  totalReturn: number;
   deleteExpenseFunction: (expenseId: string, index: number) => Promise<void>;
 }
 const ExpenseContent: React.FC<ExpenseContentProps> = ({
   expense,
   deleteExpenseFunction,
   index,
-  totalReturn
+  totalReturn,
 }) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>();
   const { user } = useContext(Context);
+  const [paymentModal, setPaymentModal] = useState<string>("close");
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  const [paymentAmount, setPaymentAmount] = useState<string>("");
+  const [zeroPayment, setZeroPayment] = useState<boolean>(false);
+  const [overPaid, setOverPaid] = useState<boolean>(false);
+  const myDebt = expense.distributions.find(
+    (dis: any) => dis.lendingUser._id == user._id
+  );
+
+  const postPayment = async function () {
+    console.log(myDebt.amount);
+    const postAmount = parseFloat(paymentAmount);
+    if (!postAmount || postAmount <= 0) {
+      setZeroPayment(true);
+      console.log("less than 0");
+      return 0;
+    } else if (postAmount > myDebt.amount.toFixed(2)) {
+      setOverPaid(true);
+      console.log("overpaid");
+      return 0;
+    }
+    try {
+      await fetch(`http://localhost:8001/expenses/payment/${expense._id}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          sender: user._id,
+          title: expense.title,
+          amount: postAmount,
+        }),
+      })
+        .then((res) => (res.ok ? res.json() : console.log(res.status)))
+        .then((data) => {
+          setPaymentModal("close");
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="expense-dropdown">
-      <div className="flex">
-        <Image
-          className="expense-img"
-          width={85}
-          src={expense.imageSrc}
-        />
-        {/* <Popover className="" placement="bottom" showArrow={true}>
-          <PopoverTrigger>
-           
-          </PopoverTrigger>
-          <PopoverContent>
-            <div className="bg-white rounded-md p-3 border-gray-300 border-[1.5px] -translate-y-2 translate-x-[30px]">
-              <table>
-                <tbody className="text-[14px]">
-                  {categories.map((category, index) => (
-                    <tr key={index}>
-                      <td>{category.name}:</td>
-                      <td>
-                        <Image
-                          // onClick={()=>{}}
-                          className="hover-gray"
-                          width={30}
-                          src={category.iconSrc}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+      {paymentModal == "open" ? (
+        <div className="modal flex flex-col md:flex-row md:pb-10 ">
+          <div className="modal-div min-w-[270px] max-w-[65vw] md:max-w-[45vw] max-h-[75vh] overflow-y-scroll mt-3">
+            <div className="modal-top">
+              <p>Make a Payment</p>
+
+              <p className="cursor" onClick={() => setPaymentModal("close")}>
+                X
+              </p>
             </div>
-          </PopoverContent>
-        </Popover> */}
+            <div className="modal-mid flex">
+              <div className="flex flex-col items-center">
+                {" "}
+                <h4 className="flex items-center">
+                  <Image
+                    width={40}
+                    className="rounded-full"
+                    src="https://www.boredpanda.com/blog/wp-content/uploads/2021/03/url-1.jpg"
+                  />{" "}
+                  <p className="ml-2 text-lg"> You owe</p>
+                </h4>
+                <h4 className="text-3xl orange flex items-center">
+                  {/* <Image
+                    width={40}
+                    className="rounded-full"
+                    src="/svgs/arrow-down.svg"
+                  />{" "} */}
+                  ${myDebt.amount.toFixed(2)}
+                  {/* <Image
+                    width={40}
+                    className="rounded-full"
+                    src="/svgs/arrow-down.svg"
+                  />{" "} */}
+                </h4>
+                <h4 className="flex items-center">
+                  <p className="mr-2 text-lg"> to {expense.creator.name}</p>
+                  <Image
+                    width={40}
+                    className="rounded-full"
+                    src="https://www.boredpanda.com/blog/wp-content/uploads/2021/03/url-1.jpg"
+                  />{" "}
+                </h4>{" "}
+              </div>
+              <div className="flex flex-col justify-between">
+                <div className="flex text-xl items-center mt-4">
+                  $
+                  <Input
+                    type="number"
+                    min={0}
+                    max={myDebt.amount.toFixed(2)}
+                    placeholder="payment amount"
+                    value={paymentAmount}
+                    className={
+                      overPaid || zeroPayment
+                        ? "rounded-lg border border-red-400 py-3 mx-2 max-w-1/2"
+                        : "rounded-lg border py-3 mx-2 max-w-1/2"
+                    }
+                    onChange={(e) => setPaymentAmount(e.target.value)}
+                  />
+                </div>
+                <div className="orange text-center">
+                  {zeroPayment
+                    ? "Invalid amount"
+                    : overPaid
+                    ? "You are paying more than you owe"
+                    : null}
+                </div>
+
+                <Button
+                  className="btn btn-green"
+                  onClick={() => setPaymentAmount(myDebt.amount.toFixed(2))}
+                  disableRipple
+                >
+                  Settle the entire amount
+                </Button>
+              </div>
+            </div>
+            <div className="modal-bot">
+              <Button
+                onClick={() => setPaymentModal("close")}
+                className="btn btn-gray"
+                disableRipple
+              >
+                Cancel
+              </Button>
+              <Button
+                className="btn btn-green"
+                disableRipple
+                onClick={() => postPayment()}
+              >
+                Save
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {/* 
+    asd
+    asd
+    as
+    da
+    sd */}
+      <div className="flex">
+        <Image className="expense-img" width={85} src={expense.imageSrc} />
         <div className="ml-3">
           <h3 className="py-[3px] flex justify-between relative">
             <p className="whitespace-nowrap	 justify-start items-center max-w-[70%]">
@@ -100,18 +223,34 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
               "/" +
               expense.transactionDate.slice(0, 4)}
           </p>
-          <Button
-            disableRipple
-            className="btn-2 btn-orange text-[11px]"
-            radius="lg"
-          >
-            Edit expense
-          </Button>
+          {expense.creator._id == user._id ? (
+            <Button
+              disableRipple
+              className="btn-2 btn-orange text-[11px]"
+              radius="lg"
+            >
+              Edit expense
+            </Button>
+          ) : expense.users.includes(user._id) ? (
+            <Button
+              disableRipple
+              className="btn-2 btn-green text-[11px]"
+              radius="lg"
+              onClick={() => {
+                setPaymentAmount("");
+                setPaymentModal("open");
+              }}
+            >
+              Make a payment
+            </Button>
+          ) : null}
         </div>
       </div>
       <div className="border-t flex mt-3 pt-2">
         <div className="w-1/2 pr-3 pl-1">
-          <p className='text-center font-extrabold text-lg'>Cost Distribution</p>
+          <p className="text-center font-extrabold text-lg">
+            Cost Distribution
+          </p>
           <div className="flex flex-1 mt-2">
             <Image
               className="w-[40px] border rounded-full mr-2"
@@ -127,15 +266,11 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
               &nbsp;
               {expense.creator._id == user._id ? "and are owed" : "and is owed"}
               &nbsp;
-              <strong>
-                {" "}
-                $
-                {totalReturn.toFixed(2)}
-              </strong>
+              <strong> ${totalReturn.toFixed(2)}</strong>
             </p>
           </div>
           {expense.distributions.map((distribution: any) => {
-            console.log(distribution);
+            // console.log(distribution);
             return (
               <div key={distribution._id} className="flex flex-1 mt-2">
                 <Image
@@ -165,7 +300,38 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
             );
           })}
         </div>
-        <div className="w-1/2 pr-3 pl-1"> payments</div>
+        <div className="w-1/2 pr-3 pl-1">
+          <p className="text-center font-extrabold text-lg">Payments</p>
+
+          {expense.payments.map((payment: any) => {
+            // console.log(payment);
+            return (
+              <div key={payment._id} className="flex flex-1 mt-2">
+                <Image
+                  className="w-[40px] border rounded-full mr-2"
+                  radius="md"
+                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                />
+                <p className="flex-1 flex flex-wrap items-center text-[13px]">
+                  <strong>
+                    {" "}
+                    {payment.sender._id == user._id
+                      ? "You"
+                      : payment.sender.name}
+                  </strong>
+                  &nbsp;paid back&nbsp;$
+                  <strong className="underline">
+                    {payment.amount.toFixed(2)}
+                    {/* {(
+                          expense.totalAmount /
+                          (expense.users.length + 1)
+                        ).toFixed(2)} */}
+                  </strong>
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

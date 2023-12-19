@@ -35,7 +35,6 @@ router.get("/", async (req, res) => {
 });
 router.get("/groupId/:groupId", async (req, res) => {
   const populate = function (expense) {
-    // return expense.populate("group", "-users -expenses -__v");
     return expense.populate([
       {
         path: "users",
@@ -48,6 +47,10 @@ router.get("/groupId/:groupId", async (req, res) => {
       {
         path: "distributions",
         populate: { path: "lendingUser", select: "name email" },
+      },
+      {
+        path: "payments",
+        populate: { path: "sender", select: "name email" },
       },
       {
         path: "creator",
@@ -126,30 +129,6 @@ router.post("/", async (req, res) => {
       throw error;
     }
   };
-  // const addToUserOwes = async function (distribution) {
-  //   try {
-  //     const updatedUser = await User.findByIdAndUpdate(
-  //       distribution.lendingUser,
-  //       { $push: { totalOwe: distribution.amount } },
-  //       { new: true, useFindAndModify: false }
-  //     );
-  //     return updatedUser;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // };
-  // const addToCreatorOwed = async function (distribution) {
-  //   try {
-  //     const updatedUser = await User.findByIdAndUpdate(
-  //       creator,
-  //       { $push: { totalOwed: distribution.amount } },
-  //       { new: true, useFindAndModify: false }
-  //     );
-  //     return updatedUser;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // };
   try {
     await User.findByIdAndUpdate(
       creator,
@@ -180,6 +159,10 @@ router.post("/", async (req, res) => {
         populate: { path: "lendingUser", select: "name email" },
       },
       {
+        path: "payments",
+        populate: { path: "sender", select: "name email" },
+      },
+      {
         path: "creator",
         select: "_id name email profilePicture",
       },
@@ -190,7 +173,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/payment/:id/", async (req, res) => {
   const { sender, title, amount } = req.body;
   try {
     const expense = await Expense.findByIdAndUpdate(
@@ -215,7 +198,7 @@ router.patch("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     await Expense.findByIdAndDelete(req.params.id);
-    res.status(204).json({message: "Expense deleted"})
+    res.status(204).json({ message: "Expense deleted" });
   } catch (err) {
     console.log(err);
   }

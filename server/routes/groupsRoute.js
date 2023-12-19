@@ -29,6 +29,10 @@ router.get("/:id", async (req, res) => {
             path: "distributions",
             populate: { path: "lendingUser", select: "name email" },
           },
+          {
+            path: "payments",
+            populate: { path: "sender", select: "name email" },
+          },
           { path: "creator", select: "name email" },
         ],
       },

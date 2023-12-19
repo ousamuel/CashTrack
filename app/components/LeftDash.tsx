@@ -10,7 +10,7 @@ interface LeftDashProps {
 
 const LeftDash: React.FC<LeftDashProps> = ({ path }) => {
   return (
-    <div className="left-container w-[200px] flex-col w-1/5 p-2">
+    <div className="left-container w-[200px] flex-col w-1/5 p-2 overflow-y-scroll">
       <LeftDashComponent path={path} />
     </div>
   );

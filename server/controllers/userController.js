@@ -47,6 +47,13 @@ exports.login = (req, res, next) => {
                     select: "name email",
                   },
                 },
+                {
+                  path: "payments",
+                  populate: {
+                    path: "sender",
+                    select: "name email",
+                  },
+                },
               ],
             },
             { path: "groups", select: "-__v" },

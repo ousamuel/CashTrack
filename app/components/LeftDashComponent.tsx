@@ -14,8 +14,15 @@ interface InviteForm {
 const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
   const router = useRouter();
 
-  const { selectedGroup, setSelectedGroup, user, userGroups } =
-    useContext(Context);
+  const {
+    selectedGroup,
+    setSelectedGroup,
+    user,
+    userGroups,
+    userFriends,
+    setUserFriends,
+  } = useContext(Context);
+  const [tempFriends, setTempFriends] = useState<any[]>([]);
   const {
     register,
     handleSubmit,
@@ -44,6 +51,7 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
       }
       const data = await res.json();
       console.log(data);
+      setTempFriends([...tempFriends, data]);
     } catch (error: any) {
       console.log(error.message);
     }
@@ -201,6 +209,18 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
               );
             })
           : null}
+        {tempFriends.map((friend: any) => {
+          return (
+            <Button className="left-tabs hover-gray" disableRipple>
+              <Image
+                src="/svgs/user.svg"
+                className="min-w-[10px]"
+                width="10px"
+              />
+              {friend.name}&nbsp;{friend.email}
+            </Button>
+          );
+        })}
         {/* <Link className="left-tabs" href="/">
           <Image src="/svgs/user.svg" width="10px" />
           man

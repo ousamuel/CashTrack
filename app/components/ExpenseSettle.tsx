@@ -123,14 +123,6 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
   const [userPercent, setUserPercent] = useState<any>();
   const [tempSideUsers, setTempSideUsers] = useState<[]>([]);
 
-  // document.addEventListener("keydown", pressEsc);
-  // function pressEsc(e: any) {
-  //   if (e.key === "Escape") {
-  //     setExpenseModal("close");
-
-  //     setSettleModal("close");
-  //   }
-  // }
   const percentsToIntArr = inputPercents.map((str: string) => parseFloat(str));
   const sum =
     percentsToIntArr.reduce((partialSum, a) => partialSum + a, 0) +

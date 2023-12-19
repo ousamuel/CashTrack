@@ -135,7 +135,7 @@ export default function NewGroup() {
                 placeholder="Enter emails with a space between each email. Example: sample@gmail.com user@gmail.com blank@gmail.com"
               />
               <Button
-                className="btn btn-green h-[40px]"
+                className="btn-3 btn-green h-[40px]"
                 onClick={() => {
                   const emailsArr = tempEmails.split(/\s+/);
                   const mergedArr = userEmails.concat(emailsArr);
