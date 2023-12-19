@@ -195,23 +195,25 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
                 expense.title
               )}
             </p>
-            <div className="flex justify-end">
-              {confirmDelete ? (
-                <Button
-                  className="text-sm text-white bg-red-500 px-1 rounded-md -translate-x-[0px] items-center z-1000"
-                  disableRipple
-                  onClick={() => deleteExpenseFunction(expense._id, index)}
-                >
-                  Delete
-                </Button>
-              ) : null}
-              <Image
-                className="hover:cursor-pointer rounded-full"
-                width={20}
-                src="/svgs/delete.svg"
-                onClick={() => setConfirmDelete((prevState) => !prevState)}
-              />
-            </div>
+            {expense.creator._id == user._id ? (
+              <div className="flex justify-end">
+                {confirmDelete ? (
+                  <Button
+                    className="text-sm text-white bg-red-500 px-1 rounded-md -translate-x-[0px] items-center z-1000"
+                    disableRipple
+                    onClick={() => deleteExpenseFunction(expense._id, index)}
+                  >
+                    Delete
+                  </Button>
+                ) : null}
+                <Image
+                  className="hover:cursor-pointer rounded-full"
+                  width={20}
+                  src="/svgs/delete.svg"
+                  onClick={() => setConfirmDelete((prevState) => !prevState)}
+                />
+              </div>
+            ) : null}
           </h3>
 
           <h4 className="mt-[3px] text-[20px] text-black font-bold">

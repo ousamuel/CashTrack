@@ -50,8 +50,8 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
               <PopoverTrigger>
                 <Button className="dropdown cursor" disableRipple>
                   <Image
-                    className="mt-[5px]"
-                    width={20}
+                    className="mt-[5px] px-2"
+                    width={35}
                     src="/svgs/dropdown.svg"
                   />
                 </Button>

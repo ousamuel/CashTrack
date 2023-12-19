@@ -15,7 +15,7 @@ export default function Login() {
   const router = useRouter();
   const { user, loginUser, logOut, wrongLogin, setWrongLogin } =
     useContext(Context);
-  
+
   const [loggingIn, setLoggingIn] = useState<boolean>(true);
   const {
     register,
@@ -45,9 +45,12 @@ export default function Login() {
     <div className="login-body flex flex-col sm:flex-row">
       <div className="flex flex-1 flex-col items-center align-center">
         <p className="login-title text-[70px] sm:hidden">CashTrack</p>
-        
 
-        <Image width={300} src="svgs/logo.svg" className="mb-4" />
+        <Image
+          width={300}
+          src="svgs/logo.svg"
+          className="mb-4 hidden sm:flex"
+        />
         <h4 className="text-[20px] text-center w-4/5 sm:w-[65%]">
           Never worry about owing money to the wrong person again!
         </h4>
@@ -67,13 +70,13 @@ export default function Login() {
           );
         })}
       </div>
-      <div className="flex flex-1 flex-col items-center align-center">
+      <div className="flex flex-1 flex-col items-center ">
         <p className="login-title text-[80px] hidden sm:flex">CashTrack</p>
 
         {loggingIn ? (
           // LOG IN FORM
 
-          <div className="w-11/12 sm:w-3/4 mt-10 mb-5 sm:mt-0">
+          <div className="w-11/12 sm:w-3/4 mt-2 mb-5 sm:mt-0">
             <div className="input-box bg-white rounded-md flex flex-col items-center">
               <h1>Log In</h1>
               <form
@@ -209,6 +212,12 @@ export default function Login() {
             </div>
           </div>
         )}
+        <Image
+          width={300}
+          src="svgs/logo.svg"
+          className="mb-4 sm:hidden"
+        />
+
         <strong className="text-black text-[20px] uppercase sm:hidden">
           Testimonials
         </strong>

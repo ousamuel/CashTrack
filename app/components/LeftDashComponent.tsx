@@ -30,7 +30,10 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
   } = useForm<InviteForm>();
   const [friendsModal, setFriendsModal] = useState<string>("close");
   async function addFriend(email: string) {
-    if (user.friends.find((friend: any) => friend.email == email)) {
+    if (
+      user.friends.find((friend: any) => friend.email == email) ||
+      user.email == email
+    ) {
       alert("already added");
       return 5;
     }
@@ -168,74 +171,30 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
             <span className="font-extrabold text-[13px]">+</span> add
           </Link>
         </div>
-        {userGroups.map((group: any) => {
-          return (
-            <Button
-              key={group._id}
-              className={path == group._id ? "left-tabs open" : "left-tabs"}
-              onClick={() => {
-                setSelectedGroup(group);
-                router.push(`/groups/${group._id}`);
-              }}
-              disableRipple
-            >
-              <Image src="/svgs/group.svg" width="10px" />
-              {group.groupName}
-            </Button>
-          );
-        })}
-
-        <div id="friends" className="left-header">
-          <span>friends</span>
-          {/* <Button
-            onClick={() => setFriendsModal("open")}
-            className="add"
-            disableRipple
-          >
-            <span className="font-extrabold text-[13px]">+</span> add
-          </Button> */}
+        <div className="max-h-[22vh] overflow-y-scroll">
+          {userGroups.map((group: any) => {
+            return (
+              <Button
+                key={group._id}
+                className={path == group._id ? "left-tabs open" : "left-tabs"}
+                onClick={() => {
+                  setSelectedGroup(group);
+                  router.push(`/groups/${group._id}`);
+                }}
+                disableRipple
+              >
+                <Image src="/svgs/group.svg" width="10px" />
+                {group.groupName}
+              </Button>
+            );
+          })}
         </div>
-        {user
-          ? user.friends.map((friend: any) => {
-              return (
-                <Button className="left-tabs hover-gray" disableRipple>
-                  <Image
-                    src="/svgs/user.svg"
-                    className="min-w-[10px]"
-                    width="10px"
-                  />
-                  {friend.name}&nbsp;{friend.email}
-                </Button>
-              );
-            })
-          : null}
-        {tempFriends.map((friend: any) => {
-          return (
-            <Button className="left-tabs hover-gray" disableRipple>
-              <Image
-                src="/svgs/user.svg"
-                className="min-w-[10px]"
-                width="10px"
-              />
-              {friend.name}&nbsp;{friend.email}
-            </Button>
-          );
-        })}
-        {/* <Link className="left-tabs" href="/">
-          <Image src="/svgs/user.svg" width="10px" />
-          man
-        </Link>
-        <Link className="left-tabs" href="/">
-          <Image src="/svgs/user.svg" width="10px" />
-          woman
-        </Link> */}
-
         <div id="invite-box" className="">
           <h3 className="invites color">Add friends</h3>
-          <div className="input-box">
+          <div className="border ml-[5px]">
             <form onSubmit={handleSubmit(onSubmit)}>
               <Input
-                className="text-black"
+                className="text-black border-b border-dashed pt-3 mb-3 "
                 type="email"
                 placeholder="Enter an email address"
                 {...register("inviteEmail", {
@@ -247,13 +206,61 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
                 <span className="pl-1">Incorrect email format</span>
               )}
 
-              <Button disableRipple className="btn-inv mt-1" type="submit">
+              <Button disableRipple className="btn-inv w-full" type="submit">
                 Send invite
               </Button>
             </form>
           </div>
         </div>
-        <div id="fb-twtt" className="text-[14px] flex pt-2 justify-center">
+        <div id="friends" className="left-header mt-4">
+          <span>friends</span>
+          {/* <Button
+            onClick={() => setFriendsModal("open")}
+            className="add"
+            disableRipple
+          >
+            <span className="font-extrabold text-[13px]">+</span> add
+          </Button> */}
+        </div>
+
+        <div className="max-h-[22vh] overflow-y-scroll">
+          {user
+            ? user.friends.map((friend: any) => {
+                return (
+                  <Button className="left-tabs hover-gray" disableRipple>
+                    <Image
+                      src="/svgs/user.svg"
+                      className="min-w-[10px]"
+                      width="10px"
+                    />
+                    {friend.name}&nbsp;{friend.email}
+                  </Button>
+                );
+              })
+            : null}
+          {tempFriends.map((friend: any) => {
+            return (
+              <Button className="left-tabs hover-gray" disableRipple>
+                <Image
+                  src="/svgs/user.svg"
+                  className="min-w-[10px]"
+                  width="10px"
+                />
+                {friend.name}&nbsp;{friend.email}
+              </Button>
+            );
+          })}
+        </div>
+        {/* <Link className="left-tabs" href="/">
+          <Image src="/svgs/user.svg" width="10px" />
+          man
+        </Link>
+        <Link className="left-tabs" href="/">
+          <Image src="/svgs/user.svg" width="10px" />
+          woman
+        </Link> */}
+
+        {/* <div id="fb-twtt" className="text-[14px] flex pt-2 justify-center">
           <Button
             onClick={() => alert("Fake button")}
             disableRipple
@@ -272,7 +279,7 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
             <Image width={15} src="/svgs/tt.svg" alt="tt" />
             Tweet
           </Button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

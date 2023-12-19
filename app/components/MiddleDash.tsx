@@ -8,13 +8,13 @@ import { Context } from "../providers";
 export default function MiddleDash() {
   const { user, totalOwe, totalOwed } = useContext(Context);
   const [selected, setSelected] = useState<string>("list");
- 
+
   return (
     <div className="mid-container">
       {user ? (
         <>
           <div className="p-3 bg-[#EEEEEE] flex justify-between">
-            <h1 className="topbar">Dashboard{user.name} </h1>
+            <h1 className="topbar">Dashboard</h1>
             {/* <ExpenseSettle /> */}
           </div>
           <div className="py-[6px] bg-[#EEEEEE] flex justify-between border-y border-gray-300">
