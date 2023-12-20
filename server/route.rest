@@ -1,4 +1,4 @@
-GET http://localhost:8001/groups/6578be5e7fcdb70a4ac2f6da
+GET http://localhost:8001/users
 ###
 GET http://localhost:8001/expenses/6581d2b958f61e13db4f83a7
 ###
@@ -15,13 +15,13 @@ Content-Type: application/json
     "amount": 2000
 }
 ###
-POST http://localhost:8001/users/login
+POST http://localhost:8001/users
 Content-Type: application/json
 
 {
-    "name": "user1",
-    "email": "user1@gmail.com",
-    "_password": "password"
+    "name": "Lizzie",
+    "email": "sample5@gmail.com",
+    "_password": "passwordCHECK"
 }
 ###
 GET http://localhost:8001/logout

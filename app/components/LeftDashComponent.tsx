@@ -227,7 +227,7 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
           {user
             ? user.friends.map((friend: any) => {
                 return (
-                  <Button className="left-tabs hover-gray" disableRipple>
+                  <Button key={friend._id}className="left-tabs hover-gray" disableRipple>
                     <Image
                       src="/svgs/user.svg"
                       className="min-w-[10px]"
@@ -240,7 +240,11 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
             : null}
           {tempFriends.map((friend: any) => {
             return (
-              <Button className="left-tabs hover-gray" disableRipple>
+              <Button
+                key={friend.email}
+                className="left-tabs hover-gray"
+                disableRipple
+              >
                 <Image
                   src="/svgs/user.svg"
                   className="min-w-[10px]"

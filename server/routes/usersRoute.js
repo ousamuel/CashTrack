@@ -47,7 +47,6 @@ router.post("/", async (req, res) => {
     });
     try {
       user.save();
-      user._password = "hidden";
       res.status(201).json(user);
     } catch (error) {
       res.status(400).json({ message: error.message });

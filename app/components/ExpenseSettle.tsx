@@ -93,9 +93,9 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
       })
         .then((res) => (res.ok ? res.json() : console.log(res.status)))
         .then((data) => {
+          setExpenseModal("close");
           setGroupExpenses([data, ...groupExpenses]);
           setUserExpenses([data, ...userExpenses]);
-          setExpenseModal("close");
         });
     } catch (error) {
       console.log(error);
@@ -465,7 +465,11 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
               >
                 Cancel
               </Button>
-              <Button className="btn btn-green" type="submit" disableRipple>
+              <Button
+                className="btn btn-green"
+                type="submit"
+                disableRipple
+              >
                 Save
               </Button>
             </div>

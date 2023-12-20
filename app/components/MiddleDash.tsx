@@ -23,21 +23,19 @@ export default function MiddleDash() {
             the user owes other people vs how much other people owe the user
             */}
             <div className="block ">
-              <p>total balance</p>
-              <p className={totalOwe > totalOwed ? "orange" : "green"}>
-                {totalOwe > totalOwed ? "-" : ""}$
-                {Math.abs(totalOwe - totalOwed).toFixed(2)}
-              </p>
-              {/* <p className={owe > owed ? "orange" : "green"}>
-              {owe > owed ? "-" : ""}${(owe - owed).toFixed(2)}</p> */}
-            </div>
-            <div className="block border-l border-gray-300">
               <p>you owe</p>
               <p className="orange">${totalOwe.toFixed(2)}</p>
             </div>
             <div className="block border-l border-gray-300">
               <p>you are owed</p>
               <p className="green">${totalOwed.toFixed(2)}</p>
+            </div>
+            <div className="block border-l border-gray-300">
+              <p>total balance</p>
+              <p className={totalOwe > totalOwed ? "orange" : "green"}>
+                {totalOwe > totalOwed ? "-" : ""}$
+                {Math.abs(totalOwe - totalOwed).toFixed(2)}
+              </p>
             </div>
           </div>
           <h2 className="flex uppercase p-2 px-3 text-[12px] sm:text-[14px]">
