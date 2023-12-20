@@ -24,9 +24,8 @@ This is a TypeScript-React project with a backend powered by [Node/Express](http
 
 Welcome to CashTrack, a full-stack fitness application developed using the framework Next.js with a Node/Express/MongoDB backend. 
 
-
-
 [Link to demo](https://www.loom.com/share/a811ea6664ad44ea8a67e11eb4f71439?sid=b6286fa8-1e6d-4dbb-8fb9-6c07f22d93b0)
+
 ## Features
 
 Front-end Integrations:
