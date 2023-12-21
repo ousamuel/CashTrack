@@ -1,9 +1,14 @@
-GET http://localhost:8001/users
+GET http://localhost:8001/groups
 ###
-GET http://localhost:8001/expenses/6581d2b958f61e13db4f83a7
+PATCH http://localhost:8001/groups/addMember/6582541933e52289810a55a7
+Content-Type: application/json
+
+{
+    "userEmail": "user3@gmail.com"
+}
 ###
 
-DELETE http://localhost:8001/expenses/657b617ce7c1de06003d01d5
+Get http://localhost:8001/groups/6578be5e7fcdb70a4ac2f6da
 ###
 
 PATCH http://localhost:8001/expenses/6578bebb7fcdb70a4ac2f6e1
@@ -99,3 +104,7 @@ Content-Type: application/json
         "6578bcca5e31dd5accac326e",
         "6578bd621454d2d3bba288e5"
     ]
+
+###
+DELETE http://localhost:8001/groups/6580a064c3da4af84ac89b3d
+

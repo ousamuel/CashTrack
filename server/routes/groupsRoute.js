@@ -92,26 +92,35 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.patch("/:id", (req, res) => {
+router.patch("/addMember/:groupId", async (req, res) => {
+  const { userEmail } = req.body;
+  try {
+    const user = await User.findOneAndUpdate(
+      { email: userEmail },
+      { $push: { groups: req.params.groupId } },
+      { new: true, useFindAndModify: false }
+    );
+    const group = await Group.findByIdAndUpdate(
+      req.params.groupId,
+      { $push: { users: user._id } },
+      { new: true, useFindAndModify: false }
+    );
+
+    res.status(201).json(group);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
   // Implement patch logic
 });
 
-router.delete("/:id", (req, res) => {
-  // Implement delete logic
+router.delete("/:groupId", async (req, res) => {
+  try {
+    await Group.findByIdAndDelete(req.params.groupId);
+    return res.status(204).json({ message: "group deleted" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
 
-async function getGroup(req, res, next) {
-  let group;
-  try {
-    group = await Group.findById(req.params.id);
-    if (group === null) {
-      return res.status(400).json({ message: "No such group" });
-    }
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-  res.group = group;
-  next();
-}
 
 module.exports = router;
