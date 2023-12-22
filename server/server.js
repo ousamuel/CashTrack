@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const sessions = require("express-session");
+const sessions = require("cookie-session");
 const { Server } = require("socket.io");
 const app = express();
 const crypto = require("crypto");
@@ -90,10 +90,10 @@ app.use("/groups", groupsRouter);
 const paymentsRouter = require("./routes/paymentsRoute");
 app.use("/payments", paymentsRouter);
 // - - - - - - -
-app.use("/api", router);
+app.use("/", router);
 
 const port = process.env.PORT || 8000;
-app.get("/api", (req, res) => {
+app.get("/", (req, res) => {
   res.send("HELLO FROM new!! EXPRESS");
 });
 app.listen(port, () => {
