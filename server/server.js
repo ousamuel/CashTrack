@@ -57,7 +57,6 @@ const hour = min * 60;
 const day = hour * 24;
 // session parameters with time limit
 // temporary secret key
-let cookieSecure = false;
 // if (process.env.NODE_ENV == "production"){
 //   cookieSecure = true
 // }
@@ -70,10 +69,10 @@ var sess = {
   }),
   resave: false,
 };
-if (process.env.NODE_ENV === "production") {
-  app.set("trust proxy", 1); // trust first proxy
-  sess.cookie.secure = true; // serve secure cookies
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.set("trust proxy", 1); // trust first proxy
+//   sess.cookie.secure = true; // serve secure cookies
+// }
 app.use(sessions(sess));
 
 app.use(
@@ -105,6 +104,10 @@ const paymentsRouter = require("./routes/paymentsRoute");
 app.use("/payments", paymentsRouter);
 // - - - - - - -
 app.use("/", router);
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something went wrong!");
+});
 
 const port = process.env.PORT || 8000;
 app.get("/", (req, res) => {
