@@ -30,6 +30,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
   } = useForm<FormData>();
   const { user } = useContext(Context);
   const [paymentModal, setPaymentModal] = useState<string>("close");
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const [paymentAmount, setPaymentAmount] = useState<string>("");
   const [zeroPayment, setZeroPayment] = useState<boolean>(false);
@@ -173,6 +174,36 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
           </div>
         </div>
       ) : null}
+      {openEditModal ? (
+        <div className="modal">
+          <div className="modal-div min-w-[270px] max-w-[65vw] md:max-w-[45vw] max-h-[75vh] overflow-y-scroll mt-3">
+            <div className="modal-top">
+              Edit "{expense.title}"
+              <p className="cursor" onClick={() => setOpenEditModal(false)}>
+                X
+              </p>
+            </div>
+
+            <div className="modal-mid">2</div>
+            <div className="modal-bot">
+              <Button
+                onClick={() => setOpenEditModal(false)}
+                className="btn btn-gray"
+                disableRipple
+              >
+                Cancel
+              </Button>
+              <Button
+                className="btn btn-green"
+                disableRipple
+                // onClick={() => postPayment()}
+              >
+                Save
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {/* 
     asd
@@ -232,6 +263,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
               disableRipple
               className="btn-2 btn-orange text-[13px]"
               radius="lg"
+              onClick={() => setOpenEditModal(true)}
             >
               Edit expense
             </Button>
@@ -257,9 +289,13 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
           </p>
           <div className="flex flex-1 mt-2">
             <Image
-              className="w-[40px] border rounded-full mr-2"
+              className={
+                expense.creator._id == user._id
+                  ? "w-[40px] border-2 border-green-400 bg-green-200 rounded-full mr-2"
+                  : "w-[40px] border-2 bg-green-200 rounded-full mr-2 "
+              }
               radius="md"
-              src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+              src="/svgs/user.svg"
             />
             <p className="flex-1 flex flex-wrap items-center text-[13px]">
               <strong>
@@ -278,9 +314,13 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
             return (
               <div key={distribution._id} className="flex flex-1 mt-2">
                 <Image
-                  className="w-[40px] border rounded-full mr-2"
+                  className={
+                    distribution.lendingUser._id == user._id
+                      ? "w-[40px] border-2 border-[#e51212] rounded-full mr-2"
+                      : "w-[40px] border-2 rounded-full mr-2"
+                  }
                   radius="md"
-                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                  src="/svgs/user.svg"
                 />
                 <p className="flex-1 flex flex-wrap items-center text-[13px]">
                   <strong>

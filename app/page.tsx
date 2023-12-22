@@ -2,35 +2,39 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Image, Button, Link, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { Context } from "./providers";
 
 type FormData = {
-  name: string;
   email: string;
   password: string;
+  name: string;
+  newEmail: string;
+  newPassword: string;
   confirm: string;
 };
 export default function Login() {
   const router = useRouter();
   const { user, loginUser, logOut, wrongLogin, setWrongLogin } =
     useContext(Context);
-
+  const [invalidNewEmail, setInvalidNewEmail] = useState<boolean>(false);
   const [loggingIn, setLoggingIn] = useState<boolean>(true);
+  const [notMatchingPass, setNotMatchingPass] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormData>();
 
-  const onLogInSubmit: SubmitHandler<FormData> = (data) => {
-    const success = loginUser(data);
+  const onLogInSubmit: SubmitHandler<FormData> = async (data) => {
+    const success = await loginUser(data);
     if (success) {
       window.location.href = "/dashboard";
     }
   };
-  const onSignUpSubmit: SubmitHandler<FormData> = (data) => {
-    const success = loginUser(data);
+  const onSignUpSubmit: SubmitHandler<FormData> = async (data) => {
+    const success = await signUpUser(data);
     if (success) {
       window.location.href = "/dashboard";
     }
@@ -41,6 +45,39 @@ export default function Login() {
     '"My girlfriend used to always yell at me about paying for my friends before I found CashTrack!" - Josh',
   ];
 
+  const signUpUser = async function (input: { [key: string]: string }) {
+    console.log(input);
+    if (input.newPassword.localeCompare(input.confirm) != 0) {
+      setNotMatchingPass(true);
+      return false;
+    }
+    try {
+      const response: any = await fetch(`http://localhost:8001/users`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: input.name,
+          email: input.newEmail,
+          _password: input.newPassword,
+        }),
+      });
+      if (!response.ok) {
+        if (response.status == 401) {
+          console.log(401);
+          setInvalidNewEmail(true);
+        }
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return true
+    } catch (error: any) {
+      console.error("error:", error.message);
+      return false;
+    }
+  };
   return (
     <div className="login-body flex flex-col sm:flex-row">
       <div className="flex flex-1 flex-col items-center align-center">
@@ -135,6 +172,7 @@ export default function Login() {
                 type="button"
                 onClick={() => {
                   setLoggingIn(false);
+                  reset();
                 }}
               >
                 Not registered? Make an account here
@@ -158,39 +196,58 @@ export default function Login() {
                 <Input
                   className={errors.name ? "input-form-wrong" : "input-form"}
                   placeholder="Name"
-                  {...register("name")}
+                  {...register("name", { required: true, minLength: 2 })}
                 />
-                {errors.email ? (
-                  <p className="text-red-500 justify-start">
+                {errors.newEmail || invalidNewEmail ? (
+                  <p className="flex text-red-500 justify-start w-[90%]">
                     Please enter a valid email.
                   </p>
                 ) : null}
                 <Input
-                  className={errors.email ? "input-form-wrong" : "input-form"}
+                  className={
+                    errors.newEmail || invalidNewEmail
+                      ? "input-form-wrong"
+                      : "input-form"
+                  }
                   placeholder="Email"
-                  {...register("email", {
+                  {...register("newEmail", {
                     pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                     required: true,
                   })}
                 />
-                {errors.password ? (
-                  <p className="text-red-500 justify-start">
-                    Incorrect password.
+                {errors.newPassword ? (
+                  <p className="flex text-red-500 justify-start w-[90%]">
+                    Password must be at least 6 characters
                   </p>
                 ) : null}
                 <Input
                   type="password"
                   className={
-                    errors.password ? "input-form-wrong" : "input-form"
+                    errors.newPassword || notMatchingPass
+                      ? "input-form-wrong"
+                      : "input-form"
                   }
                   placeholder="Password"
-                  {...register("password")}
+                  {...register("newPassword", {
+                    minLength: 6,
+                    required: true,
+                  })}
                 />
+                {notMatchingPass ? (
+                  <p className="flex text-red-500 justify-start w-[90%]">
+                    Passwords must match
+                  </p>
+                ) : null}
                 <Input
                   type="password"
-                  className={errors.confirm ? "input-form-wrong" : "input-form"}
+                  className={
+                    notMatchingPass ? "input-form-wrong" : "input-form"
+                  }
                   placeholder="Confirm Password"
-                  {...register("confirm")}
+                  {...register("confirm", {
+                    required: true,
+                    minLength: 6,
+                  })}
                 />
                 <Button
                   className="btn btn-green mt-2"
@@ -205,18 +262,17 @@ export default function Login() {
                 className="btn btn-orng mt-2"
                 disableRipple
                 type="button"
-                onClick={() => setLoggingIn(true)}
+                onClick={() => {
+                  setLoggingIn(true);
+                  reset();
+                }}
               >
                 Already registered? Log in now
               </Button>
             </div>
           </div>
         )}
-        <Image
-          width={300}
-          src="svgs/logo.svg"
-          className="mb-4 sm:hidden"
-        />
+        <Image width={300} src="svgs/logo.svg" className="mb-4 sm:hidden" />
 
         <strong className="text-black text-[20px] uppercase sm:hidden">
           Testimonials

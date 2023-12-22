@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Button,
   Input,
@@ -65,7 +65,6 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
     // check userIds can not be empty
     // title and total amount empty already prevents it from being posted
     // ^ probably throwing a form error, just handle it and throw red borders or smth
-
     if (sum != 100 && distributionType == "By Percent") {
       // return "100%";
       console.log("not 100%");
@@ -85,7 +84,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
           title: input.title,
           imageSrc: imageSrc,
           creator: user._id,
-          group: group._id,
+          group: group ? group._id : null,
           totalAmount: input.totalAmount,
           distributions: distributionsArr,
           userIds: userIds,
@@ -93,9 +92,9 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
       })
         .then((res) => (res.ok ? res.json() : console.log(res.status)))
         .then((data) => {
-          setExpenseModal("close");
-          setGroupExpenses([data, ...groupExpenses]);
           setUserExpenses([data, ...userExpenses]);
+          setGroupExpenses([data, ...groupExpenses]);
+          setExpenseModal("close");
         });
     } catch (error) {
       console.log(error);
@@ -110,19 +109,28 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
     setGroupExpenses,
     userExpenses,
     setUserExpenses,
+    userFriends,
+    setUserFriends,
   } = useContext(Context);
+  const [members, setMembers] = useState<any>([]);
   const [expenseAmount, setExpenseAmount] = useState<any>("");
   const [expenseTitle, setExpenseTitle] = useState<string>("");
   const [imageSrc, setImageSrc] = useState<string>("/ss/receipt.png");
   const [creator, setCreator] = useState<string>("");
   const [expenseModal, setExpenseModal] = useState<string>("close");
   const [distributionType, setDistributionType] = useState<string>("Evenly");
-  // const [settleModal, setSettleModal] = useState<string>("close");
   const [userIds, setUserIds] = useState<string[]>([]);
   const [inputPercents, setInputPercents] = useState<any[]>([]);
   const [userPercent, setUserPercent] = useState<any>();
   const [tempSideUsers, setTempSideUsers] = useState<[]>([]);
 
+  useEffect(() => {
+    if (group) {
+      setMembers(group.users);
+    } else if (user) {
+      setMembers(userFriends);
+    }
+  }, []);
   const percentsToIntArr = inputPercents.map((str: string) => parseFloat(str));
   const sum =
     percentsToIntArr.reduce((partialSum, a) => partialSum + a, 0) +
@@ -192,7 +200,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                               <Image
                                 className="rounded-full mr-2"
                                 width={30}
-                                src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                                src="/svgs/user.svg"
                               />
                               {user.name}
                             </strong>
@@ -200,7 +208,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                         })
                     : null}
                   {!group && user
-                    ? user.friends
+                    ? userFriends
                         .filter((checkUser: any) =>
                           userIds.includes(checkUser._id)
                         )
@@ -213,7 +221,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                               <Image
                                 className="rounded-full mr-2"
                                 width={30}
-                                src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                                src="/svgs/user.svg"
                               />
                               {friend.name}
                             </strong>
@@ -407,7 +415,50 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                             </div>
                           );
                         })
-                    : null}
+                    : userFriends
+                        .filter((checkUser: any) =>
+                          userIds.includes(checkUser._id)
+                        )
+                        .map((user: any, index: number) => {
+                          return (
+                            <div key={user._id} className="px-1 mt-2 flex">
+                              {user.name} owes &nbsp;
+                              <strong className="orange">
+                                {distributionType == "Evenly"
+                                  ? " $" +
+                                    (
+                                      expenseAmount /
+                                      (userIds.length + 1)
+                                    ).toFixed(2)
+                                  : null}
+                                {distributionType == "By Percent" ? (
+                                  <div className="flex justify-center font-bold">
+                                    <Input
+                                      className="percentInput w-[28px] border-b"
+                                      placeholder="0"
+                                      type="number"
+                                      value={inputPercents[index]}
+                                      onChange={(e) => {
+                                        handleChange(index, e.target.value);
+                                      }}
+                                    />
+                                    %&nbsp;= &nbsp;
+                                    <div className="green">
+                                      $
+                                      {inputPercents[index] && expenseAmount
+                                        ? (
+                                            (parseFloat(inputPercents[index]) *
+                                              expenseAmount) /
+                                            100
+                                          ).toFixed(2)
+                                        : "0.00"}
+                                    </div>
+                                  </div>
+                                ) : null}
+                              </strong>
+                            </div>
+                          );
+                        })}
                 </div>
                 <div className="max-w-[180px] grow text-center">
                   {" "}
@@ -465,11 +516,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
               >
                 Cancel
               </Button>
-              <Button
-                className="btn btn-green"
-                type="submit"
-                disableRipple
-              >
+              <Button className="btn btn-green" type="submit" disableRipple>
                 Save
               </Button>
             </div>
@@ -487,7 +534,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                   ? null
                   : "add group"
                 : user
-                ? user.friends.length
+                ? userFriends.length
                   ? null
                   : "add friends"
                 : null}
@@ -523,7 +570,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                           }}
                         >
                           <Image
-                            src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                            src="/svgs/user.svg"
                             width={43}
                             className="mr-1 rounded-full"
                             alt="pfp"
@@ -536,7 +583,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                       );
                     })
                 : user
-                ? user.friends.map((friend: any) => {
+                ? userFriends.map((friend: any) => {
                     const findIdx: (id: string) => boolean = function (
                       id: string
                     ): boolean {
@@ -565,7 +612,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                         }}
                       >
                         <Image
-                          src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                          src="/svgs/user.svg"
                           width={43}
                           className="mr-1 rounded-full"
                           alt="pfp"
@@ -586,7 +633,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
                 // }}
               >
                 <Image
-                  src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                  src="/svgs/user.svg"
                   width={43}
                   className="mr-1 rounded-full"
                   alt="pfp"
@@ -601,60 +648,14 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
           </div>
         </div>
       ) : null}
-      {/* {settleModal == "open" ? (
-        <div className="modal flex ">
-          <div className="modal-div">
-            <div className="modal-top">
-              <p>Add an expense</p>
-
-              <p className="cursor" onClick={() => setSettleModal("close")}>
-                X
-              </p>
-            </div>
-            <div className="modal-mid justify-center flex-col ">
-              <p className="text-center text-gray-500 text-[16px]">
-                Select a payment method
-              </p>
-              <Button
-                className="mx-auto mt-2 btn-free btn-green w-[290px] text-[16px]"
-                disableRipple
-              >
-                Cash payment
-              </Button>
-              <Button
-                className="font-bold mx-auto mt-3 btn-free btn-lblue w-[290px] text-[16px] italic"
-                disableRipple
-              >
-                Venmo
-              </Button>
-            </div>
-            <div className="modal-bot">
-              <Button
-                onClick={() => setSettleModal("close")}
-                className="btn btn-gray"
-                disableRipple
-              >
-                Cancel
-              </Button>
-              <Button
-                className="btn btn-green"
-                disableRipple
-                onClick={() => setSettleModal("close")}
-              >
-                Save
-              </Button>
-            </div>
-          </div>
-        </div>
-      ) : null} */}
 
       <Button
         onClick={() => {
           setExpenseModal("open");
-          setTempSideUsers(group ? group.users : user.friends);
+          setTempSideUsers(group ? group.users : userFriends);
           setUserPercent(null);
           setUserIds([]);
-          setExpenseAmount(null);
+          setExpenseAmount("");
           setExpenseTitle("");
           setInputPercents([]);
           setImageSrc("/ss/receipt.png");
@@ -667,14 +668,6 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
       >
         Add an expense
       </Button>
-      {/* <Button
-        onClick={() => setSettleModal("open")}
-        disableRipple
-        className="btn btn-green"
-        radius="lg"
-      >
-        Settle up
-      </Button> */}
     </div>
   );
 };

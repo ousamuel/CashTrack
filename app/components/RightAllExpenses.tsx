@@ -102,7 +102,7 @@ export default function RightAllExpenses() {
         </div>
       </div>
 
-      {buttonArray.map((obj) => {
+      {/* {buttonArray.map((obj) => {
         return (
           <Tooltip
             content={
@@ -127,8 +127,8 @@ export default function RightAllExpenses() {
             </Button>
           </Tooltip>
         );
-      })}
-      <div className="mt-2">{selectedComponent}</div>
+      })} */}
+      {/* <div className="mt-2">{selectedComponent}</div> */}
     </div>
   );
 }

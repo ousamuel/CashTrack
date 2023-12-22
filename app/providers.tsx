@@ -87,7 +87,7 @@ export function Providers({ children }: ProvidersProps) {
       const data = await response.json();
 
       setUser(data.user);
-      setUserFriends(data.friends);
+      setUserFriends(data.user.friends);
       setUserGroups(data.user.groups);
       const reversedExpenses = data.user.expenses.toReversed();
       setUserExpenses(reversedExpenses);
@@ -124,6 +124,7 @@ export function Providers({ children }: ProvidersProps) {
     } catch (error: any) {
       router.push("/");
       console.error("Error:", error.message);
+      return false;
     }
   }
   async function logOut() {
@@ -188,6 +189,7 @@ export function Providers({ children }: ProvidersProps) {
         groupExpenses,
         setGroupExpenses,
         userExpenses,
+        setUserExpenses,
         setWrongLogin,
         wrongLogin,
       }}

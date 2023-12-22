@@ -6,11 +6,8 @@ import LeftDash from "@/app/components/LeftDash";
 import MiddleGroups from "@/app/components/MiddleGroups";
 import RightGroupBalances from "@/app/components/RightGroupBalances";
 import { Context } from "@/app/providers";
-import io from "socket.io-client";
-const socket = io("http://localhost:8001");
 
-
-export default function GroupPage({ params }) {
+export default function GroupPage(params: any) {
   const {
     user,
     groupExpenses,
@@ -18,7 +15,7 @@ export default function GroupPage({ params }) {
     setSelectedGroup,
     selectedGroup,
   } = useContext(Context);
-  
+
   async function fetchGroupData(groupId: string) {
     await fetch(`http://localhost:8001/groups/${groupId}`, {
       method: "GET",

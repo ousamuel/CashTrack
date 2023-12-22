@@ -77,9 +77,9 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
             <PopoverTrigger className="hover:bg-[#39a385]">
               <Button className="px-2 flex" disableRipple>
                 <Image
-                  className="w-[25px] rounded-full mr-2"
+                  className="w-[22px] rounded-full mr-2 border bg-white"
                   radius="sm"
-                  src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                  src="/svgs/user.svg"
                 />
                 <p>{user.name}</p>
                 <Image

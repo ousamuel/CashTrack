@@ -22,7 +22,6 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
     userFriends,
     setUserFriends,
   } = useContext(Context);
-  const [tempFriends, setTempFriends] = useState<any[]>([]);
   const {
     register,
     handleSubmit,
@@ -31,7 +30,7 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
   const [friendsModal, setFriendsModal] = useState<string>("close");
   async function addFriend(email: string) {
     if (
-      user.friends.find((friend: any) => friend.email == email) ||
+      userFriends.find((friend: any) => friend.email == email) ||
       user.email == email
     ) {
       alert("already added");
@@ -54,7 +53,7 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
       }
       const data = await res.json();
       console.log(data);
-      setTempFriends([...tempFriends, data]);
+      setUserFriends([data, ...userFriends]);
     } catch (error: any) {
       console.log(error.message);
     }
@@ -131,7 +130,7 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
         </div>
       ) : null}
 
-      <div className="text-[16px] mt-1 mb-4">
+      <div className="text-[16px] mt-1">
         <Button
           className={path == "dashboard" ? "left-top open" : "left-top"}
           onClick={() => router.push("/dashboard")}
@@ -141,14 +140,14 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
           <div>Dashboard</div>
         </Button>
 
-        <Button
+        {/* <Button
           className={path == "recent-activity" ? "left-top open" : "left-top"}
           onClick={() => router.push("/recent-activity")}
           disableRipple
         >
           <Image className="h-[17px] ml-1" src="/svgs/recent.svg" alt="logo" />
           Recent Activity
-        </Button>
+        </Button> */}
       </div>
       <div className="text-[14px]">
         <Button
@@ -191,8 +190,8 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
         </div>
         <div id="invite-box" className="">
           <h3 className="invites color">Add friends</h3>
-          <div className="border ml-[5px]">
-            <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="border ml-[5px] rounded-b-sm">
+            <form onSubmit={handleSubmit(onSubmit)} >
               <Input
                 className="text-black border-b border-dashed pt-3 mb-3 "
                 type="email"
@@ -225,9 +224,13 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
 
         <div className="max-h-[22vh] overflow-y-scroll">
           {user
-            ? user.friends.map((friend: any) => {
+            ? userFriends.map((friend: any) => {
                 return (
-                  <Button key={friend._id}className="left-tabs hover-gray" disableRipple>
+                  <Button
+                    key={friend._id}
+                    className="left-tabs hover-gray"
+                    disableRipple
+                  >
                     <Image
                       src="/svgs/user.svg"
                       className="min-w-[10px]"
@@ -238,22 +241,6 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
                 );
               })
             : null}
-          {tempFriends.map((friend: any) => {
-            return (
-              <Button
-                key={friend.email}
-                className="left-tabs hover-gray"
-                disableRipple
-              >
-                <Image
-                  src="/svgs/user.svg"
-                  className="min-w-[10px]"
-                  width="10px"
-                />
-                {friend.name}&nbsp;{friend.email}
-              </Button>
-            );
-          })}
         </div>
         {/* <Link className="left-tabs" href="/">
           <Image src="/svgs/user.svg" width="10px" />

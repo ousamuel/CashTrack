@@ -10,9 +10,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@nextui-org/react";
-import io from "socket.io-client";
+import { useForm, SubmitHandler } from "react-hook-form";
+
 import { Context } from "../providers";
-const socket = io("http://localhost:8001");
+// import io from "socket.io-client";
+// const socket = io("http://localhost:8001");
+interface InviteForm {
+  inviteEmail: string;
+}
 
 type RightGroupBalancesProps = {
   group: any;
@@ -22,39 +27,69 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
   group,
   expenses,
 }) => {
+  const [selectedComponent, setSelectedComponent] = useState<any>(null);
+  const [selectedDesc, setSelectedDesc] = useState<string>("Balances");
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [addMemberModal, setAddMemberModal] = useState<boolean>(false);
+  const handleButtonClick = (desc: string): void => {
+    setSelectedDesc(desc);
+    const component = renderComponent(desc);
+    setSelectedComponent(component);
+  };
   const { user } = useContext(Context);
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<InviteForm>();
   console.log(group);
   type ButtonType = {
     src: string;
     desc: string;
   };
-
   const buttonArray: ButtonType[] = [
     { src: "/svgs/list.svg", desc: "Balances" },
     { src: "/svgs/user.svg", desc: "Members" },
     // { src: "/svgs/chat.svg", desc: "Whiteboard" },
     { src: "/svgs/settings.svg", desc: "Settings" },
   ];
-
   const MembersComponent: React.FC = () => {
     return (
       <div>
-        <h4>Group Members</h4>
-        {group.users.map((user: any) => {
+        <h4 className="flex justify-between pr-5">
+          Group Members{" "}
+          <Button
+            className="rounded-sm leading-none px-1 text-gray-500 
+            bg-[#f1f1f1] hover:bg-[#eaeaea] hover:text-black"
+            disableRipple
+            onClick={() => {
+              reset();
+              setAddMemberModal(true);
+            }}
+          >
+            +
+          </Button>
+        </h4>
+        {group.users.map((userObj: any) => {
           return (
-            <div key={user._id} className="flex items-center mt-3 ">
+            <div key={userObj._id} className="flex items-center mt-3 ">
               <Image
-                className="rounded-full min-w-[40px] max-w-[40px] items-center my-auto justify-center "
-                src="https://www.boredpanda.com/blog/wp-content/uploads/2021/03/url-1.jpg"
+                className={
+                  userObj._id == user._id
+                    ? "rounded-full min-w-[40px] max-w-[40px] items-center my-auto justify-center border-b-2 border-[#2c9984]"
+                    : "rounded-full min-w-[40px] max-w-[40px] items-center my-auto justify-center"
+                }
+                src="/svgs/user.svg"
               />
               <div className="flex flex-col pl-2">
                 <h3 className="leading-none font-bold flex">
-                  {user.name}{" "}
-                  {group.creator == user._id ? (
+                  {userObj.name}{" "}
+                  {group.creator == userObj._id ? (
                     <Image width={17} className="ml-2" src="/svgs/crown.svg" />
                   ) : null}
                 </h3>
-                <h2 className="leading-snug">{user.email}</h2>
+                <h2 className="leading-snug">{userObj.email}</h2>
               </div>
             </div>
           );
@@ -66,18 +101,16 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
     return (
       <div className="flex flex-col ">
         <h4>Settings</h4>
-        <Button
-          className="btn-3 text-left bg-[#f1f1f1] hover:bg-[#eaeaea]"
-          disableRipple
-        >
-          Edit Group
-        </Button>
-        <Button
-          className="btn-3 text-left text-white bg-[#e51212] hover:bg-[#c83400]"
-          disableRipple
-        >
-          Delete Group
-        </Button>
+
+        {group.creator == user._id ? (
+          <Button
+            className="btn-3 text-left text-white bg-[#e51212] hover:bg-[#c83400]"
+            disableRipple
+            onClick={() => setOpenDeleteModal(true)}
+          >
+            Delete Group
+          </Button>
+        ) : null}
       </div>
     );
   };
@@ -93,16 +126,142 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
         return MembersComponent;
     }
   };
-  const [selectedComponent, setSelectedComponent] = useState<any>(null);
-  const [selectedDesc, setSelectedDesc] = useState<string>("Balances");
-  const handleButtonClick = (desc: string): void => {
-    setSelectedDesc(desc);
-    const component = renderComponent(desc);
-    setSelectedComponent(component);
-  };
 
+  const addMember = async function (inviteEmail: string) {
+    const duplicateMember = group.users.find(
+      (user: any) => user.email == inviteEmail
+    );
+    if (duplicateMember) {
+      alert(`${inviteEmail} is already in "${group.groupName}"`);
+      return false
+    }
+    try {
+      const res: any = await fetch(
+        `http://localhost:8001/groups/addMember/${group._id}`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            userEmail: inviteEmail,
+          }),
+        }
+      );
+      if (res.ok) {
+        setAddMemberModal(false);
+      } else {
+        const data = await res.json();
+        console.log(data);
+      }
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+  const deleteGroup = async function () {
+    try {
+      const res: any = await fetch(
+        `http://localhost:8001/groups/${group._id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Accept: "application/json",
+          },
+        }
+      );
+      if (res.ok) {
+        window.location.href = "/dashboard";
+      } else {
+        const data = await res.json();
+        console.log(data);
+      }
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+  const onSubmit: SubmitHandler<InviteForm> = (data) => {
+    addMember(data.inviteEmail);
+  };
   return (
     <div className="right-container">
+      {openDeleteModal ? (
+        <div className="modal flex flex-col md:flex-row md:pb-10 ">
+          <div className="modal-div min-w-[270px] max-w-[65vw] flex flex-col text-center">
+            This action is permanent
+            <Button
+              className="btn-free btn-orange"
+              onClick={deleteGroup}
+              disableRipple
+            >
+              {" "}
+              Delete <strong className="">({group.groupName})</strong>
+            </Button>
+            <Button
+              className="btn-free btn-green"
+              onClick={() => setOpenDeleteModal(false)}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      ) : null}
+      {addMemberModal ? (
+        <div className="modal flex flex-col md:flex-row md:pb-10 ">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="modal-div min-w-[270px] flex flex-col text-center"
+          >
+            <div className="modal-top">
+              {" "}
+              <p className="mr-5">Add a member to "{group.groupName}"</p>
+              <p
+                className="cursor text-[#e51212]"
+                onClick={() => setAddMemberModal(false)}
+              >
+                X
+              </p>
+            </div>
+            <Input
+              className={
+                errors.inviteEmail
+                  ? "modal-mid border border-[#e51212]"
+                  : "modal-mid border-b"
+              }
+              placeholder="Enter member's email"
+              {...register("inviteEmail", {
+                pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                required: true,
+              })}
+            />
+
+            {/* <div className="modal-mid flex">overPaid || zeroPayment</div> */}
+            <div className="flex justify-between bg-white rounded-b-[5px]">
+              <p className="flex px-4 text-[#e51212]">
+                {errors.inviteEmail ? "Invalid email" : null}
+              </p>
+              <div className="modal-bot">
+                <Button
+                  onClick={() => {
+                    setAddMemberModal(false);
+                  }}
+                  className="btn btn-gray"
+                  disableRipple
+                >
+                  Cancel
+                </Button>
+                <Button className="btn btn-green" type="submit" disableRipple>
+                  Add user
+                </Button>
+              </div>
+            </div>
+          </form>
+        </div>
+      ) : null}
+
       {buttonArray.map((obj) => {
         return (
           <Tooltip
@@ -134,7 +293,7 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
       </h4>
 
       {group && group.users
-        ? group.users.map((userObj: any) => {
+        ? group.users.map((userObj: any, index: number) => {
             // console.log(userObj);
             const ownedExpenses = expenses.filter(
               (expense: any) =>
@@ -164,13 +323,17 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
               }
             });
             return totalPaid || totalBorrowed ? (
-              <div className={selectedDesc == "Balances" ? "mt-3" : "hidden"}>
-                <div className="flex">
-                  <div className="flex flex-col items-center border-r border-gray-200 pr-1">
+              <div className={selectedDesc == "Balances" ? "" : "hidden"}>
+                <div
+                  className={
+                    index != 0 ? "flex border-t py-[10px]" : "flex py-[10px]"
+                  }
+                >
+                  <div className="flex flex-col items-center justify-center border-r border-gray-200 pr-1">
                     <strong>{userObj.name}</strong>
                     <Image
                       className="rounded-full min-w-[40px] max-w-[40px] items-center my-auto justify-center "
-                      src="https://www.boredpanda.com/blog/wp-content/uploads/2021/03/url-1.jpg"
+                      src="/svgs/user.svg"
                     />
                   </div>
                   <div className="pl-2 flex flex-col justify-center">
