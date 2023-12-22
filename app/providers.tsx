@@ -3,7 +3,6 @@ import React, { createContext, useState, ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@nextui-org/react";
 import dotenv from "dotenv";
-dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 // CASHTRACK
 interface ContextProps {
@@ -25,9 +24,9 @@ export function Providers({ children }: ProvidersProps) {
     // }
   }, []);
   const router = useRouter();
-  let BACKEND_API = "http://localhost:8001";
+  let BACKEND_API: any = "http://localhost:8001";
   if (process.env.NODE_ENV == "production") {
-    BACKEND_API = "http://localhost:10005";
+    BACKEND_API = process.env.BACKEND_URL;
   }
   const [user, setUser] = useState<User>();
   const [wrongLogin, setWrongLogin] = useState<boolean>(false);
