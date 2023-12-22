@@ -7,13 +7,14 @@ import MiddleGroups from "@/app/components/MiddleGroups";
 import RightGroupBalances from "@/app/components/RightGroupBalances";
 import { Context } from "@/app/providers";
 
-export default function GroupPage(params: any) {
+export default function GroupPage({ params }: { params: any }) {
   const {
     user,
     groupExpenses,
     setGroupExpenses,
     setSelectedGroup,
-    selectedGroup,BACKEND_API
+    selectedGroup,
+    BACKEND_API,
   } = useContext(Context);
 
   async function fetchGroupData(groupId: string) {

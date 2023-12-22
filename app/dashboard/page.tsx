@@ -6,7 +6,7 @@ import RightOnTheGo from "../components/RightOnTheGo";
 export default function Dashboard() {
   return (
     <div>
-      <Header path='dashboard' />
+      <Header path="dashboard" />
       <div className="main-body">
         <LeftDash path="dashboard" />
         <MiddleDash />

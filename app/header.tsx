@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
   const router = useRouter();
   const logOut = async function () {
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}logout`, {
+      await fetch(`${BACKEND_API}logout`, {
         method: "GET",
         credentials: "include",
         headers: {

@@ -25,7 +25,6 @@ export function Providers({ children }: ProvidersProps) {
   }, []);
   const router = useRouter();
   let BACKEND_API: any = process.env.NEXT_PUBLIC_BACKEND_API;
-  // console.log(BACKEND_API);
   // let BACKEND_API: any = "https://cash-track-api.onrender.com";
   // if (process.env.NODE_ENV == "production") {
   //   BACKEND_API = process.env.REACT_APP_BACKEND_URL;

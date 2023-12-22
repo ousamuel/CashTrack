@@ -64,7 +64,7 @@ let cookieSecure = false;
 var sess = {
   secret: generateRandomKey(36),
   saveUninitialized: true,
-  cookie: { maxAge: day },
+  cookie: { maxAge: day, secure: false },
   store: new MemoryStore({
     checkPeriod: day,
   }),

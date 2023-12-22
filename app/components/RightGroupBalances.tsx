@@ -137,7 +137,7 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
     }
     try {
       const res: any = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API}groups/addMember/${group._id}`,
+        `${BACKEND_API}groups/addMember/${group._id}`,
         {
           method: "PATCH",
           credentials: "include",
@@ -163,7 +163,7 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
   const deleteGroup = async function () {
     try {
       const res: any = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API}groups/${group._id}`,
+        `${BACKEND_API}groups/${group._id}`,
         {
           method: "DELETE",
           credentials: "include",

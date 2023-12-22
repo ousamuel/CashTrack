@@ -53,7 +53,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
       return 0;
     }
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}expenses/payment/${expense._id}`, {
+      await fetch(`${BACKEND_API}expenses/payment/${expense._id}`, {
         method: "PATCH",
         credentials: "include",
         headers: {

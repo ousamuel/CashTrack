@@ -37,7 +37,7 @@ export default function NewGroup() {
 
   const createNewGroup = async function (input: { [key: string]: any }) {
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}groups`, {
+      await fetch(`${BACKEND_API}groups`, {
         method: "POST",
         credentials: "include",
         headers: {
