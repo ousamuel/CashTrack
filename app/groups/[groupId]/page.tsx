@@ -17,7 +17,7 @@ export default function GroupPage(params: any) {
   } = useContext(Context);
 
   async function fetchGroupData(groupId: string) {
-    await fetch(`${BACKEND_API}/groups/${groupId}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}groups/${groupId}`, {
       method: "GET",
       credentials: "include",
       headers: {

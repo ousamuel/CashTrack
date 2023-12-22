@@ -73,7 +73,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
       console.log("100%");
     }
     try {
-      await fetch(`${BACKEND_API}/expenses`, {
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}expenses`, {
         method: "POST",
         credentials: "include",
         headers: {

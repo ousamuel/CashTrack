@@ -52,7 +52,7 @@ export default function Login() {
       return false;
     }
     try {
-      const response: any = await fetch(`${BACKEND_API}/users`, {
+      const response: any = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}users`, {
         method: "POST",
         credentials: "include",
         headers: {

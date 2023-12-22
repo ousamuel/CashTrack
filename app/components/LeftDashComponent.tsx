@@ -38,7 +38,7 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
       return 5;
     }
     try {
-      const res: any = await fetch(`${BACKEND_API}/users/addFriend`, {
+      const res: any = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}users/addFriend`, {
         method: "PATCH",
         credentials: "include",
         headers: {

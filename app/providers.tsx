@@ -24,8 +24,8 @@ export function Providers({ children }: ProvidersProps) {
     // }
   }, []);
   const router = useRouter();
-  let BACKEND_API: any = process.env.NEXT_PUBLIC_BACKEND_API
-  console.log(BACKEND_API)
+  let BACKEND_API: any = process.env.NEXT_PUBLIC_BACKEND_API;
+  // console.log(BACKEND_API);
   // let BACKEND_API: any = "https://cash-track-api.onrender.com";
   // if (process.env.NODE_ENV == "production") {
   //   BACKEND_API = process.env.REACT_APP_BACKEND_URL;
@@ -66,18 +66,21 @@ export function Providers({ children }: ProvidersProps) {
   async function loginUser(input: { [key: string]: string }) {
     // function points to /server/controllers/userController.js
     try {
-      const response: any = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}users/login`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          email: input.email,
-          _password: input.password,
-        }),
-      });
+      const response: any = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_API}users/login`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            email: input.email,
+            _password: input.password,
+          }),
+        }
+      );
       if (!response.ok) {
         if (response.status == 401) {
           console.log(401);
@@ -132,7 +135,7 @@ export function Providers({ children }: ProvidersProps) {
   async function logOut() {
     // function points to app.get('/logout') in /server/server.js
     try {
-      const response = await fetch(`${BACKEND_API}logout`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}logout`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -150,17 +153,14 @@ export function Providers({ children }: ProvidersProps) {
   }
   async function deleteExpense(expenseId: string, index: number) {
     try {
-      const response: any = await fetch(
-        `${BACKEND_API}expenses/${expenseId}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Accept: "application/json",
-          },
-        }
-      );
+      const response: any = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}expenses/${expenseId}`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          Accept: "application/json",
+        },
+      });
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       } else {
