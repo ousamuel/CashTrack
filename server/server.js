@@ -57,22 +57,24 @@ const hour = min * 60;
 const day = hour * 24;
 // session parameters with time limit
 // temporary secret key
-let cookieSecure = false
+let cookieSecure = false;
 // if (process.env.NODE_ENV == "production"){
 //   cookieSecure = true
 // }
-app.use(
-  sessions({
-    secret: generateRandomKey(36),
-    saveUninitialized: true,
-    cookie: { maxAge: day, secure: cookieSecure },
-    store: new MemoryStore({
-      checkPeriod: day,
-    }),
-    resave: false,
-  })
-);
-app.set('trust proxy', true);
+var sess = {
+  secret: generateRandomKey(36),
+  saveUninitialized: true,
+  cookie: { maxAge: day },
+  store: new MemoryStore({
+    checkPeriod: day,
+  }),
+  resave: false,
+};
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1); // trust first proxy
+  sess.cookie.secure = true; // serve secure cookies
+}
+app.use(sessions(sess));
 
 app.use(
   cors({
