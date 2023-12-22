@@ -8,14 +8,15 @@ const app = express();
 const crypto = require("crypto");
 const mongoose = require("mongoose");
 const router = express.Router();
-const deploymentType = process.env.NODE_ENV;
-let FRONTEND;
-if (deploymentType === "production") {
-  FRONTEND = process.env.PRODUCTION_FRONTEND;
-} else {
-  FRONTEND = process.env.FRONTEND_URL;
-}
-console.log(FRONTEND);
+// const deploymentType = process.env.NODE_ENV;
+// let FRONTEND;
+// if (deploymentType === "production") {
+//   FRONTEND = process.env.PRODUCTION_FRONTEND;
+// } else {
+//   FRONTEND = process.env.FRONTEND_URL;
+// }
+// console.log(FRONTEND);
+const FRONTEND = process.env.FRONTEND_URL
 mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
