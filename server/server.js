@@ -63,6 +63,7 @@ const day = hour * 24;
 var sess = {
   secret: generateRandomKey(36),
   saveUninitialized: true,
+  name: generateRandomKey(36),
   cookie: { maxAge: day, secure: false },
   store: new MemoryStore({
     checkPeriod: day,
@@ -72,6 +73,7 @@ var sess = {
 if (process.env.NODE_ENV === "production") {
   app.set("trust proxy", 1); // trust first proxy
   sess.cookie.secure = true; // serve secure cookies
+  sess.cookie.sameSite = "none";
 }
 app.use(sessions(sess));
 
