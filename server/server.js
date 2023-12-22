@@ -90,10 +90,10 @@ app.use("/groups", groupsRouter);
 const paymentsRouter = require("./routes/paymentsRoute");
 app.use("/payments", paymentsRouter);
 // - - - - - - -
-app.use("/", router);
+app.use("/api", router);
 
 const port = process.env.PORT || 8000;
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.send("HELLO FROM new!! EXPRESS");
 });
 app.listen(port, () => {
