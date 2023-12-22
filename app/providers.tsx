@@ -66,7 +66,7 @@ export function Providers({ children }: ProvidersProps) {
   async function loginUser(input: { [key: string]: string }) {
     // function points to /server/controllers/userController.js
     try {
-      const response: any = await fetch(`${BACKEND_API}users/login`, {
+      const response: any = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}users/login`, {
         method: "POST",
         credentials: "include",
         headers: {
