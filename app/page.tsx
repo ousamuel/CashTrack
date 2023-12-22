@@ -15,7 +15,7 @@ type FormData = {
 };
 export default function Login() {
   const router = useRouter();
-  const { user, loginUser, logOut, wrongLogin, setWrongLogin } =
+  const { user, loginUser, logOut, wrongLogin, setWrongLogin, BACKEND_API } =
     useContext(Context);
   const [invalidNewEmail, setInvalidNewEmail] = useState<boolean>(false);
   const [loggingIn, setLoggingIn] = useState<boolean>(true);
@@ -52,7 +52,7 @@ export default function Login() {
       return false;
     }
     try {
-      const response: any = await fetch(`http://localhost:8001/users`, {
+      const response: any = await fetch(`${BACKEND_API}/users`, {
         method: "POST",
         credentials: "include",
         headers: {

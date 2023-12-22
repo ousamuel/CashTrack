@@ -36,7 +36,7 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
     const component = renderComponent(desc);
     setSelectedComponent(component);
   };
-  const { user } = useContext(Context);
+  const { user, BACKEND_API } = useContext(Context);
   const {
     register,
     reset,
@@ -137,7 +137,7 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
     }
     try {
       const res: any = await fetch(
-        `http://localhost:8001/groups/addMember/${group._id}`,
+        `${BACKEND_API}/groups/addMember/${group._id}`,
         {
           method: "PATCH",
           credentials: "include",
@@ -163,7 +163,7 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
   const deleteGroup = async function () {
     try {
       const res: any = await fetch(
-        `http://localhost:8001/groups/${group._id}`,
+        `${BACKEND_API}/groups/${group._id}`,
         {
           method: "DELETE",
           credentials: "include",

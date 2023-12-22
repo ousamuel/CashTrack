@@ -13,11 +13,11 @@ export default function GroupPage(params: any) {
     groupExpenses,
     setGroupExpenses,
     setSelectedGroup,
-    selectedGroup,
+    selectedGroup,BACKEND_API
   } = useContext(Context);
 
   async function fetchGroupData(groupId: string) {
-    await fetch(`http://localhost:8001/groups/${groupId}`, {
+    await fetch(`${BACKEND_API}/groups/${groupId}`, {
       method: "GET",
       credentials: "include",
       headers: {

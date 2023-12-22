@@ -28,7 +28,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
     reset,
     formState: { errors },
   } = useForm<FormData>();
-  const { user } = useContext(Context);
+  const { user, BACKEND_API } = useContext(Context);
   const [paymentModal, setPaymentModal] = useState<string>("close");
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
@@ -53,7 +53,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
       return 0;
     }
     try {
-      await fetch(`http://localhost:8001/expenses/payment/${expense._id}`, {
+      await fetch(`${BACKEND_API}/expenses/payment/${expense._id}`, {
         method: "PATCH",
         credentials: "include",
         headers: {

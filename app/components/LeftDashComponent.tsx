@@ -21,6 +21,7 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
     userGroups,
     userFriends,
     setUserFriends,
+    BACKEND_API
   } = useContext(Context);
   const {
     register,
@@ -37,7 +38,7 @@ const LeftDashComponent: React.FC<LeftDashProps> = ({ path }) => {
       return 5;
     }
     try {
-      const res: any = await fetch(`http://localhost:8001/users/addFriend`, {
+      const res: any = await fetch(`${BACKEND_API}/users/addFriend`, {
         method: "PATCH",
         credentials: "include",
         headers: {

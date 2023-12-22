@@ -26,6 +26,7 @@ export function Providers({ children }: ProvidersProps) {
 
   const router = useRouter();
   const API = process.env.REACT_APP_API;
+  const BACKEND_API = "http://localhost:8001";
   const [user, setUser] = useState<User>();
   const [wrongLogin, setWrongLogin] = useState<boolean>(false);
   const [totalOwe, setTotalOwe] = useState<number>(0);
@@ -64,7 +65,7 @@ export function Providers({ children }: ProvidersProps) {
   async function loginUser(input: { [key: string]: string }) {
     // function points to /server/controllers/userController.js
     try {
-      const response: any = await fetch(`http://localhost:8001/users/login`, {
+      const response: any = await fetch(`${BACKEND_API}/users/login`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -130,7 +131,7 @@ export function Providers({ children }: ProvidersProps) {
   async function logOut() {
     // function points to app.get('/logout') in /server/server.js
     try {
-      const response = await fetch(`http://localhost:8001/logout`, {
+      const response = await fetch(`${BACKEND_API}/logout`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -149,7 +150,7 @@ export function Providers({ children }: ProvidersProps) {
   async function deleteExpense(expenseId: string, index: number) {
     try {
       const response: any = await fetch(
-        `http://localhost:8001/expenses/${expenseId}`,
+        `${BACKEND_API}/expenses/${expenseId}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -171,6 +172,7 @@ export function Providers({ children }: ProvidersProps) {
   return (
     <Context.Provider
       value={{
+        BACKEND_API,
         totalOwe,
         userFriends,
         setUserFriends,

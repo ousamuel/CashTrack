@@ -73,7 +73,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
       console.log("100%");
     }
     try {
-      await fetch(`http://localhost:8001/expenses`, {
+      await fetch(`${BACKEND_API}/expenses`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -111,6 +111,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
     setUserExpenses,
     userFriends,
     setUserFriends,
+    BACKEND_API
   } = useContext(Context);
   const [members, setMembers] = useState<any>([]);
   const [expenseAmount, setExpenseAmount] = useState<any>("");

@@ -16,11 +16,11 @@ interface HeaderProps {
   path: string;
 }
 const Header: React.FC<HeaderProps> = ({ path }) => {
-  const { user } = useContext(Context);
+  const { user, BACKEND_API } = useContext(Context);
   const router = useRouter();
   const logOut = async function () {
     try {
-      await fetch(`http://localhost:8001/logout`, {
+      await fetch(`${BACKEND_API}/logout`, {
         method: "GET",
         credentials: "include",
         headers: {

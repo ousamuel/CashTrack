@@ -20,7 +20,7 @@ type FormData = {
   // distributions: DistributionType[];
 };
 export default function NewGroup() {
-  const { user } = useContext(Context);
+  const { user, BACKEND_API } = useContext(Context);
   const [userEmails, setUserEmails] = useState<string[]>([]);
   const [groupName, setGroupName] = useState<string>("");
   const [tempEmails, setTempEmails] = useState<string>("");
@@ -37,7 +37,7 @@ export default function NewGroup() {
 
   const createNewGroup = async function (input: { [key: string]: any }) {
     try {
-      await fetch(`http://localhost:8001/groups`, {
+      await fetch(`${BACKEND_API}/groups`, {
         method: "POST",
         credentials: "include",
         headers: {
