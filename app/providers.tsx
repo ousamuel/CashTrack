@@ -2,6 +2,8 @@
 import React, { createContext, useState, ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@nextui-org/react";
+import dotenv from "dotenv";
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 // CASHTRACK
 interface ContextProps {
@@ -17,16 +19,16 @@ export function Providers({ children }: ProvidersProps) {
   useEffect(() => {
     setWrongLogin(false);
     loginUser({});
-
     // if (!user) {
     //   router.push("/");
     //   // reroute to login page if session/user is null
     // }
   }, []);
-
   const router = useRouter();
-  const API = process.env.REACT_APP_API;
-  const BACKEND_API = "http://localhost:8001";
+  let BACKEND_API = "http://localhost:8001";
+  if (process.env.NODE_ENV == "production") {
+    BACKEND_API = "";
+  }
   const [user, setUser] = useState<User>();
   const [wrongLogin, setWrongLogin] = useState<boolean>(false);
   const [totalOwe, setTotalOwe] = useState<number>(0);

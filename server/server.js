@@ -4,11 +4,17 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const sessions = require("express-session");
 const { Server } = require("socket.io");
-
 const app = express();
 const crypto = require("crypto");
 const mongoose = require("mongoose");
 const router = express.Router();
+const deploymentType = process.env.NODE_ENV;
+let FRONTEND;
+if (deploymentType === "production") {
+  FRONTEND = process.env.PRODUCTION_FRONTEND;
+} else {
+  FRONTEND = process.env.FRONTEND_URL;
+}
 mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
@@ -19,7 +25,7 @@ const http = require("http");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL,
+    origin: FRONTEND,
     methods: ["GET", "POST"],
   },
 });
@@ -58,7 +64,7 @@ app.use(
 app.use(
   cors({
     credentials: true,
-    origin: process.env.FRONTEND_URL,
+    origin: FRONTEND,
   })
 );
 app.use(express.json());
