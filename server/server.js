@@ -22,25 +22,25 @@ db.once("open", () => console.log("connected to db"));
 
 const http = require("http");
 // const io = require("socket.io")(process.env.SOCKET_PORT);
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: FRONTEND,
-    methods: ["GET", "POST"],
-  },
-});
+// const server = http.createServer(app);
+// const io = new Server(server, {
+//   cors: {
+//     origin: FRONTEND,
+//     methods: ["GET", "POST"],
+//   },
+// });
 
-io.on("connection", (socket) => {
-  // console.log("user connected " + socket.id);
+// io.on("connection", (socket) => {
+//   // console.log("user connected " + socket.id);
 
-  socket.on("send_message", (data) => {
-    socket.broadcast.emit("receive_message", data);
-  });
+//   socket.on("send_message", (data) => {
+//     socket.broadcast.emit("receive_message", data);
+//   });
 
-  // socket.on("disconnect", () => {
-  //   console.log("user disconnected " + socket.id);
-  // });
-});
+//   // socket.on("disconnect", () => {
+//   //   console.log("user disconnected " + socket.id);
+//   // });
+// });
 
 function generateRandomKey(length) {
   return crypto
@@ -95,7 +95,7 @@ const port = process.env.PORT || 8000;
 app.get("/", (req, res) => {
   res.send("HELLO FROM new!! EXPRESS");
 });
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`listening on ${port}`);
 });
 /*
