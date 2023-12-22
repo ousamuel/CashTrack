@@ -24,10 +24,10 @@ export function Providers({ children }: ProvidersProps) {
     // }
   }, []);
   const router = useRouter();
-  let BACKEND_API: any = "http://localhost:8001";
-  if (process.env.NODE_ENV == "production") {
-    BACKEND_API = process.env.REACT_APP_BACKEND_URL;
-  }
+  let BACKEND_API: any = "https://cash-track-api.onrender.com";
+  // if (process.env.NODE_ENV == "production") {
+  //   BACKEND_API = process.env.REACT_APP_BACKEND_URL;
+  // }
   // console.log(process.env)
   const [user, setUser] = useState<User>();
   const [wrongLogin, setWrongLogin] = useState<boolean>(false);
