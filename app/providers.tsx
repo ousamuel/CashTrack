@@ -27,7 +27,7 @@ export function Providers({ children }: ProvidersProps) {
   const router = useRouter();
   let BACKEND_API = "http://localhost:8001";
   if (process.env.NODE_ENV == "production") {
-    BACKEND_API = "";
+    BACKEND_API = "http://localhost:10005";
   }
   const [user, setUser] = useState<User>();
   const [wrongLogin, setWrongLogin] = useState<boolean>(false);
