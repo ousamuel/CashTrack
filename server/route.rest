@@ -1,4 +1,4 @@
-GET http://localhost:8001/groups
+GET http://localhost:8001/users
 ###
 PATCH http://localhost:8001/groups/addMember/6582541933e52289810a55a7
 Content-Type: application/json

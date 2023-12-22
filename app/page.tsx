@@ -30,13 +30,13 @@ export default function Login() {
   const onLogInSubmit: SubmitHandler<FormData> = async (data) => {
     const success = await loginUser(data);
     if (success) {
-      router.push("/dashboard")
+      window.location.href = "/dashboard";
     }
   };
   const onSignUpSubmit: SubmitHandler<FormData> = async (data) => {
     const success = await signUpUser(data);
     if (success) {
-      router.push("/dashboard")
+      window.location.href = "/dashboard";
     }
   };
   // console.log(user);
@@ -72,7 +72,7 @@ export default function Login() {
         }
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      return true
+      return true;
     } catch (error: any) {
       console.error("error:", error.message);
       return false;
