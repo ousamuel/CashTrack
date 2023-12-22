@@ -100,7 +100,8 @@ app.use("/", router);
 
 const port = process.env.PORT || 8000;
 app.get("/", (req, res) => {
-  res.send("HELLO FROM new!! EXPRESS");
+  res.send("HELLO FROM new!! EXPRESS" + FRONTEND);
+
 });
 app.listen(port, () => {
   console.log(`listening on ${port}`);
