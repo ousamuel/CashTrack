@@ -71,7 +71,7 @@ app.use(
 app.use(
   cors({
     credentials: true,
-    origin: FRONTEND,
+    origin: process.env.FRONTEND_URL,
   })
 );
 app.use(express.json());
