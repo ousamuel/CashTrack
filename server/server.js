@@ -57,17 +57,23 @@ const hour = min * 60;
 const day = hour * 24;
 // session parameters with time limit
 // temporary secret key
+let cookieSecure = false
+if (process.env.NODE_ENV == "production"){
+  cookieSecure = true
+}
 app.use(
   sessions({
     secret: generateRandomKey(36),
     saveUninitialized: true,
-    cookie: { maxAge: day, secure: true },
+    cookie: { maxAge: day, secure: cookieSecure },
     store: new MemoryStore({
       checkPeriod: day,
     }),
     resave: false,
   })
 );
+app.set('trust proxy', true);
+
 app.use(
   cors({
     credentials: true,
