@@ -24,7 +24,9 @@ export function Providers({ children }: ProvidersProps) {
     // }
   }, []);
   const router = useRouter();
-  let BACKEND_API: any = "https://cash-track-api.onrender.com";
+  let BACKEND_API: any = process.env.NEXT_PUBLIC_BACKEND_API
+  console.log(BACKEND_API)
+  // let BACKEND_API: any = "https://cash-track-api.onrender.com";
   // if (process.env.NODE_ENV == "production") {
   //   BACKEND_API = process.env.REACT_APP_BACKEND_URL;
   // }
@@ -38,10 +40,7 @@ export function Providers({ children }: ProvidersProps) {
   const [userGroups, setUserGroups] = useState<[]>([]);
   const [userExpenses, setUserExpenses] = useState<any[]>([]);
   const [userFriends, setUserFriends] = useState<any[]>([]);
-  // const [loading, setLoading] = useState<boolean>(true);
-  // const [groups, setGroups] = useState<ReactNode>(null);
   const [groupExpenses, setGroupExpenses] = useState<any>([]);
-  // document.addEventListener('keydown', sayHi);
 
   type Expense = {
     _id: string;
