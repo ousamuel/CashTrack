@@ -61,7 +61,7 @@ app.use(
   sessions({
     secret: generateRandomKey(36),
     saveUninitialized: true,
-    cookie: { maxAge: day },
+    cookie: { maxAge: day, secure: true },
     store: new MemoryStore({
       checkPeriod: day,
     }),
@@ -101,7 +101,6 @@ app.use("/", router);
 const port = process.env.PORT || 8000;
 app.get("/", (req, res) => {
   res.send("HELLO FROM new!! EXPRESS" + FRONTEND);
-
 });
 app.listen(port, () => {
   console.log(`listening on ${port}`);
