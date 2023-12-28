@@ -108,3 +108,25 @@ Content-Type: application/json
 ###
 DELETE http://localhost:8001/groups/6580a064c3da4af84ac89b3d
 
+###
+
+PATCH http://localhost:8001/expenses/myDistribution/658338a3bbeb2d3569d40a48
+Content-Type: application/json
+
+{
+    "sender": "65824f5f33e52289810a52e9",
+    "payment": 50
+}
+
+###
+GET http://localhost:8001/expenses/myDistribution/658338a3bbeb2d3569d40a48
+Content-Type: application/json
+
+{
+    "sender": "65824f5f33e52289810a52e9"
+}
+
+###
+658338a3bbeb2d3569d40a48
+
+65824f5f33e52289810a52e9

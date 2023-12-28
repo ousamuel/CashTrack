@@ -46,7 +46,6 @@ export default function RightAllExpenses() {
       </div>
     );
   };
-  
   const RandomComp: React.FC = () => {
     return (
       <div>
@@ -55,7 +54,6 @@ export default function RightAllExpenses() {
       </div>
     );
   };
-  
   const renderComponent = (desc: string): React.FC => {
     switch (desc) {
       case "Balances":

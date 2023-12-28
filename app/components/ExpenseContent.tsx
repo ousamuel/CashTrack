@@ -47,13 +47,16 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
       setZeroPayment(true);
       console.log("less than 0");
       return 0;
-    } else if (postAmount > myDebt.amount.toFixed(2)) {
+    } else if (
+      postAmount >
+      myDebt.amount.toFixed(2) - myDebt.payment.toFixed(2)
+    ) {
       setOverPaid(true);
       console.log("overpaid");
       return 0;
     }
     try {
-      await fetch(`${BACKEND_API}expenses/payment/${expense._id}`, {
+      await fetch(`${BACKEND_API}expenses/myDistribution/${expense._id}`, {
         method: "PATCH",
         credentials: "include",
         headers: {
@@ -62,8 +65,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
         },
         body: JSON.stringify({
           sender: user._id,
-          title: expense.title,
-          amount: postAmount,
+          payment: postAmount,
         }),
       })
         .then((res) => (res.ok ? res.json() : console.log(res.status)))
@@ -105,7 +107,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
                     className="rounded-full"
                     src="/svgs/arrow-down.svg"
                   />{" "} */}
-                  ${myDebt.amount.toFixed(2)}
+                  ${(myDebt.amount - myDebt.payment).toFixed(2)}
                   {/* <Image
                     width={40}
                     className="rounded-full"
@@ -148,7 +150,11 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
 
                 <Button
                   className="btn btn-green"
-                  onClick={() => setPaymentAmount(myDebt.amount.toFixed(2))}
+                  onClick={() =>
+                    setPaymentAmount(
+                      (myDebt.amount - myDebt.payment).toFixed(2)
+                    )
+                  }
                   disableRipple
                 >
                   Settle the entire amount
@@ -291,8 +297,8 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
             <Image
               className={
                 expense.creator._id == user._id
-                  ? "w-[40px] border-2 border-green-400 bg-green-200 rounded-full mr-2"
-                  : "w-[40px] border-2 bg-green-200 rounded-full mr-2 "
+                  ? "w-[40px] border-2 border-green-400 rounded-full mr-2"
+                  : "w-[40px] border-2 rounded-full mr-2 "
               }
               radius="md"
               src="/svgs/user.svg"
@@ -347,41 +353,47 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
         <div className="w-1/2 pl-10">
           <p className="text-center font-extrabold text-lg">Payments</p>
 
-          {expense.payments.map((payment: any) => {
-            // console.log(payment);
-            return (
-              <div key={payment._id} className="flex flex-1 mt-2">
-                <Image
-                  className="w-[40px] border rounded-full mr-2"
-                  radius="md"
-                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                />
-                <p className="flex-1 flex flex-wrap items-center text-[13px]">
-                  <strong>
-                    {" "}
-                    {payment.sender._id == user._id
-                      ? "You"
-                      : payment.sender.name}
-                  </strong>
-                  &nbsp;paid back&nbsp;$
-                  <strong className="underline">
-                    {payment.amount.toFixed(2)}
-                    {/* {(
+          {expense.distributions
+            .filter((dis: any) => dis.payment > 0)
+            .map((dis: any) => {
+              // console.log(payment);
+              return (
+                <div key={dis._id} className="flex flex-1 mt-2">
+                  <Image
+                    className={
+                      dis.lendingUser._id == user._id
+                        ? "w-[40px] border-2 border-green-400 rounded-full mr-2"
+                        : "w-[40px] border-2 rounded-full mr-2 "
+                    }
+                    radius="md"
+                    src="/svgs/user.svg"
+                  />
+                  <p className="flex-1 flex flex-wrap items-center text-[13px]">
+                    <strong>
+                      {" "}
+                      {dis.lendingUser._id == user._id
+                        ? "You"
+                        : dis.lendingUser.name}
+                    </strong>
+                    &nbsp;paid back&nbsp;$
+                    <strong className="underline">
+                      {dis.payment.toFixed(2)}
+                      {/* {(
                           expense.totalAmount /
                           (expense.users.length + 1)
                         ).toFixed(2)} */}
-                  </strong>
-                </p>
-              </div>
-            );
-          })}
+                    </strong>
+                  </p>
+                </div>
+              );
+            })}
 
           {tempPayment ? (
             <div className="flex flex-1 mt-2">
               <Image
                 className="w-[40px] border rounded-full mr-2"
                 radius="md"
-                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                src="/svgs/user.svg"
               />
               <p className="flex-1 flex flex-wrap items-center text-[13px]">
                 <strong>You</strong>

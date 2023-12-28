@@ -5,11 +5,13 @@ interface ExpenseAccordionItemProps {
   path: string;
   expense: any;
   totalReturn: number;
+  totalUpdatedReturn: number;
 }
 const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
   path,
   expense,
   totalReturn,
+  totalUpdatedReturn,
 }) => {
   const [month, setMonth] = useState<string>("Jan");
   const [amountBorrowed, setAmountBorrowed] = useState<number>(0);
@@ -66,24 +68,14 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
       }
     }
   }, []);
-  // console.log(expense);
-  // <div className="px-1 max-w-[115px] justify-end inline-block ">
-  //   <p className="expense-owe w-max">and lent you</p>
-  //   <h4 className="mt-[3px] text-[16px] orange font-bold w-max">
-  //     {expense.distributions
-  //       .find((distribution: any) => distribution.lendingUser._id == user._id)
-  //       .map((dis: any) => (
-  //         <div key={dis._id}>${dis.amount.toFixed(2)}</div>
-  //       ))}
-  //   </h4>
-  // </div>;
   useEffect(() => {
     let tempBorrowed = 0;
     const involvedDistribution = expense.distributions.find(
       (distribution: any) => distribution.lendingUser._id == user._id
     );
     if (involvedDistribution) {
-      tempBorrowed += involvedDistribution.amount;
+      tempBorrowed +=
+        involvedDistribution.amount - involvedDistribution.payment;
       const myPayments = expense.payments.filter(
         (payment: any) => payment.sender._id == user._id
       );
@@ -98,7 +90,7 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
 
   return (
     <div className="expense-trigger open-down justify-between">
-      <div className='flex'>
+      <div className="flex">
         <div className="max-w-[35px] mr-[5px] text-center flex flex-col justify-center inline-block">
           <p className="text-[10px] uppercase">{month} </p>
           <p className="text-[20px] ">{expense.transactionDate.slice(8, 10)}</p>
@@ -128,7 +120,7 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
           ) : null}
         </div>
       </div>
-      <div className='flex justify-end'>
+      <div className="flex justify-end">
         <div className="max-w-[115px] px-2 text-right">
           <p className="expense-owe">
             {user && expense.creator._id == user._id
@@ -144,7 +136,7 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
           <div className="px-1 max-w-[120px] ">
             <p className="expense-owe w-max">You lent</p>
             <h4 className="mt-[3px] text-[16px] green font-bold">
-              ${totalReturn.toFixed(2)}
+              ${totalUpdatedReturn.toFixed(2)}
             </h4>
           </div>
         ) : expense.distributions.find(

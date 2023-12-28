@@ -30,7 +30,17 @@ const MiddleGroups: React.FC<MiddleGroupsProps> = ({ group, expenses }) => {
         <Accordion className="p-0 w-full overflow-y-scroll">
           {expenses.map((expense: any, index: number) => {
             const totalReturn = expense.distributions.reduce(
-              (total: number, { amount }: { amount: number }) => total + amount,
+              (
+                total: number,
+                { amount }: { amount: number; }
+              ) => total + amount ,
+              0
+            );
+            const totalUpdatedReturn = expense.distributions.reduce(
+              (
+                total: number,
+                { amount, payment }: { amount: number; payment: number }
+              ) => total + amount - payment,
               0
             );
             return (
@@ -42,6 +52,7 @@ const MiddleGroups: React.FC<MiddleGroupsProps> = ({ group, expenses }) => {
                   <ExpenseAccordionItem
                     path="groups"
                     totalReturn={totalReturn}
+                    totalUpdatedReturn={totalUpdatedReturn}
                     expense={expense}
                   />
                 }

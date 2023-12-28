@@ -16,9 +16,19 @@ export default function MiddleAllExpenses() {
       </div>
       {userExpenses ? (
         <Accordion className="p-0 w-full overflow-y-scroll">
-          {userExpenses.map((expense: any, index:number) => {
+          {userExpenses.map((expense: any, index: number) => {
             const totalReturn = expense.distributions.reduce(
-              (total: number, { amount }: { amount: number }) => total + amount,
+              (
+                total: number,
+                { amount }: { amount: number; }
+              ) => total + amount ,
+              0
+            );
+            const totalUpdatedReturn = expense.distributions.reduce(
+              (
+                total: number,
+                { amount, payment }: { amount: number; payment: number }
+              ) => total + amount - payment,
               0
             );
             return (
@@ -29,6 +39,7 @@ export default function MiddleAllExpenses() {
                 title={
                   <ExpenseAccordionItem
                     totalReturn={totalReturn}
+                    totalUpdatedReturn={totalUpdatedReturn}
                     path={""}
                     expense={expense}
                   />

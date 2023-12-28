@@ -25,6 +25,7 @@ export default function MiddleDashList() {
                     id: distribution._id,
                     amount: distribution.amount,
                     expenseTitle: expense.title,
+                    payment: distribution.payment,
                   }));
 
                 if (creditors[creditorName]) {
@@ -35,7 +36,7 @@ export default function MiddleDashList() {
                     distributions: distributions,
                   };
                 }
-
+                // const payments = expense.payments.filter((payment:any) => )
                 return creditors;
               }, {})
             ).map(([creditorName, creditorData]: [string, any], index) => (
@@ -52,7 +53,9 @@ export default function MiddleDashList() {
                       {creditorData.distributions
                         .reduce(
                           (totalAmount: number, distribution: any) =>
-                            totalAmount + distribution.amount,
+                            totalAmount +
+                            distribution.amount -
+                            distribution.payment,
                           0
                         )
                         .toFixed(2)}
@@ -62,17 +65,25 @@ export default function MiddleDashList() {
                 <ul className="max-h-[25vh] overflow-y-scroll">
                   {creditorData.distributions.map(
                     (distribution: any, index: number) => (
-                      <li
-                        key={distribution.id + index.toString()}
-                        className="flex whitespace-normal items-center my-1 text-[15px]"
-                      >
-                        <strong className="orange">
-                          ${distribution.amount.toFixed(2)}
-                        </strong>
-                        &nbsp;for&nbsp;
-                        <p className="expense-group">
-                          {distribution.expenseTitle}
-                        </p>
+                      <li key={distribution.id + index.toString()}>
+                        <div className="flex whitespace-normal items-center my-1 text-[15px]">
+                          <strong className="orange">
+                            ${distribution.amount.toFixed(2)}
+                          </strong>
+                          &nbsp;for&nbsp;
+                          <p className="expense-group">
+                            {distribution.expenseTitle}
+                          </p>
+                        </div>
+                        {distribution.payment > 0 ? (
+                          <strong className="green leading-none flex">
+                            <Image
+                              width={13}
+                              src="/svgs/down-right-arrow.svg"
+                            />
+                            You paid back ${distribution.payment.toFixed(2)}
+                          </strong>
+                        ) : null}
                       </li>
                     )
                   )}
@@ -94,6 +105,7 @@ export default function MiddleDashList() {
                   expense.distributions.map((distribution: any) => ({
                     id: distribution._id,
                     amount: distribution.amount,
+                    payment: distribution.payment,
                     debtorId: distribution.lendingUser._id,
                     debtorName: distribution.lendingUser.name,
                     distributionTitle: distribution.title,
@@ -107,6 +119,7 @@ export default function MiddleDashList() {
                     distributions: [],
                   };
                   debtor.totalAmount += item.amount;
+                  debtor.totalAmount -= item.payment;
                   debtor.distributions.push(item);
                   acc[key] = debtor;
                   return acc;
@@ -126,16 +139,23 @@ export default function MiddleDashList() {
                   </p>
                 </div>
                 <ul className="max-h-[25vh] overflow-y-scroll">
-                  {debtor.distributions.map((item: any, index: number) => (
-                    <li
-                      key={item.id + index}
+                  {debtor.distributions.map((dis: any, index: number) => (
+                    <li key={dis.id + index}>
+                       <div
                       className="flex whitespace-normal items-center my-1 text-[15px]"
                     >
                       <strong className="green">
-                        ${item.amount.toFixed(2)}{" "}
+                        ${dis.amount.toFixed(2)}{" "}
                       </strong>
                       &nbsp;from&nbsp;
-                      <p className="expense-group">{item.distributionTitle} </p>
+                      <p className="expense-group">{dis.distributionTitle} </p>
+                    </div>
+                      {dis.payment > 0 ? (
+                        <strong className="orange leading-none flex">
+                          <Image width={13} src="/svgs/down-right-arrow-red.svg" />
+                          You paid back ${dis.payment.toFixed(2)}
+                        </strong>
+                      ) : null}
                     </li>
                   ))}
                 </ul>

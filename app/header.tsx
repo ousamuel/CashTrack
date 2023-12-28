@@ -94,9 +94,9 @@ const Header: React.FC<HeaderProps> = ({ path }) => {
               <div className="triangle-up"></div>
               <div className="bg-white rounded-md border-gray-400 border-[1px] -translate-y-2 ">
                 <div className="flex flex-col">
-                  <Link className="acc-btn" href="/account">
+                  {/* <Link className="acc-btn" href="/account">
                     Your account
-                  </Link>
+                  </Link> */}
                   <Link className="acc-btn" href="/new-group">
                     Create a group
                   </Link>

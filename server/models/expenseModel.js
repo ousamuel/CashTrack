@@ -14,6 +14,10 @@ const DistributionSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  payment: {
+    type: Number,
+    default: 0,
+  },
 });
 const PaymentSchema = new mongoose.Schema({
   sender: {
@@ -57,7 +61,7 @@ const ExpenseSchema = new mongoose.Schema({
   },
   group: {
     type: mongoose.Schema.Types.ObjectId,
-    default: 0,
+    default: null,
     ref: "Group",
   },
   imageSrc: {

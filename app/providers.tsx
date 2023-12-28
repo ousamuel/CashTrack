@@ -101,6 +101,7 @@ export function Providers({ children }: ProvidersProps) {
         if (expense.creator._id == data.user._id) {
           expense.distributions.forEach((distribution: any) => {
             tempOwed += distribution.amount;
+            tempOwed -= distribution.payment;
           });
           setTotalOwed(tempOwed);
         } else {
@@ -111,15 +112,17 @@ export function Providers({ children }: ProvidersProps) {
           // });
           for (let i = 0; i < expense.distributions.length; i++) {
             if (expense.distributions[i].lendingUser._id == data.user._id) {
-              tempBorrowed += expense.distributions[i].amount;
+              tempBorrowed += expense.distributions[i].amount ;
+              tempBorrowed -= expense.distributions[i].payment ;
               break;
             }
           }
-          for (let i = 0; i < expense.payments.length; i++) {
-            if (expense.payments[i].sender._id == data.user._id) {
-              tempBorrowed -= expense.payments[i].amount;
-            }
-          }
+          // for (let i = 0; i < expense.payments.length; i++) {
+          //   if (expense.payments[i].sender._id == data.user._id) {
+          //     tempBorrowed -= expense.payments[i].amount;
+          //     // tempBorrowed += expense.payments[i].amount;
+          //   }
+          // }
           setTotalOwe(tempBorrowed);
         }
       });

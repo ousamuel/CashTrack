@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
     return expense.populate([
       {
         path: "creator",
-        select: "-_password -expenses -groups -__v",
+        select: "_id name email profilePicture",
       },
       {
         path: "group",
@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
       },
       {
         path: "users",
-        select: "",
+        select: "_id name email profilePicture",
       },
     ]);
   };
@@ -82,7 +82,46 @@ router.get("/:id", async (req, res) => {
   }
   // res.json(res.locals.expense);
 });
+router.patch("/myDistribution/:expenseId", async (req, res) => {
+  const { payment, sender } = req.body;
 
+  try {
+    const expense = await Expense.findOne({ _id: req.params.expenseId });
+    await expense.populate({
+      path: "distributions",
+      populate: {
+        path: "lendingUser",
+        select: "name email",
+      },
+    });
+    const dis = expense.distributions.find((dis) => dis.lendingUser._id == sender);
+    dis.payment += payment;
+    await expense.save();
+    res.status(200).json(dis);
+  } catch (err) {
+    console.error(err);
+  }
+});
+router.get("/myDistribution/:expenseId", async (req, res) => {
+  const { sender } = req.body;
+
+  try {
+    const expense = await Expense.findOne({ _id: req.params.expenseId });
+    await expense.populate({
+      path: "distributions",
+      populate: {
+        path: "lendingUser",
+        select: "name email",
+      },
+    });
+    const dis = expense.distributions.find(
+      (dis) => dis.lendingUser._id == sender
+    );
+    res.status(200).json(dis);
+  } catch (err) {
+    console.error(err);
+  }
+});
 router.post("/", async (req, res) => {
   const {
     title,
@@ -139,10 +178,6 @@ router.post("/", async (req, res) => {
     for (const userId of userIds) {
       await addExpenseToUser(userId, expense);
     }
-    // for (const distribution of distributions) {
-    //   await addToUserOwes(distribution);
-    //   await addToCreatorOwed(distribution);
-    // }
     await addExpenseToGroup(group, expense);
     expense.save();
     await expense.populate([
