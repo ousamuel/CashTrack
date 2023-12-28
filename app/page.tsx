@@ -30,13 +30,14 @@ export default function Login() {
   const onLogInSubmit: SubmitHandler<FormData> = async (data) => {
     const success = await loginUser(data);
     if (success) {
-      window.location.href = "/dashboard";
+      router.push('/dashboard')
     }
   };
   const onSignUpSubmit: SubmitHandler<FormData> = async (data) => {
     const success = await signUpUser(data);
     if (success) {
-      window.location.href = "/dashboard";
+      // window.location.href = "/dashboard";
+      router.push('/dashboard')
     }
   };
   // console.log(user);
