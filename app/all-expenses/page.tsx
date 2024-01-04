@@ -1,16 +1,22 @@
 "use client";
 import Header from "../header";
 import dynamic from "next/dynamic";
-
+import { Spinner } from "@nextui-org/react";
 const LeftDash = dynamic(() => import("../components/LeftDash"), {
-  loading: () => <p>Loading...</p>,
+  loading: () => <div className="left-container">Loading...</div>,
 });
-const MiddleAllExpenses = dynamic(() => import("../components/MiddleAllExpenses"), {
-  loading: () => <p>Loading...</p>,
-});
-const RightAllExpenses = dynamic(() => import("../components/RightAllExpenses"), {
-  loading: () => <p>Loading...</p>,
-});
+const MiddleAllExpenses = dynamic(
+  () => import("../components/MiddleAllExpenses"),
+  {
+    loading: () => <div className="mid-container text-center">Loading ...</div>,
+  }
+);
+const RightAllExpenses = dynamic(
+  () => import("../components/RightAllExpenses"),
+  {
+    loading: () => <div className="right-container">Loading...</div>,
+  }
+);
 
 export default function AllExpenses() {
   return (

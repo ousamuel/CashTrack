@@ -87,7 +87,7 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
     }
     setAmountBorrowed(tempBorrowed);
   }, []);
-  console.log()
+  // console.log(amountBorrowed)
   return (
     <div className="expense-trigger open-down justify-between">
       <div className="flex">
@@ -144,9 +144,9 @@ const ExpenseAccordionItem: React.FC<ExpenseAccordionItemProps> = ({
           ) ? (
           <div className="px-1 max-w-[120px] justify-end inline-block ">
             <p className="expense-owe w-max">
-              {amountBorrowed < 0 ? " - " : "and lent you"}
+              {amountBorrowed == 0 ? " - " : "and lent you"}
             </p>
-            {amountBorrowed < 0 ? (
+            {amountBorrowed == 0 ? (
               <h4 className="mt-[3px] text-[16px] w-max">Settled</h4>
             ) : (
               <h4 className="mt-[3px] text-[16px] orange font-bold w-max">

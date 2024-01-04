@@ -35,7 +35,7 @@ export default function GroupPage({ params }: { params: any }) {
         const reversedGroupExpenses = data.expenses.toReversed();
         setGroupExpenses(reversedGroupExpenses);
         setSelectedGroup(data);
-        console.log(data);
+        // console.log(data);
       });
   }
 

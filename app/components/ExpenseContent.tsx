@@ -39,18 +39,15 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
   const myDebt = expense.distributions.find(
     (dis: any) => dis.lendingUser._id == user._id
   );
-
   const postPayment = async function () {
-    console.log(myDebt.amount);
     const postAmount = parseFloat(paymentAmount);
+    const remainingOwe = (myDebt.amount - myDebt.payment).toFixed(2)
+    // console.log(remainingOwe)
     if (!postAmount || postAmount <= 0) {
       setZeroPayment(true);
       console.log("less than 0");
       return 0;
-    } else if (
-      postAmount >
-      myDebt.amount.toFixed(2) - myDebt.payment.toFixed(2)
-    ) {
+    } else if (postAmount > parseFloat(remainingOwe)) {
       setOverPaid(true);
       console.log("overpaid");
       return 0;
@@ -264,8 +261,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
               "/" +
               expense.transactionDate.slice(0, 4)}
           </p>
-          {expense.creator._id == user._id ? null : // <Button
-          //   disableRipple
+          {expense.creator._id == user._id ? null : //   disableRipple // <Button
           //   className="btn-2 btn-orange text-[13px]"
           //   radius="lg"
           //   onClick={() => setOpenEditModal(true)}

@@ -43,7 +43,6 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
     handleSubmit,
     formState: { errors },
   } = useForm<InviteForm>();
-  console.log(group);
   type ButtonType = {
     src: string;
     desc: string;
@@ -133,7 +132,7 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
     );
     if (duplicateMember) {
       alert(`${inviteEmail} is already in "${group.groupName}"`);
-      return false
+      return false;
     }
     try {
       const res: any = await fetch(
@@ -154,7 +153,7 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
         setAddMemberModal(false);
       } else {
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
       }
     } catch (error: any) {
       console.error(error.message);
@@ -162,22 +161,19 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
   };
   const deleteGroup = async function () {
     try {
-      const res: any = await fetch(
-        `${BACKEND_API}groups/${group._id}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Accept: "application/json",
-          },
-        }
-      );
+      const res: any = await fetch(`${BACKEND_API}groups/${group._id}`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          Accept: "application/json",
+        },
+      });
       if (res.ok) {
         window.location.href = "/dashboard";
       } else {
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
       }
     } catch (error: any) {
       console.error(error.message);
@@ -311,9 +307,9 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
 
             let totalPaid = 0;
             ownedExpenses.map((expense: any) => {
-              expense.distributions.map((dis:any)=>{
-                totalPaid += dis.amount
-              })
+              expense.distributions.map((dis: any) => {
+                totalPaid += dis.amount;
+              });
             });
 
             let totalBorrowed = 0;
@@ -331,7 +327,10 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
               }
             });
             return totalPaid || totalBorrowed ? (
-              <div className={selectedDesc == "Balances" ? "" : "hidden"}>
+              <div
+                key={index}
+                className={selectedDesc == "Balances" ? "" : "hidden"}
+              >
                 <div
                   className={
                     index != 0 ? "flex border-t py-[10px]" : "flex py-[10px]"

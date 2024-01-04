@@ -1,15 +1,14 @@
 "use client";
 import Header from "../header";
 import dynamic from "next/dynamic";
-
 const LeftDash = dynamic(() => import("../components/LeftDash"), {
-  loading: () => <p>Loading...</p>,
+  loading: () => <div className='left-container'>Loading...</div>,
 });
 const MiddleDash = dynamic(() => import("../components/MiddleDash"), {
-  loading: () => <p>Loading...</p>,
+  loading: () => <div className='mid-container text-center'>Loading ...</div>
 });
 const RightOnTheGo = dynamic(() => import("../components/RightOnTheGo"), {
-  loading: () => <p>Loading...</p>,
+  loading: () => <div className='right-container'>Loading...</div>,
 });
 
 export default function Dashboard() {
