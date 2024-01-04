@@ -76,7 +76,7 @@ export default function MiddleDashList() {
                           </p>
                         </div>
                         {distribution.payment > 0 ? (
-                          <strong className="green leading-none flex">
+                          <strong className="green leading-none flex mb-1">
                             <Image
                               width={13}
                               src="/svgs/down-right-arrow.svg"
@@ -134,7 +134,7 @@ export default function MiddleDashList() {
                   <p>
                     Total:&nbsp;
                     <strong className="green text-lg">
-                      ${debtor.totalAmount.toFixed(2)}
+                      ${debtor.totalAmount <= 1/100 ? "0.00": debtor.totalAmount.toFixed(2)}
                     </strong>{" "}
                   </p>
                 </div>
@@ -151,9 +151,9 @@ export default function MiddleDashList() {
                       <p className="expense-group">{dis.distributionTitle} </p>
                     </div>
                       {dis.payment > 0 ? (
-                        <strong className="orange leading-none flex">
+                        <strong className="orange leading-none flex mb-1">
                           <Image width={13} src="/svgs/down-right-arrow-red.svg" />
-                          You paid back ${dis.payment.toFixed(2)}
+                          {debtor.debtorName} paid back ${dis.payment.toFixed(2)}
                         </strong>
                       ) : null}
                     </li>

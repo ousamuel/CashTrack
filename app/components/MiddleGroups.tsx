@@ -62,6 +62,7 @@ const MiddleGroups: React.FC<MiddleGroupsProps> = ({ group, expenses }) => {
                   totalReturn={totalReturn}
                   expense={expense}
                   index={index}
+
                   deleteExpenseFunction={deleteExpense}
                 />
               </AccordionItem>

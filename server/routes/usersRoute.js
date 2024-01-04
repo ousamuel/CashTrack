@@ -39,18 +39,17 @@ router.post("/", async (req, res) => {
   if (existingUser) {
     return res.status(401).json({ error: "invalid email" });
   }
-  bcrypt.hash(req.body._password, 10).then((hash) => {
+  bcrypt.hash(req.body._password, 10).then(async(hash) => {
     const user = new User({
       name: req.body.name,
       email: req.body.email,
       _password: hash,
     });
     try {
-      user.save();
-
+      await user.save();
+      user._password='hidden'
       var session = req.session;
       session.userId = user.id;
-      user._password = "secret";
       res.status(201).json({ user });
     } catch (error) {
       res.status(400).json({ message: error.message });

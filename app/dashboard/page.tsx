@@ -1,8 +1,17 @@
 "use client";
-import MiddleDash from "../components/MiddleDash";
-import LeftDash from "../components/LeftDash";
 import Header from "../header";
-import RightOnTheGo from "../components/RightOnTheGo";
+import dynamic from "next/dynamic";
+
+const LeftDash = dynamic(() => import("../components/LeftDash"), {
+  loading: () => <p>Loading...</p>,
+});
+const MiddleDash = dynamic(() => import("../components/MiddleDash"), {
+  loading: () => <p>Loading...</p>,
+});
+const RightOnTheGo = dynamic(() => import("../components/RightOnTheGo"), {
+  loading: () => <p>Loading...</p>,
+});
+
 export default function Dashboard() {
   return (
     <div>

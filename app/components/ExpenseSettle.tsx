@@ -57,7 +57,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
   const distributionOptions: Option[] = [
     { desc: "Evenly", iconSrc: "/svgs/equal.svg" },
     { desc: "By Percent", iconSrc: "/svgs/percent.svg" },
-    { desc: "Custom", iconSrc: "/svgs/dollar-sign.svg" },
+    // { desc: "Custom", iconSrc: "/svgs/dollar-sign.svg" },
   ];
 
   const postNewExpense = async function (input: { [key: string]: any }) {
@@ -151,7 +151,7 @@ OPTIONS FOR DISTRIBUTION TYPES (EVENLY, BY PERCENTAGES, CUSTOM SETTING)
       lendingUser: user._id,
       amount:
         distributionType == "Evenly"
-          ? expenseAmount / (userIds.length + 1)
+          ? parseFloat((expenseAmount / (userIds.length + 1)).toFixed(2))
           : distributionType == "By Percent"
           ? (parseFloat(inputPercents[index]) * expenseAmount) / 100
           : distributionType == "Custom"

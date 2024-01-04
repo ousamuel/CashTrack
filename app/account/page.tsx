@@ -11,6 +11,7 @@ import {
   Image,
   Tooltip,
 } from "@nextui-org/react";
+
 export default function Account() {
   const { user } = useContext(Context);
 

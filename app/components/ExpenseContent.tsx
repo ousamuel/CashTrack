@@ -90,14 +90,14 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
                 X
               </p>
             </div>
-            <div className="modal-mid flex">
+            <div className="modal-mid flex-col sm:flex-row">
               <div className="flex flex-col items-center">
                 {" "}
                 <h4 className="flex items-center">
                   <Image
                     width={40}
                     className="rounded-full"
-                    src="https://www.boredpanda.com/blog/wp-content/uploads/2021/03/url-1.jpg"
+                    src="/svgs/user.svg"
                   />{" "}
                   <p className="ml-2 text-lg"> You owe</p>
                 </h4>
@@ -107,7 +107,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
                     className="rounded-full"
                     src="/svgs/arrow-down.svg"
                   />{" "} */}
-                  ${(myDebt.amount - myDebt.payment).toFixed(2)}
+                  ${Math.abs(myDebt.amount - myDebt.payment).toFixed(2)}
                   {/* <Image
                     width={40}
                     className="rounded-full"
@@ -119,7 +119,7 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
                   <Image
                     width={40}
                     className="rounded-full"
-                    src="https://www.boredpanda.com/blog/wp-content/uploads/2021/03/url-1.jpg"
+                    src="/svgs/user.svg"
                   />{" "}
                 </h4>{" "}
               </div>
@@ -264,16 +264,15 @@ const ExpenseContent: React.FC<ExpenseContentProps> = ({
               "/" +
               expense.transactionDate.slice(0, 4)}
           </p>
-          {expense.creator._id == user._id ? (
-            <Button
-              disableRipple
-              className="btn-2 btn-orange text-[13px]"
-              radius="lg"
-              onClick={() => setOpenEditModal(true)}
-            >
-              Edit expense
-            </Button>
-          ) : expense.users.includes(user._id) ? (
+          {expense.creator._id == user._id ? null : // <Button
+          //   disableRipple
+          //   className="btn-2 btn-orange text-[13px]"
+          //   radius="lg"
+          //   onClick={() => setOpenEditModal(true)}
+          // >
+          //   Edit expense
+          // </Button>
+          expense.users.includes(user._id) ? (
             <Button
               disableRipple
               className="btn-2 btn-green text-[13px]"

@@ -273,7 +273,31 @@ export default function Login() {
           </div>
         )}
         <Image width={300} src="svgs/logo.svg" className="mb-4 sm:hidden" />
-
+        <table className='flex flex-col btn-free mb-4 bg-[#247a69]'>
+          <thead className='flex justify-center text-lg'>
+            <tr>
+              <th>Demo Logins</th>
+            </tr>
+          </thead>
+          <tbody className='text-lg'>
+            <tr>
+              <td className='text-center'>Email</td>
+              <td className='text-center'>Password</td>
+            </tr>
+            <tr>
+              <td>demo1@gmail.com: </td>
+              <td className='pl-4'>passwordDEMO</td>
+            </tr>
+            <tr>
+              <td>demo2@gmail.com: </td>
+              <td className='pl-4'>passwordDEMO</td>
+            </tr>
+            <tr>
+              <td>demo3@gmail.com: </td>
+              <td className='pl-4'>passwordDEMO</td>
+            </tr>
+          </tbody>
+        </table>
         <strong className="text-black text-[20px] uppercase sm:hidden">
           Testimonials
         </strong>

@@ -1,8 +1,17 @@
 "use client";
-import LeftDash from "../components/LeftDash";
 import Header from "../header";
-import MiddleRecentActivity from "../components/MiddleRecentActivity";
-import RightOnTheGo from "../components/RightOnTheGo";
+import dynamic from 'next/dynamic'
+
+const LeftDash = dynamic(() => import('../components/LeftDash'), {
+  loading: () => <p>Loading...</p>,
+})
+const MiddleRecentActivity = dynamic(() => import('../components/MiddleRecentActivity'), {
+  loading: () => <p>Loading...</p>,
+})
+const RightOnTheGo = dynamic(() => import('../components/RightOnTheGo'), {
+  loading: () => <p>Loading...</p>,
+})
+
 export default function RecentActivity() {
   return (
     <div>

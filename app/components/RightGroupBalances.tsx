@@ -289,7 +289,7 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
         );
       })}
       <h4 className={selectedDesc == "Balances" ? "pt-1" : "hidden"}>
-        Group Balances
+        Cumulative Balances
       </h4>
 
       {group && group.users
@@ -299,15 +299,23 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
               (expense: any) =>
                 expense.creator && expense.creator._id === userObj._id
             );
-            const totalPaid = ownedExpenses.reduce(
-              (total: number, { totalAmount }: { totalAmount: number }) =>
-                total + totalAmount,
-              0
-            );
+            // const totalPaid = ownedExpenses.reduce(
+            //   (total: number, { totalAmount }: { totalAmount: number }) =>
+            //     total + totalAmount,
+            //   0
+            // );
             const involvedExpenses = expenses.filter(
               (expense: any) =>
                 expense.users && expense.users.includes(userObj._id)
             );
+
+            let totalPaid = 0;
+            ownedExpenses.map((expense: any) => {
+              expense.distributions.map((dis:any)=>{
+                totalPaid += dis.amount
+              })
+            });
+
             let totalBorrowed = 0;
             involvedExpenses.map((expense: any) => {
               for (let i = 0; i < expense.payments.length; i++) {
@@ -339,27 +347,27 @@ const RightGroupBalances: React.FC<RightGroupBalancesProps> = ({
                   <div className="pl-2 flex flex-col justify-center">
                     {totalPaid ? (
                       <h2 className="text-[#2c9984]">
-                        PAID ${totalPaid.toFixed(2)}{" "}
+                        LENT ${totalPaid.toFixed(2)}{" "}
                       </h2>
                     ) : null}
                     {totalBorrowed ? (
                       <h2 className="text-[#e51212]">
-                        OWES ${totalBorrowed.toFixed(2)}{" "}
+                        OWED ${totalBorrowed.toFixed(2)}{" "}
                       </h2>
                     ) : null}
-                    {totalPaid && totalBorrowed ? (
+                    {totalPaid || totalBorrowed ? (
                       <strong className="border-t border-gray-200 text-center">
-                        Net Balance
+                        All-time Total
                       </strong>
                     ) : null}
-                    {totalPaid && totalBorrowed ? (
+                    {totalPaid || totalBorrowed ? (
                       totalPaid >= totalBorrowed ? (
                         <h2 className="text-[#2c9984] text-center leading-none">
                           ${(totalPaid - totalBorrowed).toFixed(2)}{" "}
                         </h2>
                       ) : (
                         <h2 className="text-[#e51212] text-center leading-none">
-                          ${(totalBorrowed - totalPaid).toFixed(2)}{" "}
+                          -${(totalBorrowed - totalPaid).toFixed(2)}{" "}
                         </h2>
                       )
                     ) : null}

@@ -24,8 +24,8 @@ POST http://localhost:8001/users
 Content-Type: application/json
 
 {
-    "name": "Lizzie",
-    "email": "sample5@gmail.com",
+    "name": "demo19",
+    "email": "demo19@gmail.com",
     "_password": "passwordCHECK"
 }
 ###

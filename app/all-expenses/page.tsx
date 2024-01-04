@@ -1,10 +1,18 @@
 "use client";
-import LeftDash from "../components/LeftDash";
 import Header from "../header";
-import MiddleAllExpenses from "../components/MiddleAllExpenses";
-import RightAllExpenses from "../components/RightAllExpenses";
-export default function AllExpenses() {
+import dynamic from "next/dynamic";
 
+const LeftDash = dynamic(() => import("../components/LeftDash"), {
+  loading: () => <p>Loading...</p>,
+});
+const MiddleAllExpenses = dynamic(() => import("../components/MiddleAllExpenses"), {
+  loading: () => <p>Loading...</p>,
+});
+const RightAllExpenses = dynamic(() => import("../components/RightAllExpenses"), {
+  loading: () => <p>Loading...</p>,
+});
+
+export default function AllExpenses() {
   return (
     <div>
       <Header path="all-expenses" />
