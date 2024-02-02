@@ -1,3 +1,25 @@
+For development:
+In root directory (CashTrack):
+- create .env.local file
+    - NEXT_PUBLIC_BACKEND_API = http://localhost:8000/
+    -  change backend url to different port if necessary
+- Run this command
+```bash
+npm run dev
+```
+In server directory:
+- create .env file
+    - FRONTEND_URL = http://localhost:3000
+          - replace frontend url with different port if necessary
+    - DATABASE_URL = "mongodb+srv://dev-user:CCOPehyRsEEZctjy@cluster0.w0qyptv.mongodb.net/?retryWrites=true&w=majority"
+- Run this command
+```bash
+node server.js
+```
+  
+
+
+
 Current installations:
 npm i concurrently, rimraf, express , react-hook-form , @hookform/resolvers yup, mongodb, cors , bcrypt
 npm i mongodb
