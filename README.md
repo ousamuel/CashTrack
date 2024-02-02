@@ -14,12 +14,10 @@ In server directory:
     - DATABASE_URL = "mongodb+srv://dev-user:CCOPehyRsEEZctjy@cluster0.w0qyptv.mongodb.net/?retryWrites=true&w=majority"
 - Run this command
 ```bash
+npm start
+or
 node server.js
 ```
-  
-
-
-
 Current installations:
 npm i concurrently, rimraf, express , react-hook-form , @hookform/resolvers yup, mongodb, cors , bcrypt
 npm i mongodb
@@ -30,15 +28,8 @@ cd server
 npm i express morgan nodemon body-parser dotenv mongoose ax
 ios, bcrypt, jsonwebtoken
 express-session cookie-parser
-
-development:
-npm run dev in cashtrack
-npm start in server
-
 This is a TypeScript-React project with a backend powered by [Node/Express](https://expressjs.com/) + [MongoDB](https://www.mongodb.com/) and Tailwind CSS for UX.
 
-<!-- Deployed via Vercel & PythonAnywhere: [Click here to visit the site](https://fitness-app-ousamuel.vercel.app/)
-# SteelStance -->
 
 [![Home Page Screen Shot](public/images/cashtrack.png)](https://raw.githubusercontent.com/ousamuel/CashTrack/main/public/images/cashtrack.png)
 
@@ -55,12 +46,14 @@ Welcome to CashTrack, a full-stack fitness application developed using the frame
 ## Features
 
 Front-end Integrations:
-
+- React Context
+- Component-based Architecture
+- Conditional Rendering/Event handling based on user interaction
+- Type safety for consistent data validation
 Back-end Integrations:
-<!-- 
-- User authentication via Flask-Login and Flask-Bcrypt for secure session management and password hashing
-- Object-relational mapping utilizing SQLAlchemy
-- RESTful API with full CRUD + CORS for cross-origin requests -->
+- Custom user authentication via express sessions and bcrypt
+- RESTful API with full CRUD + CORS
+- Object-relational mapping via Node/Express
 
 ## Acknowledgements
 
