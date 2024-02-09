@@ -21,7 +21,7 @@ const router = express.Router();
 const FRONTEND = process.env.FRONTEND_URL;
 mongoose.connect(process.env.DATABASE_URL);
 // mongoose.connect();
-console.log(process.env.NODE_ENV)
+console.log(process.env.NODE_ENV);
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("connected to db"));
@@ -79,12 +79,21 @@ if (process.env.NODE_ENV === "production") {
 }
 app.use(sessions(sess));
 
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: process.env.FRONTEND_URL,
+//   })
+// );
 app.use(
   cors({
     credentials: true,
     origin: process.env.FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"], 
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
