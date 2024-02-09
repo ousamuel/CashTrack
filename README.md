@@ -23,6 +23,7 @@ Front-end Integrations:
 - Component-based Architecture
 - Conditional Rendering/Event handling based on user interaction
 - Type safety for consistent data validation
+
 Back-end Integrations:
 - Custom user authentication via express sessions and bcrypt
 - RESTful API with full CRUD + CORS
