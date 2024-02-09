@@ -25,11 +25,7 @@ export function Providers({ children }: ProvidersProps) {
   }, []);
   const router = useRouter();
   let BACKEND_API: any = process.env.NEXT_PUBLIC_BACKEND_API;
-  // let BACKEND_API: any = "https://cash-track-api.onrender.com";
-  // if (process.env.NODE_ENV == "production") {
-  //   BACKEND_API = process.env.REACT_APP_BACKEND_URL;
-  // }
-  // console.log(process.env)
+  console.log(BACKEND_API)
   const [user, setUser] = useState<User>();
   const [wrongLogin, setWrongLogin] = useState<boolean>(false);
   const [totalOwe, setTotalOwe] = useState<number>(0);
@@ -112,8 +108,8 @@ export function Providers({ children }: ProvidersProps) {
           // });
           for (let i = 0; i < expense.distributions.length; i++) {
             if (expense.distributions[i].lendingUser._id == data.user._id) {
-              tempBorrowed += expense.distributions[i].amount ;
-              tempBorrowed -= expense.distributions[i].payment ;
+              tempBorrowed += expense.distributions[i].amount;
+              tempBorrowed -= expense.distributions[i].payment;
               break;
             }
           }
@@ -137,14 +133,17 @@ export function Providers({ children }: ProvidersProps) {
   async function logOut() {
     // function points to app.get('/logout') in /server/server.js
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}logout`, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Accept: "application/json",
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_API}logout`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Accept: "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -155,14 +154,17 @@ export function Providers({ children }: ProvidersProps) {
   }
   async function deleteExpense(expenseId: string, index: number) {
     try {
-      const response: any = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}expenses/${expenseId}`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Accept: "application/json",
-        },
-      });
+      const response: any = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_API}expenses/${expenseId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Accept: "application/json",
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       } else {

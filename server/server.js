@@ -20,6 +20,8 @@ const router = express.Router();
 // console.log(FRONTEND);
 const FRONTEND = process.env.FRONTEND_URL;
 mongoose.connect(process.env.DATABASE_URL);
+// mongoose.connect();
+console.log(process.env.NODE_ENV)
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("connected to db"));
