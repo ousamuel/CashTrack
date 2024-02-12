@@ -22,31 +22,12 @@ const FRONTEND = process.env.FRONTEND_URL;
 mongoose.connect(process.env.DATABASE_URL);
 // mongoose.connect();
 console.log(process.env.NODE_ENV);
+console.log(FRONTEND);
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("connected to db"));
 
 const http = require("http");
-// const io = require("socket.io")(process.env.SOCKET_PORT);
-// const server = http.createServer(app);
-// const io = new Server(server, {
-//   cors: {
-//     origin: FRONTEND,
-//     methods: ["GET", "POST"],
-//   },
-// });
-
-// io.on("connection", (socket) => {
-//   // console.log("user connected " + socket.id);
-
-//   socket.on("send_message", (data) => {
-//     socket.broadcast.emit("receive_message", data);
-//   });
-
-//   // socket.on("disconnect", () => {
-//   //   console.log("user disconnected " + socket.id);
-//   // });
-// });
 
 function generateRandomKey(length) {
   return crypto
@@ -79,7 +60,6 @@ if (process.env.NODE_ENV === "production") {
 }
 app.use(sessions(sess));
 
-
 // app.use(
 //   cors({
 //     credentials: true,
@@ -90,8 +70,8 @@ app.use(
   cors({
     credentials: true,
     origin: process.env.FRONTEND_URL,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"], 
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 

@@ -24,24 +24,19 @@ const UserSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Group",
-      unique: true,
     },
   ],
-
   gender: {
     type: String,
   },
-
   profilePicture: {
     type: String,
     default: "/src",
   },
-
   friends: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      unique: true,
     },
   ],
 });

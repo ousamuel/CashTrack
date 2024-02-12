@@ -122,5 +122,4 @@ router.delete("/:groupId", async (req, res) => {
   }
 });
 
-
 module.exports = router;
