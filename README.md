@@ -10,7 +10,8 @@ Welcome to CashTrack, a full-stack fitness application developed using the frame
 In this application, users can effortlessly manage shared expenses with friends, family, or colleagues. They can create groups for different occasions or groups of people, add expenses, split bills accurately among group members, and keep track of who owes what. The app provides clear insights into spending patterns and simplifies settling debts, ensuring financial transparency among users.
 
 
-**Not available on IOS/Safari due to cross-domain cookies not being supported**
+**For IOS, cross-site tracking must be allowed for cross-domain cookies**
+(Settings -> Safari -> Uncheck 'Prevent Cross-Site Tracking')
 
 [Deployed via AWS Amplify](https://main.d3pzfughhwvxcj.amplifyapp.com/)
 
