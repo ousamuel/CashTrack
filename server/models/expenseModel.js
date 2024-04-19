@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
+//ODM Model
 const DistributionSchema = new mongoose.Schema({
   lendingUser: {
     type: mongoose.Schema.Types.ObjectId,
