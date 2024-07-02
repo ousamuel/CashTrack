@@ -5,7 +5,7 @@ This is a TypeScript-React project with a backend powered by [Node/Express](http
 
 ## Introduction
 
-Welcome to CashTrack, a full-stack fitness application developed using the framework Next.js with a Node/Express/MongoDB backend. 
+Welcome to CashTrack, a expense-tracking application developed using TypeScript the framework Next.js with a Node/Express/MongoDB backend. 
 
 In this application, users can effortlessly manage shared expenses with friends, family, or colleagues. They can create groups for different occasions or groups of people, add expenses, split bills accurately among group members, and keep track of who owes what. The app provides clear insights into spending patterns and simplifies settling debts, ensuring financial transparency among users.
 
