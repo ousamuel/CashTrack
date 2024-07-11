@@ -1,4 +1,3 @@
-This is a TypeScript-React project with a backend powered by [Node/Express](https://expressjs.com/) + [MongoDB](https://www.mongodb.com/) and Tailwind CSS for UX.
 
 
 [![Home Page Screen Shot](public/images/cashtrack.png)](https://raw.githubusercontent.com/ousamuel/CashTrack/main/public/images/cashtrack.png)
@@ -6,6 +5,8 @@ This is a TypeScript-React project with a backend powered by [Node/Express](http
 ## Introduction
 
 Welcome to CashTrack, a expense-tracking application developed using TypeScript the framework Next.js with a Node/Express/MongoDB backend. 
+
+Video Demo: https://www.loom.com/share/a811ea6664ad44ea8a67e11eb4f71439?sid=b6286fa8-1e6d-4dbb-8fb9-6c07f22d93b0
 
 In this application, users can effortlessly manage shared expenses with friends, family, or colleagues. They can create groups for different occasions or groups of people, add expenses, split bills accurately among group members, and keep track of who owes what. The app provides clear insights into spending patterns and simplifies settling debts, ensuring financial transparency among users.
 
@@ -15,7 +16,6 @@ In this application, users can effortlessly manage shared expenses with friends,
 
 [Deployed via AWS Amplify](https://main.d3pzfughhwvxcj.amplifyapp.com/)
 
-[Link to demo](https://www.loom.com/share/a811ea6664ad44ea8a67e11eb4f71439?sid=b6286fa8-1e6d-4dbb-8fb9-6c07f22d93b0)
 
 ## Features
 
