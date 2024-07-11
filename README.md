@@ -1,7 +1,3 @@
-
-
-[![Home Page Screen Shot](public/images/cashtrack.png)](https://raw.githubusercontent.com/ousamuel/CashTrack/main/public/images/cashtrack.png)
-
 ## Introduction
 
 Welcome to CashTrack, a expense-tracking application developed using TypeScript the framework Next.js with a Node/Express/MongoDB backend. 
@@ -15,6 +11,8 @@ In this application, users can effortlessly manage shared expenses with friends,
 (Settings -> Safari -> Uncheck 'Prevent Cross-Site Tracking')
 
 [Deployed via AWS Amplify](https://main.d3pzfughhwvxcj.amplifyapp.com/)
+
+[![Home Page Screen Shot](public/images/cashtrack.png)](https://raw.githubusercontent.com/ousamuel/CashTrack/main/public/images/cashtrack.png)
 
 
 ## Features
